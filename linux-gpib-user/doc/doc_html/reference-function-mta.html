@@ -1,0 +1,214 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>MTA</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.2.1
+ Documentation"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="	Utility Functions"
+HREF="reference.html#AEN3423"><LINK
+REL="PREVIOUS"
+TITLE="MSA"
+HREF="reference-function-msa.html"><LINK
+REL="NEXT"
+TITLE="PPE_byte"
+HREF="reference-function-ppe-byte.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.2.1
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference-function-msa.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-ppe-byte.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="REFERENCE-FUNCTION-MTA"
+></A
+>MTA</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3633"
+></A
+><H2
+>Name</H2
+>MTA&nbsp;--&nbsp;generate 'my talk address' command byte</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN3636"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN3637"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;gpib/ib.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>uint8_t MTA</CODE
+>(unsigned int address);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3644"
+></A
+><H2
+>	Description
+	</H2
+><P
+>	MTA() returns a 'my talk address'
+	<A
+HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+>command byte</A
+> corresponding
+	to the <CODE
+CLASS="PARAMETER"
+>address</CODE
+> argument.  The <CODE
+CLASS="PARAMETER"
+>address</CODE
+>
+	my be between 0 and 30.
+	</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3650"
+></A
+><H2
+>	Return value
+	</H2
+><P
+>	The appropriate MTA command byte is returned.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference-function-msa.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-ppe-byte.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>MSA</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="reference.html#AEN3423"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PPE_byte</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

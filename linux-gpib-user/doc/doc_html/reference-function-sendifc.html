@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>SendIFC</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.2.1
+ Documentation"
+HREF="index.html"><LINK
+REL="UP"
+TITLE='	"Multidevice" API Functions'
+HREF="reference.html#AEN2647"><LINK
+REL="PREVIOUS"
+TITLE="SendDataBytes"
+HREF="reference-function-senddatabytes.html"><LINK
+REL="NEXT"
+TITLE="SendList"
+HREF="reference-function-sendlist.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.2.1
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference-function-senddatabytes.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-sendlist.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="REFERENCE-FUNCTION-SENDIFC"
+></A
+>SendIFC</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3192"
+></A
+><H2
+>Name</H2
+>SendIFC&nbsp;--&nbsp;perform interface clear</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN3195"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN3196"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;gpib/ib.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void SendIFC</CODE
+>(int board_desc);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3203"
+></A
+><H2
+>	Description
+	</H2
+><P
+>	SendIFC() resets the GPIB bus by asserting the 'interface clear' (IFC)
+	bus line
+	for a duration of at least 100 microseconds.  The board specified
+	by <CODE
+CLASS="PARAMETER"
+>board_desc</CODE
+> must be the system controller
+	in order to assert IFC.  The interface clear causes all devices
+	to untalk and unlisten, puts them into
+	serial poll disabled state (don't worry, you will still be able
+	to conduct serial polls), and the board becomes
+	controller-in-charge.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference-function-senddatabytes.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-sendlist.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>SendDataBytes</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="reference.html#AEN2647"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>SendList</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

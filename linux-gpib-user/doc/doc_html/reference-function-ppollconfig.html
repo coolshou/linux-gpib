@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>PPollConfig</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.2.1
+ Documentation"
+HREF="index.html"><LINK
+REL="UP"
+TITLE='	"Multidevice" API Functions'
+HREF="reference.html#AEN2647"><LINK
+REL="PREVIOUS"
+TITLE="PPoll"
+HREF="reference-function-ppoll.html"><LINK
+REL="NEXT"
+TITLE="PPollUnconfig"
+HREF="reference-function-ppollunconfig.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.2.1
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference-function-ppoll.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-ppollunconfig.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="REFERENCE-FUNCTION-PPOLLCONFIG"
+></A
+>PPollConfig</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2892"
+></A
+><H2
+>Name</H2
+>PPollConfig&nbsp;--&nbsp;configure a device's parallel poll response</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN2895"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN2896"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;gpib/ib.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void PPollConfig</CODE
+>(int board_desc, Addr4882_t address, int dio_line, int line_sense);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2909"
+></A
+><H2
+>	Description
+	</H2
+><P
+>	PPollConfig() configures the device specified by <CODE
+CLASS="PARAMETER"
+>address</CODE
+>
+	to respond to parallel polls.
+	The <CODE
+CLASS="PARAMETER"
+>dio_line</CODE
+> (valid values are 1 through 8)
+	specifies which dio line the device being configured should use to send
+	back its parallel poll response.  The <CODE
+CLASS="PARAMETER"
+>line_sense</CODE
+> argument
+	specifies the polarity of the response.  If <CODE
+CLASS="PARAMETER"
+>line_sense</CODE
+>
+	is nonzero, then the specified dio line will be asserted to indicate
+	that the 'individual status bit' (or 'ist') is 1.  If <CODE
+CLASS="PARAMETER"
+>sense</CODE
+>
+	is zero, then the specified dio line will be asserted when ist is zero.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference-function-ppoll.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-ppollunconfig.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PPoll</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="reference.html#AEN2647"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PPollUnconfig</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

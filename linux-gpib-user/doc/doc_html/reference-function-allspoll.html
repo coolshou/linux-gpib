@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>AllSPoll</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.2.1
+ Documentation"
+HREF="index.html"><LINK
+REL="UP"
+TITLE='	"Multidevice" API Functions'
+HREF="reference.html#AEN2647"><LINK
+REL="PREVIOUS"
+TITLE="	Linux-GPIB Reference"
+HREF="reference.html"><LINK
+REL="NEXT"
+TITLE="DevClear"
+HREF="reference-function-devclear.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.2.1
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-devclear.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="REFERENCE-FUNCTION-ALLSPOLL"
+></A
+>AllSPoll</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN2655"
+></A
+><H2
+>Name</H2
+>AllSPoll&nbsp;--&nbsp;serial poll multiple devices</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN2658"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN2659"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;gpib/ib.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void AllSPoll</CODE
+>(int board_desc, Addr4882_t *addressList, short *resultList);</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>void AllSpoll</CODE
+>(int board_desc, const Addr4882_t *addressList, short *resultList);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN2679"
+></A
+><H2
+>	Description
+	</H2
+><P
+>	AllSPoll() causes the interface board specified by <CODE
+CLASS="PARAMETER"
+>board_desc</CODE
+>
+	to serial poll all the GPIB addresses specified in the <CODE
+CLASS="PARAMETER"
+>addressList</CODE
+>
+	array.  The results of the serial polls are stored into <CODE
+CLASS="PARAMETER"
+>resultList</CODE
+>.
+	If you only wish to serial poll a single device,
+	<A
+HREF="reference-function-readstatusbyte.html"
+>ReadStatusByte()</A
+> or
+	<A
+HREF="reference-function-ibrsp.html"
+>ibrsp()</A
+> may be
+	more convenient.
+	</P
+><P
+>	This function may also be invoked with the alternate capitalization 'AllSpoll'
+	for compatibility with NI's library.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-devclear.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Linux-GPIB Reference</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="reference.html#AEN2647"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>DevClear</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

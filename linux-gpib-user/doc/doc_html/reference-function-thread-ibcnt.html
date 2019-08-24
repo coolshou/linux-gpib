@@ -1,0 +1,219 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>ThreadIbcnt and ThreadIbcntl</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.2.1
+ Documentation"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="	Utility Functions"
+HREF="reference.html#AEN3423"><LINK
+REL="PREVIOUS"
+TITLE="PPE_byte"
+HREF="reference-function-ppe-byte.html"><LINK
+REL="NEXT"
+TITLE="ThreadIberr"
+HREF="reference-function-thread-iberr.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.2.1
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference-function-ppe-byte.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-thread-iberr.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="REFERENCE-FUNCTION-THREAD-IBCNT"
+></A
+>ThreadIbcnt and ThreadIbcntl</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN3687"
+></A
+><H2
+>Name</H2
+>ThreadIbcnt and ThreadIbcntl&nbsp;--&nbsp;thread-specific ibcnt and ibcntl values</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN3690"
+></A
+><H2
+>Synopsis</H2
+><DIV
+CLASS="FUNCSYNOPSIS"
+><P
+></P
+><A
+NAME="AEN3691"
+></A
+><PRE
+CLASS="FUNCSYNOPSISINFO"
+>#include &lt;gpib/ib.h&gt;</PRE
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>int ThreadIbcnt</CODE
+>(void);</CODE
+></P
+><P
+><CODE
+><CODE
+CLASS="FUNCDEF"
+>long ThreadIbcntl</CODE
+>(void);</CODE
+></P
+><P
+></P
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3701"
+></A
+><H2
+>	Description
+	</H2
+><P
+>	ThreadIbcnt() and ThreadIbcntl() return thread-local versions
+	 of the global
+	variables <A
+HREF="reference-globals-ibcnt.html"
+>ibcnt and ibcntl</A
+>.
+	</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN3705"
+></A
+><H2
+>	Return value
+	</H2
+><P
+>	The value of <A
+HREF="reference-globals-ibcnt.html"
+>ibcnt or ibcntl</A
+>
+	corresponding to the last 'traditional' or 'multidevice' function
+	called in the current thread is returned.
+	</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference-function-ppe-byte.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-thread-iberr.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PPE_byte</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="reference.html#AEN3423"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ThreadIberr</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>
