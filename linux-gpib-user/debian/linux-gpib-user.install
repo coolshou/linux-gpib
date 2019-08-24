@@ -1,0 +1,16 @@
+etc/udev/rules.d/98-gpib-generic.rules
+etc/udev/rules.d/99-ni_usb_gpib.rules
+etc/udev/rules.d/99-agilent_82357a.rules
+usr/share/usb/ni_usb_gpib
+usr/share/usb/agilent_82357a
+usr/lib/udev
+usr/lib/x86_64-linux-gnu/libgpib.la
+usr/lib/x86_64-linux-gnu/libgpib.so
+usr/lib/x86_64-linux-gnu/pkgconfig/libgpib.pc
+usr/lib/x86_64-linux-gnu/libgpib.so.0.3.0
+usr/lib/x86_64-linux-gnu/libgpib.so.0
+usr/sbin/gpib_config
+usr/include/gpib/gpib_user.h
+usr/include/gpib/ib.h
+usr/bin/ibterm
+usr/bin/ibtest

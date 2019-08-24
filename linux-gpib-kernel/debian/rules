@@ -1,0 +1,26 @@
+#!/usr/bin/make -f
+# See debhelper(7) (uncomment to enable)
+# output every command that modifies files on the build system.
+#export DH_VERBOSE = 1
+
+DRIVER_NAME := linux-gpib-kernel
+VERSION := $(shell dpkg-parsechangelog | grep '^Version:' | cut -d' ' -f2 | cut -d- -f1 | cut -d\: -f2)
+
+BDATE=$(shell date +%Y%m%d)
+GDATE=${BDATE}_$(shell git rev-parse HEAD)
+
+%:
+	dh "$@" --with dkms,modaliases
+
+override_dh_install:
+	dh_install ChangeLog drivers NEWS AUTHORS compat COPYING INSTALL README Makefile usr/src/$(DRIVER_NAME)-$(VERSION)/
+#	find debian/$(DRIVER_NAME)/usr/src/$(DRIVER_NAME)-$(VERSION) -type f -exec chmod 644 {} \;
+
+override_dh_dkms:
+	dh_dkms -V $(VERSION)
+
+override_dh_auto_configure:
+#	$(shell sed -i 's/^#define BUILDNO.*/#define BUILDNO "${GDATE}"/' ./os_dep/linux/os_intfs.c)
+
+
+override_dh_auto_build override_dh_auto_test override_dh_auto_install override_dh_auto_c:

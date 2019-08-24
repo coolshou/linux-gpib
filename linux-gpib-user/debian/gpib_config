@@ -1,0 +1,3 @@
+#!/bin/sh
+/usr/sbin/gpib_config
+exit 0

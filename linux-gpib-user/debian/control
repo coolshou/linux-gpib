@@ -1,0 +1,21 @@
+Source: linux-gpib-user
+Section: utility
+Priority: optional
+Maintainer: test <test@unknown>
+Build-Depends: debhelper (>= 11), autotools-dev, dh-python, python3-setuptools,
+Standards-Version: 4.1.3
+Homepage: https://sourceforge.net/projects/linux-gpib/
+#Vcs-Browser: https://salsa.debian.org/debian/linux-gpib-user
+#Vcs-Git: https://salsa.debian.org/debian/linux-gpib-user.git
+
+Package: linux-gpib-user
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, linux-gpib-kernel
+Description: The Linux GPIB Package is a support package for GPIB (IEEE 488.2) hardware
+ The Linux GPIB Package is a support package for GPIB (IEEE 488.2) hardware. The package contains a development environment consisting of a GPIB library written in C, kernel driver modules, and bindings for several other languages.
+
+Package: python3-gpib
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, linux-gpib-user
+Description: python3 binding to Linux GPIB Package
+ The package contains a python binding of the GPIB library

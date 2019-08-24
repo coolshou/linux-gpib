@@ -1,0 +1,17 @@
+Source: linux-gpib-kernel
+Section: kernel
+Priority: optional
+Maintainer: jimmy <jimmy@jimmy-alpha>
+Build-Depends: debhelper (>=9), dkms, dh-modaliases, git, sed
+Standards-Version: 3.9.6
+Homepage:  https://sourceforge.net/projects/linux-gpib/
+#Vcs-Git: https://github.com/coolshou/linux-gpib.git
+#Vcs-Browser: https://github.com/coolshou/linux-gpib
+
+Package: linux-gpib-kernel
+Architecture: all
+Depends: ${misc:Depends}, dkms, linux-libc-dev, libc6-dev
+XB-Modaliases: ${modaliases}
+Description: The Linux GPIB Package is a support package for GPIB (IEEE 488.2) hardware
+ This package provides the dkms source code for the GPIB kernel module.
+ Kernel source or headers are required to compile these modules.
