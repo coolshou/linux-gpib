@@ -1,0 +1,5 @@
+linux-gpib-user (4.2.1-20190812) unstable; urgency=medium
+
+  * Initial release
+
+ -- test <test@unknown>  Fri, 09 Aug 2019 04:11:14 +0800
