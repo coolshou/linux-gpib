@@ -2,7 +2,7 @@ Source: linux-gpib-user
 Section: utility
 Priority: optional
 Maintainer: test <test@unknown>
-Build-Depends: debhelper (>= 11), autotools-dev, dh-python, python3-setuptools,
+Build-Depends: debhelper (>= 11), autotools-dev, dh-python, python3-setuptools, bison
 Standards-Version: 4.1.3
 Homepage: https://sourceforge.net/projects/linux-gpib/
 #Vcs-Browser: https://salsa.debian.org/debian/linux-gpib-user
