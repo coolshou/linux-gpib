@@ -34,4 +34,4 @@ override_dh_auto_install:
 	mkdir -p debian/linux-gpib-user/etc/udev/rules.d/
 	cp debian/98-gpib-generic.rules debian/linux-gpib-user/etc/udev/rules.d/
 	mkdir -p debian/linux-gpib-user/etc/
-	cp debian/gpib_config debian/linux-gpib-user/etc/
+	cp debian/gpib.conf debian/linux-gpib-user/etc/
