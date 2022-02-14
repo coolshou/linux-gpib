@@ -7,7 +7,7 @@ usr/lib/udev
 usr/lib/x86_64-linux-gnu/libgpib.la
 usr/lib/x86_64-linux-gnu/libgpib.so
 usr/lib/x86_64-linux-gnu/pkgconfig/libgpib.pc
-usr/lib/x86_64-linux-gnu/libgpib.so.0.3.0
+usr/lib/x86_64-linux-gnu/libgpib.so.0.4.0
 usr/lib/x86_64-linux-gnu/libgpib.so.0
 usr/sbin/gpib_config
 usr/include/gpib/gpib_user.h
