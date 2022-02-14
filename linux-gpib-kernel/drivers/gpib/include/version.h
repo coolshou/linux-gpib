@@ -1,1 +1,1 @@
-#define GPIB_VERSION "4.2.0"
+#define GPIB_VERSION "4.3.4"

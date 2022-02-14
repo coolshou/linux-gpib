@@ -61,8 +61,6 @@ unsigned int usec_to_ppoll_timeout( unsigned int usec );
 int set_timeout( const ibBoard_t *board, unsigned int usec_timeout );
 int close_gpib_handle( ibConf_t *conf );
 int open_gpib_handle( ibConf_t *conf );
-int gpibi_change_address( ibConf_t *conf,
-	unsigned int pad, int sad );
 int lock_board_mutex( ibBoard_t *board );
 int unlock_board_mutex( ibBoard_t *board );
 int conf_lock_board( ibConf_t *conf );
@@ -109,7 +107,7 @@ void internal_ibeot( ibConf_t *conf, int send_eoi );
 int internal_ibist( ibConf_t *conf, int ist );
 int internal_ibppc( ibConf_t *conf, int v );
 int internal_ibsre( ibConf_t *conf, int v );
-int internal_ibrsv( ibConf_t *conf, int v );
+int internal_ibrsv2( ibConf_t *conf, int status_byte, int new_reason_for_service );
 int internal_iblines( ibConf_t *conf, short *line_status );
 int internal_ibgts( ibConf_t *conf, int shadow_handshake );
 int internal_ibrsc( ibConf_t *conf, int request_control );

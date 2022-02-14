@@ -123,15 +123,15 @@ unsigned int tnt4882_update_status( gpib_board_t *board, unsigned int clear_mask
 	tnt4882_private_t *priv = board->private_data;
 	return nec7210_update_status( board, &priv->nec7210_priv, clear_mask );
 }
-void tnt4882_primary_address(gpib_board_t *board, unsigned int address)
+int tnt4882_primary_address(gpib_board_t *board, unsigned int address)
 {
 	tnt4882_private_t *priv = board->private_data;
-	nec7210_primary_address(board, &priv->nec7210_priv, address);
+	return nec7210_primary_address(board, &priv->nec7210_priv, address);
 }
-void tnt4882_secondary_address(gpib_board_t *board, unsigned int address, int enable)
+int tnt4882_secondary_address(gpib_board_t *board, unsigned int address, int enable)
 {
 	tnt4882_private_t *priv = board->private_data;
-	nec7210_secondary_address(board, &priv->nec7210_priv, address, enable);
+	return nec7210_secondary_address(board, &priv->nec7210_priv, address, enable);
 }
 int tnt4882_parallel_poll(gpib_board_t *board, uint8_t *result)
 {
@@ -153,19 +153,74 @@ int tnt4882_parallel_poll(gpib_board_t *board, uint8_t *result)
 void tnt4882_parallel_poll_configure(gpib_board_t *board, uint8_t config )
 {
 	tnt4882_private_t *priv = board->private_data;
-	nec7210_parallel_poll_configure( board, &priv->nec7210_priv, config );
+	if(priv->nec7210_priv.type == TNT5004) {
+		write_byte(&priv->nec7210_priv, AUXRI | 0x4, AUXMR);		/* configure locally */
+		if (config) {
+			write_byte(&priv->nec7210_priv, PPR | config, AUXMR);	/* set response + clear sense */
+		} else {
+			write_byte(&priv->nec7210_priv, PPR | 0x10, AUXMR);	/* disable ppoll */
+		}
+	}
+	else
+		nec7210_parallel_poll_configure( board, &priv->nec7210_priv, config );
 }
 void tnt4882_parallel_poll_response(gpib_board_t *board, int ist )
 {
 	tnt4882_private_t *priv = board->private_data;
 	nec7210_parallel_poll_response( board, &priv->nec7210_priv, ist );
 }
-// XXX tnt4882 has fancier serial poll capability, should send reqt AUX command
+
+/* this is just used by the old nec7210 isa interfaces, the newer
+ * boards use tnt4882_serial_poll_response2
+ */
 void tnt4882_serial_poll_response(gpib_board_t *board, uint8_t status)
 {
 	tnt4882_private_t *priv = board->private_data;
 	nec7210_serial_poll_response(board, &priv->nec7210_priv, status);
 }
+
+void tnt4882_serial_poll_response2(gpib_board_t *board, 
+	uint8_t status, int new_reason_for_service)
+{
+	tnt4882_private_t *priv = board->private_data;
+	unsigned long flags;
+	const int MSS = status & request_service_bit;
+	const int reqt = MSS && new_reason_for_service;
+	const int reqf = MSS == 0;
+
+	spin_lock_irqsave( &board->spinlock, flags );
+	if( reqt )
+	{
+		priv->nec7210_priv.srq_pending = 1;
+
+		smp_mb__before_atomic();
+		clear_bit(SPOLL_NUM, &board->status);
+		smp_mb__after_atomic();
+	}else if ( reqf )
+	{
+		priv->nec7210_priv.srq_pending = 0;
+	}
+
+	if( reqt )
+	{
+		/* It may seem like a race to issue reqt before updating
+		 * the status byte, but it is not.  The chip does not
+		 * issue the reqt until the SPMR is written to at
+		 * a later time.
+		 */
+		write_byte(&priv->nec7210_priv, AUX_REQT, AUXMR);
+	} else if ( reqf )
+	{
+		write_byte(&priv->nec7210_priv, AUX_REQF, AUXMR);
+	}
+	/* We need to always zero bit 6 of the status byte before writing it to
+	 * the SPMR to insure we are using
+	 * serial poll mode SP1, and not accidentally triggering mode SP3.
+	*/
+	write_byte(&priv->nec7210_priv, status & ~request_service_bit, SPMR);
+	spin_unlock_irqrestore( &board->spinlock, flags );
+}
+
 uint8_t tnt4882_serial_poll_status( gpib_board_t *board )
 {
 	tnt4882_private_t *priv = board->private_data;
@@ -200,7 +255,7 @@ gpib_interface_t ni_pci_interface =
 	update_status: tnt4882_update_status,
 	primary_address: tnt4882_primary_address,
 	secondary_address: tnt4882_secondary_address,
-	serial_poll_response: tnt4882_serial_poll_response,
+	serial_poll_response2: tnt4882_serial_poll_response2,
 	serial_poll_status: tnt4882_serial_poll_status,
 	t1_delay: tnt4882_t1_delay,
 	return_to_local: tnt4882_return_to_local,
@@ -229,7 +284,7 @@ gpib_interface_t ni_pci_accel_interface =
 	update_status: tnt4882_update_status,
 	primary_address: tnt4882_primary_address,
 	secondary_address: tnt4882_secondary_address,
-	serial_poll_response: tnt4882_serial_poll_response,
+	serial_poll_response2: tnt4882_serial_poll_response2,
 	serial_poll_status: tnt4882_serial_poll_status,
 	t1_delay: tnt4882_t1_delay,
 	return_to_local: tnt4882_return_to_local,
@@ -258,7 +313,7 @@ gpib_interface_t ni_isa_interface =
 	update_status: tnt4882_update_status,
 	primary_address: tnt4882_primary_address,
 	secondary_address: tnt4882_secondary_address,
-	serial_poll_response: tnt4882_serial_poll_response,
+	serial_poll_response2: tnt4882_serial_poll_response2,
 	serial_poll_status: tnt4882_serial_poll_status,
 	t1_delay: tnt4882_t1_delay,
 	return_to_local: tnt4882_return_to_local,
@@ -287,7 +342,7 @@ gpib_interface_t ni_nat4882_isa_interface =
 	update_status: tnt4882_update_status,
 	primary_address: tnt4882_primary_address,
 	secondary_address: tnt4882_secondary_address,
-	serial_poll_response: tnt4882_serial_poll_response,
+	serial_poll_response2: tnt4882_serial_poll_response2,
 	serial_poll_status: tnt4882_serial_poll_status,
 	t1_delay: tnt4882_t1_delay,
 	return_to_local: tnt4882_return_to_local,
@@ -345,7 +400,7 @@ gpib_interface_t ni_isa_accel_interface =
 	update_status: tnt4882_update_status,
 	primary_address: tnt4882_primary_address,
 	secondary_address: tnt4882_secondary_address,
-	serial_poll_response: tnt4882_serial_poll_response,
+	serial_poll_response2: tnt4882_serial_poll_response2,
 	serial_poll_status: tnt4882_serial_poll_status,
 	t1_delay: tnt4882_t1_delay,
 	return_to_local: tnt4882_return_to_local,
@@ -374,7 +429,7 @@ gpib_interface_t ni_nat4882_isa_accel_interface =
 	update_status: tnt4882_update_status,
 	primary_address: tnt4882_primary_address,
 	secondary_address: tnt4882_secondary_address,
-	serial_poll_response: tnt4882_serial_poll_response,
+	serial_poll_response2: tnt4882_serial_poll_response2,
 	serial_poll_status: tnt4882_serial_poll_status,
 	t1_delay: tnt4882_t1_delay,
 	return_to_local: tnt4882_return_to_local,
@@ -462,7 +517,7 @@ void tnt4882_init( tnt4882_private_t *tnt_priv, const gpib_board_t *board )
 	tnt_writeb( tnt_priv,AUX_7210, SWAPPED_AUXCR);
 	udelay(1);
 	// turn on one-chip mode
-	if( nec_priv->type == TNT4882 )
+ 	if(( nec_priv->type == TNT4882 ) || ( nec_priv->type == TNT5004 ))
 		tnt_writeb(tnt_priv, NODMA | TNT_ONE_CHIP_BIT, HSSEL);
 	else
 		tnt_writeb(tnt_priv, NODMA, HSSEL);
@@ -538,10 +593,12 @@ int ni_pci_attach(gpib_board_t *board, const gpib_board_config_t *config)
 		{
 		case PCI_DEVICE_ID_NI_GPIB:
 		case PCI_DEVICE_ID_NI_GPIB_PLUS:
+		case PCI_DEVICE_ID_NI_GPIB_PLUS2:
 		case PCI_DEVICE_ID_NI_PXIGPIB:
 		case PCI_DEVICE_ID_NI_PMCGPIB:
 		case PCI_DEVICE_ID_NI_PCIEGPIB:
 		case PCI_DEVICE_ID_NI_PCIE2GPIB:
+		case PCI_DEVICE_ID_MC_PCI488: 		// support for Measurement Computing PCI-488
 		case PCI_DEVICE_ID_CEC_NI_GPIB:
 			found_board = 1;
 			break;
@@ -575,6 +632,17 @@ int ni_pci_attach(gpib_board_t *board, const gpib_board_config_t *config)
 	tnt_priv->irq = mite_irq(tnt_priv->mite);
 	printk( "tnt4882: irq %i\n", tnt_priv->irq );
 
+	// TNT5004 detection
+	switch(tnt_readb( tnt_priv, CSR ) & 0xf0) {
+	case 0x30:
+		nec_priv->type = TNT4882;
+		printk("tnt4882: TNT4882 chipset detected\n");
+		break;
+	case 0x40:
+		nec_priv->type = TNT5004;
+		printk("tnt4882: TNT5004 chipset detected\n");
+		break;
+	}
 	tnt4882_init( tnt_priv, board );
 
 	return 0;
@@ -741,10 +809,12 @@ static const struct pci_device_id tnt4882_pci_table[] =
 {
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB)},
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB_PLUS)},
+	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB_PLUS2)},
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PXIGPIB)},
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PMCGPIB)},
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PCIEGPIB)},
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_PCIE2GPIB)},
+	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_MC_PCI488)},	// support for Measurement Computing PCI-488
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_CEC_NI_GPIB)},
 	{ 0 }
 };
@@ -767,7 +837,7 @@ static int __init tnt4882_init_module( void )
 	gpib_register_driver(&ni_nec_isa_accel_interface, THIS_MODULE);
 	gpib_register_driver(&ni_pci_interface, THIS_MODULE);
 	gpib_register_driver(&ni_pci_accel_interface, THIS_MODULE);
-#if defined(GPIB_CONFIG_PCMCIA)
+#if (GPIB_CONFIG_PCMCIA==1)
 	gpib_register_driver(&ni_pcmcia_interface, THIS_MODULE);
 	gpib_register_driver(&ni_pcmcia_accel_interface, THIS_MODULE);
 	if( init_ni_gpib_cs() < 0 )
@@ -790,7 +860,7 @@ static void __exit tnt4882_exit_module( void )
 	gpib_unregister_driver(&ni_nec_isa_accel_interface);
 	gpib_unregister_driver(&ni_pci_interface);
 	gpib_unregister_driver(&ni_pci_accel_interface);
-#if defined(GPIB_CONFIG_PCMCIA)
+#if (GPIB_CONFIG_PCMCIA==1)
 	gpib_unregister_driver(&ni_pcmcia_interface);
 	gpib_unregister_driver(&ni_pcmcia_accel_interface);
 	exit_ni_gpib_cs();

@@ -73,19 +73,26 @@ void nec7210_parallel_poll_response( gpib_board_t *board, nec7210_private_t *pri
 		write_byte( priv, AUX_CPPF , AUXMR );
 }
 
+/* This is really only adequate for chips that do a 488.2 style reqt/reqf
+ * based on bit 6 of the SPMR (see chapter 11.3.3 of 488.2). For simpler chips that simply
+ * set rsv directly based on bit 6, we either need to do more hardware setup to expose
+ * the 488.2 capability (for example with NI chips), or we need to implement the
+ * 488.2 set srv state machine in the driver (if that is even viable).
+ */
 void nec7210_serial_poll_response(gpib_board_t *board, nec7210_private_t *priv, uint8_t status)
 {
 	unsigned long flags;
 
 	spin_lock_irqsave( &board->spinlock, flags );
 	if(status & request_service_bit)
+	{	
 		priv->srq_pending = 1;
-	else
+		
+		smp_mb__before_atomic();
+		clear_bit(SPOLL_NUM, &board->status);
+		smp_mb__after_atomic();
+	}else
 		priv->srq_pending = 0;
-
-	smp_mb__before_atomic();
-	clear_bit(SPOLL_NUM, &board->status);
-	smp_mb__after_atomic();
 
 	write_byte(priv, status, SPMR);
 	spin_unlock_irqrestore( &board->spinlock, flags );
@@ -96,13 +103,14 @@ uint8_t nec7210_serial_poll_status( gpib_board_t *board, nec7210_private_t *priv
 	return read_byte(priv, SPSR);
 }
 
-void nec7210_primary_address(const gpib_board_t *board, nec7210_private_t *priv, unsigned int address)
+int nec7210_primary_address(const gpib_board_t *board, nec7210_private_t *priv, unsigned int address)
 {
 	// put primary address in address0
 	write_byte(priv, address & ADDRESS_MASK, ADR);
+	return 0;
 }
 
-void nec7210_secondary_address(const gpib_board_t *board, nec7210_private_t *priv, unsigned int address, int enable)
+int nec7210_secondary_address(const gpib_board_t *board, nec7210_private_t *priv, unsigned int address, int enable)
 {
 	if(enable)
 	{
@@ -120,6 +128,7 @@ void nec7210_secondary_address(const gpib_board_t *board, nec7210_private_t *pri
 		priv->reg_bits[ ADMR ] &= ~HR_ADM1;
 	}
 	write_byte( priv, priv->reg_bits[ ADMR ], ADMR );
+	return 0;
 }
 
 static void update_talker_state(nec7210_private_t *priv, unsigned address_status_bits)

@@ -35,7 +35,7 @@ int iboffline( gpib_board_t *board );
 int iblines( const gpib_board_t *board, short *lines );
 int ibrd(gpib_board_t *board, uint8_t *buf, size_t length, int *end_flag, size_t *bytes_read);
 int ibrpp( gpib_board_t *board, uint8_t *buf );
-int ibrsv(gpib_board_t *board, uint8_t poll_status);
+int ibrsv2(gpib_board_t *board, uint8_t status_byte, int new_reason_for_service );
 void ibrsc( gpib_board_t *board, int request_control );
 int ibsic( gpib_board_t *board, unsigned int usec_duration );
 int ibsre(gpib_board_t *board, int enable);

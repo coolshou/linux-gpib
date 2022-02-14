@@ -84,37 +84,45 @@ irqreturn_t tms9914_interrupt_have_status(gpib_board_t *board, tms9914_private_t
 	// unrecognized command received
 	if(status1 & HR_UNC)
 	{
-		unsigned short command_byte = read_byte(priv, CPTR);
+		unsigned short command_byte = read_byte(priv, CPTR) & gpib_command_mask;
 // 		printk("tms9914: command pass thru 0x%x\n", command_byte);
 		switch(command_byte)
 		{
 		case PPConfig:
 			priv->ppoll_configure_state = 1;
+			/* AUX_PTS generates another UNC interrupt on the next command byte 
+			 * if it is in the secondary address group (such as PPE and PPD). */
 			write_byte(priv, AUX_PTS, AUXCR);
 			write_byte(priv, AUX_VAL, AUXCR);
 			break;
 		case PPU:
-			tms9914_parallel_poll_configure(board, priv, PPD);
-			write_byte(priv, AUX_VAL, AUXCR);	
+			tms9914_parallel_poll_configure(board, priv, command_byte);
+			write_byte(priv, AUX_VAL, AUXCR);
+			break;
 		default:
-			if(priv->ppoll_configure_state)
+			if(is_PPE(command_byte) || is_PPD(command_byte))
 			{
-				priv->ppoll_configure_state = 0;
-				if(command_byte >= PPE && command_byte <= PPD + 0xd)
+				if(priv->ppoll_configure_state)
 				{
 					tms9914_parallel_poll_configure(board, priv, command_byte);
 					write_byte(priv, AUX_VAL, AUXCR);
 				}else
 				{
-					printk("tms9914: bad parallel poll configure byte, command pass thru 0x%x\n", command_byte);
+//					printk("tms9914: bad parallel poll configure byte, command pass thru 0x%x\n", command_byte);
 					write_byte(priv, AUX_INVAL, AUXCR);
 				}
-				break;
+			} else
+			{
+//				printk("tms9914: unrecognized gpib command pass thru 0x%x\n", command_byte);
+				// clear dac holdoff
+				write_byte(priv, AUX_INVAL, AUXCR);
 			}
-			printk("tms9914: unknown gpib command pass thru 0x%x\n", command_byte);
-			// clear dac holdoff
-			write_byte(priv, AUX_INVAL, AUXCR);
 			break;
+		}
+		
+		if(in_primary_command_group(command_byte) && command_byte != PPConfig)
+		{
+			priv->ppoll_configure_state = 0;
 		}
 	}
 
@@ -152,7 +160,7 @@ irqreturn_t tms9914_interrupt_have_status(gpib_board_t *board, tms9914_private_t
 		{
 			printk( "tms9914: bug, APT interrupt without secondary addressing?\n" );
 		}
-		if( read_byte( priv, CPTR ) == MSA( board->sad ) )
+		if( (read_byte( priv, CPTR ) & gpib_command_mask) == MSA( board->sad ) )
 		{
 			write_byte(priv, AUX_VAL, AUXCR);
 		}else

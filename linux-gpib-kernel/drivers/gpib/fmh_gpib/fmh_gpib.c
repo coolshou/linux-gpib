@@ -100,15 +100,15 @@ unsigned int fmh_gpib_update_status( gpib_board_t *board, unsigned int clear_mas
 	fmh_gpib_private_t *priv = board->private_data;
 	return nec7210_update_status( board, &priv->nec7210_priv, clear_mask );
 }
-void fmh_gpib_primary_address(gpib_board_t *board, unsigned int address)
+int fmh_gpib_primary_address(gpib_board_t *board, unsigned int address)
 {
 	fmh_gpib_private_t *priv = board->private_data;
-	nec7210_primary_address(board, &priv->nec7210_priv, address);
+	return nec7210_primary_address(board, &priv->nec7210_priv, address);
 }
-void fmh_gpib_secondary_address(gpib_board_t *board, unsigned int address, int enable)
+int fmh_gpib_secondary_address(gpib_board_t *board, unsigned int address, int enable)
 {
 	fmh_gpib_private_t *priv = board->private_data;
-	nec7210_secondary_address(board, &priv->nec7210_priv, address, enable);
+	return nec7210_secondary_address(board, &priv->nec7210_priv, address, enable);
 }
 int fmh_gpib_parallel_poll(gpib_board_t *board, uint8_t *result)
 {
@@ -139,11 +139,49 @@ void fmh_gpib_local_parallel_poll_mode( gpib_board_t *board, int local )
 		write_byte(&priv->nec7210_priv, AUX_I_REG | 0x0, AUXMR);
 	}
 }
-void fmh_gpib_serial_poll_response(gpib_board_t *board, uint8_t status)
+
+void fmh_gpib_serial_poll_response2(gpib_board_t *board, 
+	uint8_t status, int new_reason_for_service)
 {
 	fmh_gpib_private_t *priv = board->private_data;
-	nec7210_serial_poll_response(board, &priv->nec7210_priv, status);
+	unsigned long flags;
+	const int MSS = status & request_service_bit;
+	const int reqt = MSS && new_reason_for_service;
+	const int reqf = MSS == 0;
+
+	spin_lock_irqsave( &board->spinlock, flags );
+	if( reqt )
+	{
+		priv->nec7210_priv.srq_pending = 1;
+
+		smp_mb__before_atomic();
+		clear_bit(SPOLL_NUM, &board->status);
+		smp_mb__after_atomic();
+	}else if ( reqf )
+	{
+		priv->nec7210_priv.srq_pending = 0;
+	}
+
+	if( reqt )
+	{
+		/* It may seem like a race to issue reqt before updating
+		 * the status byte, but it is not.  The chip does not
+		 * issue the reqt until the SPMR is written to at
+		 * a later time.
+		 */
+		write_byte(&priv->nec7210_priv, AUX_REQT, AUXMR);
+	} else if ( reqf )
+	{
+		write_byte(&priv->nec7210_priv, AUX_REQF, AUXMR);
+	}
+	/* We need to always zero bit 6 of the status byte before writing it to
+	 * the SPMR to insure we are using
+	 * serial poll mode SP1, and not accidentally triggering mode SP3.
+	*/
+	write_byte(&priv->nec7210_priv, status & ~request_service_bit, SPMR);
+	spin_unlock_irqrestore( &board->spinlock, flags );
 }
+
 uint8_t fmh_gpib_serial_poll_status( gpib_board_t *board )
 {
 	fmh_gpib_private_t *priv = board->private_data;
@@ -318,9 +356,9 @@ static int fmh_gpib_dma_write(gpib_board_t *board,
 		BUG();
 	dmaengine_terminate_all(e_priv->dma_channel);
 	memcpy(e_priv->dma_buffer, buffer, length);
-	address = dma_map_single(NULL, e_priv->dma_buffer,
+	address = dma_map_single(board->dev, e_priv->dma_buffer,
 		 length, DMA_TO_DEVICE);
-	if(dma_mapping_error(NULL,  address))
+	if(dma_mapping_error(board->dev,  address))
 	{
 		printk("dma mapping error in dma write!\n");
 	}
@@ -387,7 +425,7 @@ static int fmh_gpib_dma_write(gpib_board_t *board,
 	/*	printk("length=%i, *bytes_written=%i, residue=%i, retval=%i\n",
 		length, *bytes_written, get_dma_residue(e_priv->dma_channel), retval);*/
 cleanup:
-	dma_unmap_single(NULL, address, length, DMA_TO_DEVICE);
+	dma_unmap_single(board->dev, address, length, DMA_TO_DEVICE);
 //	printk("%s: exit, retval=%d\n", __FUNCTION__, retval);
 	return retval;
 }
@@ -499,9 +537,9 @@ static int fmh_gpib_dma_read(gpib_board_t *board, uint8_t *buffer,
 	if(length == 0)
 		return 0;
 
-	bus_address = dma_map_single(NULL, e_priv->dma_buffer,
+	bus_address = dma_map_single(board->dev, e_priv->dma_buffer,
 		length, DMA_FROM_DEVICE);
-	if(dma_mapping_error(NULL, bus_address))
+	if(dma_mapping_error(board->dev, bus_address))
 	{
 		printk("dma mapping error in dma read!");
 	}
@@ -510,7 +548,7 @@ static int fmh_gpib_dma_read(gpib_board_t *board, uint8_t *buffer,
 	retval = fmh_gpib_config_dma(board, 0);
 	if(retval) 
 	{
-		dma_unmap_single(NULL, bus_address, length, DMA_FROM_DEVICE);
+		dma_unmap_single(board->dev, bus_address, length, DMA_FROM_DEVICE);
 		return retval;
 	}
 	tx_desc = dmaengine_prep_slave_single(e_priv->dma_channel, bus_address, length, DMA_DEV_TO_MEM, 
@@ -518,7 +556,7 @@ static int fmh_gpib_dma_read(gpib_board_t *board, uint8_t *buffer,
 	if(tx_desc == NULL)
 	{
 		printk("fmh_gpib_gpib: failed to allocate dma transmit descriptor\n");
-		dma_unmap_single(NULL, bus_address, length, DMA_FROM_DEVICE);
+		dma_unmap_single(board->dev, bus_address, length, DMA_FROM_DEVICE);
 		return -EIO;
 	}
 	tx_desc->callback = fmh_gpib_dma_callback;
@@ -570,7 +608,7 @@ static int fmh_gpib_dma_read(gpib_board_t *board, uint8_t *buffer,
 		fmh_gpib_dma_callback(board);
 	}
 
-	dma_unmap_single(NULL, bus_address, length, DMA_FROM_DEVICE);
+	dma_unmap_single(board->dev, bus_address, length, DMA_FROM_DEVICE);
 	memcpy(buffer, e_priv->dma_buffer, *bytes_read);
 
 	/* Manually read any dregs out of fifo. */
@@ -719,7 +757,7 @@ gpib_interface_t fmh_gpib_unaccel_interface =
 	update_status: fmh_gpib_update_status,
 	primary_address: fmh_gpib_primary_address,
 	secondary_address: fmh_gpib_secondary_address,
-	serial_poll_response: fmh_gpib_serial_poll_response,
+	serial_poll_response2: fmh_gpib_serial_poll_response2,
 	serial_poll_status: fmh_gpib_serial_poll_status,
 	t1_delay: fmh_gpib_t1_delay,
 	return_to_local: fmh_gpib_return_to_local,
@@ -748,7 +786,7 @@ gpib_interface_t fmh_gpib_interface =
 	update_status: fmh_gpib_update_status,
 	primary_address: fmh_gpib_primary_address,
 	secondary_address: fmh_gpib_secondary_address,
-	serial_poll_response: fmh_gpib_serial_poll_response,
+	serial_poll_response2: fmh_gpib_serial_poll_response2,
 	serial_poll_status: fmh_gpib_serial_poll_status,
 	t1_delay: fmh_gpib_t1_delay,
 	return_to_local: fmh_gpib_return_to_local,
@@ -888,8 +926,7 @@ static int fmh_gpib_config_dma(gpib_board_t *board, int output)
 	fmh_gpib_private_t *e_priv = board->private_data;
 	struct dma_slave_config config;
 	config.device_fc = true;
-	config.slave_id = 0;
-	
+
 	if(e_priv->dma_burst_length < 1)
 	{
 		config.src_maxburst = 1;
@@ -944,7 +981,7 @@ int fmh_gpib_init(fmh_gpib_private_t *e_priv, gpib_board_t *board, int handshake
 }
 
 /* Match callback for driver_find_device */
-static int fmh_gpib_device_match(struct device *dev, void *data)
+static int fmh_gpib_device_match(struct device *dev, DRIVER_FIND_DEVICE_DATA_TYPE data)
 {
 	const gpib_board_config_t *config = data;
 	
@@ -976,7 +1013,7 @@ static int fmh_gpib_attach_impl(gpib_board_t *board, const gpib_board_config_t *
 	struct platform_device *pdev;
 	
 	board->dev = driver_find_device(&fmh_gpib_platform_driver.driver,
-		NULL, (void*)config, &fmh_gpib_device_match);
+		NULL, (DRIVER_FIND_DEVICE_DATA_TYPE)config, &fmh_gpib_device_match);
 	if(board->dev == NULL)
 	{
 		printk("No matching fmh_gpib_core device was found, attach failed.");

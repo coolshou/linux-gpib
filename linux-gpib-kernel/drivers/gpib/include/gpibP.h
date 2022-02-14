@@ -47,13 +47,17 @@ extern gpib_board_t board_array[GPIB_MAX_NUM_BOARDS];
 
 extern struct list_head registered_drivers;
 
-#if defined( GPIB_CONFIG_KERNEL_DEBUG )
+#if ( GPIB_CONFIG_KERNEL_DEBUG==1 )
 #define GPIB_DPRINTK( format, args... ) printk( "gpib debug: " format, ## args )
 #else
 #define GPIB_DPRINTK( arg... )
 #endif
 
 #include <asm/io.h>
+
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+#define ioremap_nocache ioremap
+#endif
 
 void writeb_wrapper(unsigned int value, void *address);
 unsigned int readb_wrapper(void *address);

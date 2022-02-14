@@ -172,6 +172,8 @@ enum sts2_bits
 enum tnt4882_aux_cmds
 {
 	AUX_9914 = 0x15,	// switch to 9914 mode
+	AUX_REQT = 0x18,
+	AUX_REQF = 0x19,
 	AUX_PAGEIN = 0x50,	/* page in alternate registers */
 	AUX_HLDI = 0x51,	// rfd holdoff immediately
 	AUX_CLEAR_END = 0x55,

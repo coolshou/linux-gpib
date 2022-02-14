@@ -166,6 +166,8 @@ enum fmh_gpib_aux_cmds
 	asserted by AUX_RTL2. */
 	AUX_RTL2 = 0x0d,
 	AUX_RFD_HOLDOFF_ASAP = 0x15,
+	AUX_REQT = 0x18,
+	AUX_REQF = 0x19,
 	AUX_LO_SPEED = 0x40,
 	AUX_HI_SPEED = 0x41
 };

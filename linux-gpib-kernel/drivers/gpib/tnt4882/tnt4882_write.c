@@ -39,7 +39,7 @@ static int fifo_xfer_done( tnt4882_private_t *tnt_priv )
 
 	return retval;
 }
-	
+
 static unsigned tnt_transfer_count(tnt4882_private_t *tnt_priv)
 {
 	unsigned count = 0;
@@ -52,7 +52,7 @@ static unsigned tnt_transfer_count(tnt4882_private_t *tnt_priv)
 };
 
 static int write_wait( gpib_board_t *board, tnt4882_private_t *tnt_priv,
-	int wait_for_done )
+		int wait_for_done, int send_commands )
 {
 	nec7210_private_t *nec_priv = &tnt_priv->nec7210_priv;
 
@@ -74,7 +74,7 @@ static int write_wait( gpib_board_t *board, tnt4882_private_t *tnt_priv,
 	if( test_and_clear_bit( BUS_ERROR_BN, &nec_priv->state ) )
 	{
 		printk("tnt4882: write bus error\n");
-		return -EIO;
+		return (send_commands) ? -ENOTCONN : -ECOMM;
 	}
 	if( test_bit( DEV_CLEAR_BN, &nec_priv->state ) )
 	{
@@ -91,7 +91,7 @@ static int generic_write( gpib_board_t *board, uint8_t *buffer, size_t length,
 	ssize_t retval = 0;
 	tnt4882_private_t *tnt_priv = board->private_data;
 	nec7210_private_t *nec_priv = &tnt_priv->nec7210_priv;
-	unsigned int bits, imr0_bits, imr1_bits, imr2_bits;
+	unsigned int bits;
 	int32_t hw_count;
 	unsigned long flags;
 
@@ -101,25 +101,21 @@ static int generic_write( gpib_board_t *board, uint8_t *buffer, size_t length,
 	clear_bit(DEV_CLEAR_BN, &nec_priv->state);	
 	smp_mb__after_atomic();
 
-	imr1_bits = nec_priv->reg_bits[ IMR1 ];
-	imr2_bits = nec_priv->reg_bits[ IMR2 ];
-	nec7210_set_reg_bits( nec_priv, IMR1, 0xff, HR_ERRIE | HR_DECIE );
-	if( nec_priv->type != TNT4882 )
-		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, HR_DMAO );
+	nec7210_set_reg_bits( nec_priv, IMR1, HR_ERRIE, HR_ERRIE );
+
+	if(( nec_priv->type != TNT4882 ) && ( nec_priv->type != TNT5004 ))
+		nec7210_set_reg_bits( nec_priv, IMR2, HR_DMAO, HR_DMAO );
 	else
-		nec7210_set_reg_bits( nec_priv, IMR2, 0xff, 0 );
-	imr0_bits = tnt_priv->imr0_bits;
-	tnt_priv->imr0_bits &= ~TNT_ATNI_BIT;
-	tnt_writeb(tnt_priv, tnt_priv->imr0_bits, IMR0);
+		nec7210_set_reg_bits( nec_priv, IMR2, HR_DMAO, 0 );
 
 	tnt_writeb( tnt_priv, RESET_FIFO, CMDR );
 	udelay(1);
 
-	bits = TNT_TLCHE | TNT_B_16BIT;
+	bits = TNT_B_16BIT;
 	if( send_eoi )
 	{
 		bits |= TNT_CCEN;
-		if(nec_priv->type != TNT4882 )
+		if((nec_priv->type != TNT4882 ) && (nec_priv->type != TNT5004 ))
 			tnt_writeb( tnt_priv, AUX_SEOI, CCR );
 	}
 	if( send_commands )
@@ -144,7 +140,7 @@ static int generic_write( gpib_board_t *board, uint8_t *buffer, size_t length,
 	while( count < length  )
 	{
 		// wait until byte is ready to be sent
-		retval = write_wait( board, tnt_priv, 0 );
+		retval = write_wait( board, tnt_priv, 0, send_commands );
 		if( retval < 0 ) break;
 		if( fifo_xfer_done( tnt_priv ) ) break;
 
@@ -167,15 +163,13 @@ static int generic_write( gpib_board_t *board, uint8_t *buffer, size_t length,
 	}
 	// wait last byte has been sent
 	if(retval == 0)
-		retval = write_wait(board, tnt_priv, 1);
+		retval = write_wait(board, tnt_priv, 1, send_commands);
 
 	tnt_writeb( tnt_priv, STOP, CMDR );
 	udelay(1);
 
-	nec7210_set_reg_bits( nec_priv, IMR1, 0xff, imr1_bits );
-	nec7210_set_reg_bits( nec_priv, IMR2, 0xff, imr2_bits );
-	tnt_priv->imr0_bits = imr0_bits;
-	tnt_writeb(tnt_priv, tnt_priv->imr0_bits, IMR0);
+	nec7210_set_reg_bits( nec_priv, IMR1, HR_ERR, 0x0 );
+	nec7210_set_reg_bits( nec_priv, IMR2, HR_DMAO, 0x0 );
 	/* force handling of any interrupts that happened
 	 * while they were masked (this appears to be needed)*/
 	tnt4882_internal_interrupt(board);

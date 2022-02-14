@@ -95,6 +95,33 @@ static int set_local_parallel_poll_mode( ibBoard_t *board, int local )
 	return 0;
 }
 
+/* Send CFE and CFGn to enable noninterlocked handshaking */
+static int set_cable_length (ibConf_t *conf, int num_meters)
+{
+	int retval;
+	uint8_t cmd[2];
+	size_t length;
+	
+	if (num_meters < 0 || num_meters > 15)
+	{
+			setIberr (EARG);
+			return -1;
+	}
+
+	cmd [length++] = CFE;
+	if (num_meters)
+	{
+		cmd [length++] = CFGn(num_meters);
+	}
+	retval = my_ibcmd (conf, cmd, length);
+	if (retval != length)
+	{
+			return -1;
+	}
+
+	return 0;
+}
+
 int ibconfig( int ud, int option, int value )
 {
 	ibConf_t *conf;
@@ -297,14 +324,13 @@ int ibconfig( int ud, int option, int value )
 				}
 				break;
 			case IbcHSCableLength:
-				// XXX
-				if( value )
+				if (set_cable_length (conf, value) < 0)
 				{
-					fprintf( stderr, "libgpib: HS protocol not supported\n" );
-					setIberr( ECAP );
 					return exit_library( ud, 1 );
-				}else
+				} else
+				{
 					return exit_library( ud, 0 );
+				}
 				break;
 			case IbcIst:
 				retval = internal_ibist( conf, value );
@@ -312,7 +338,7 @@ int ibconfig( int ud, int option, int value )
 				else return exit_library( ud, 0 );
 				break;
 			case IbcRsv:
-				retval = internal_ibrsv( conf, value );
+				retval = internal_ibrsv2( conf, value, value & request_service_bit );
 				if( retval < 0 )
 					return exit_library( ud, 1 );
 				else

@@ -33,10 +33,12 @@ enum
 {
 	PCI_DEVICE_ID_NI_GPIB = 0xc801,
 	PCI_DEVICE_ID_NI_GPIB_PLUS = 0xc811,
+	PCI_DEVICE_ID_NI_GPIB_PLUS2 = 0x71ad,
 	PCI_DEVICE_ID_NI_PXIGPIB = 0xc821,
 	PCI_DEVICE_ID_NI_PMCGPIB = 0xc831,
 	PCI_DEVICE_ID_NI_PCIEGPIB = 0x70cf,
 	PCI_DEVICE_ID_NI_PCIE2GPIB = 0x710e,
+	PCI_DEVICE_ID_MC_PCI488 = 0x7259,    // Measurement Computing PCI-488 same design as PCI-GPIB with TNT5004
 	PCI_DEVICE_ID_CEC_NI_GPIB = 0x7258
 };
 
@@ -84,8 +86,8 @@ int tnt4882_enable_eos(gpib_board_t *board, uint8_t eos_byte, int
  compare_8_bits);
 void tnt4882_disable_eos(gpib_board_t *board);
 unsigned int tnt4882_update_status( gpib_board_t *board, unsigned int clear_mask );
-void tnt4882_primary_address(gpib_board_t *board, unsigned int address);
-void tnt4882_secondary_address(gpib_board_t *board, unsigned int address, int
+int tnt4882_primary_address(gpib_board_t *board, unsigned int address);
+int tnt4882_secondary_address(gpib_board_t *board, unsigned int address, int
  enable);
 int tnt4882_parallel_poll(gpib_board_t *board, uint8_t *result);
 void tnt4882_parallel_poll_configure( gpib_board_t *board, uint8_t config );
@@ -149,6 +151,7 @@ static inline unsigned short tnt_readb( tnt4882_private_t *priv, unsigned long o
 		switch(priv->nec7210_priv.type)
 		{
 		case TNT4882:
+		case TNT5004:
 			retval = priv->io_readb(address);
 			break;
 		case NAT4882:
@@ -186,6 +189,7 @@ static inline void tnt_writeb( tnt4882_private_t *priv, unsigned short value, un
 		switch(priv->nec7210_priv.type)
 		{
 		case TNT4882:
+		case TNT5004:
 			priv->io_writeb( value, address );
 			break;
 		case NAT4882:

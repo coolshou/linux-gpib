@@ -71,6 +71,7 @@ GPIB_DUMMY_VERSION {
 		ibrsc;
 		ibrsp;
 		ibrsv;
+		ibrsv2;
 		ibsad;
 		ibsic;
 		ibspb;

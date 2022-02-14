@@ -1,7 +1,7 @@
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([linux-gpib-user], [4.2.1])
+AC_INIT([linux-gpib-user],[4.3.4])
 # libtool version: current:revision:age
 #
 # If the library source code has changed at all since the last update, then
@@ -15,7 +15,7 @@ AC_INIT([linux-gpib-user], [4.2.1])
 #
 # If any interfaces have been removed since the last public release, then set
 # age to 0.
-GPIB_SO_VERSION=3:0:3
+GPIB_SO_VERSION=4:0:4
 AC_CONFIG_SRCDIR([lib/ibask.c])
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
@@ -59,9 +59,9 @@ dnl Checks for programs.
 AC_PROG_INSTALL
 AC_PROG_CC
 AM_PROG_CC_C_O
-AM_PROG_LEX
-AC_PROG_YACC
-AC_PROG_LIBTOOL
+AM_PROG_LEX([noyywrap])
+AM_MISSING_PROG(YACC,yacc)
+LT_INIT
 AC_PATH_PROG([JW_PATH], [jw], [no])
 if test "$JW_PATH" = "no" ; then
 	AC_MSG_NOTICE([docbook-tools (jw) not found, disabling documentation])
@@ -69,19 +69,21 @@ if test "$JW_PATH" = "no" ; then
 fi
 
 if test "$BIND_PYTHON" = "yes"; then
-	AM_PATH_PYTHON()
-	PYTHON_MAJOR_VERSION=$(echo $PYTHON_VERSION | cut -d. -f1 )
-	PYTHON_MINOR_VERSION=$(echo $PYTHON_VERSION | cut -d. -f2 )
-	if (( $PYTHON_MAJOR_VERSION < 2 )); then
-		AC_MSG_WARN([python version less than 2.0, disabling python binding])
+	AM_PATH_PYTHON([3.0],,[:])
+	if test "$PYTHON" = :; then
+	   	AC_MSG_NOTICE([no usable python found, disabling python binding])
 		BIND_PYTHON="no"
 	fi
 fi
-AC_PATH_PROG([PERL], [perl], [no], [])
-if test "$PERL" = "no"; then
-	AC_MSG_NOTICE([perl not found, disabling perl binding])
-	BIND_PERL="no"
+
+if test "$BIND_PERL" = "yes"; then
+   AC_PATH_PROG([PERL], [perl], [no], [])
+   if test "$PERL" = "no"; then
+      AC_MSG_NOTICE([perl not found, disabling perl binding])
+      BIND_PERL="no"
+    fi
 fi
+
 if test "$BIND_TCL" = "yes"; then
    SC_PATH_TCLCONFIG   
    if [[ $no_tcl ]]; then
@@ -91,15 +93,22 @@ if test "$BIND_TCL" = "yes"; then
 	SC_LOAD_TCLCONFIG
    fi
 fi
-AC_PATH_PROG([PHP_CONFIG], [php-config], [no],[])
-if test "$PHP_CONFIG" = "no"; then
-	AC_MSG_NOTICE([php-config not found, disabling PHP binding])
-	BIND_PHP="no"
+
+if test "$BIND_PHP" = "yes"; then
+   AC_PATH_PROG([PHP_CONFIG], [php-config], [no],[])
+   if test "$PHP_CONFIG" = "no"; then
+      AC_MSG_NOTICE([php-config not found, disabling PHP binding])
+      BIND_PHP="no"
+   fi
+else
+   PHP_CONFIG="no"
 fi
 
 dnl Checks for libraries.
+if test "$BIND_GUILE" = "yes"; then
 AC_CHECK_LIB([guile],[gh_define],[echo this prevents default actions from occurring > /dev/null],
 	[BIND_GUILE="no";AC_MSG_NOTICE([libguile not found, disabling guile binding])],[])
+fi
 
 AC_CHECK_LIB([readline], [readline], 
   	     [readline_lib=yes;AC_SUBST([LIB_READLINE_LDFLAGS], ["-lreadline -lncurses"])],
@@ -107,10 +116,15 @@ AC_CHECK_LIB([readline], [readline],
 	     [-lncurses])
 		       
 dnl Checks for header files.
-AC_HEADER_STDC
 AC_CHECK_HEADERS(unistd.h sys/param.h sys/time.h time.h sys/mkdev.h sys/sysmacros.h string.h memory.h fcntl.h dirent.h sys/ndir.h ndir.h alloca.h locale.h )
+
+if test "$BIND_PYTHON" = "yes"; then
 AM_CHECK_PYTHON_HEADERS([],[BIND_PYTHON=no;AC_MSG_NOTICE([python headers not found, disabling python binding])])
+fi
+
+if test "$BIND_GUILE" = "yes"; then
 AC_CHECK_HEADER([libguile.h],[],[BIND_GUILE="no";AC_MSG_NOTICE([libguile headers not found, disabling guile binding])])
+fi
 
 AC_CHECK_HEADER(readline/readline.h,[readline_h=yes])
 AC_CHECK_HEADER(readline/history.h,[history_h=yes])
@@ -166,8 +180,11 @@ AM_CONDITIONAL([BIND_PYTHON], [test "$BIND_PYTHON" = "yes"])
 echo "Python binding: $BIND_PYTHON"
 AM_CONDITIONAL([BIND_TCL], [test "$BIND_TCL" = "yes"])
 echo "TCL binding: $BIND_TCL"
+AX_DEFINE_DIR([SYSCONFDIR], [sysconfdir], [System configuration directory])
+AS_ECHO "sysconfdir: [$SYSCONFDIR]"
+AS_ECHO ""
 
-AC_OUTPUT([\
+AC_CONFIG_FILES([\
 	Makefile \
 	drivers/Makefile \
 	lib/Makefile \
@@ -187,6 +204,8 @@ AC_OUTPUT([\
 	usb/Makefile \
 	usb/ni_usb_gpib/Makefile \
 	usb/agilent_82357a/Makefile \
-]
-)
+	usb/lpvo_usb_gpib/Makefile \
+
+])
+AC_OUTPUT
 
