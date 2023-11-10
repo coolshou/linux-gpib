@@ -7,18 +7,18 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.2.1
+TITLE="	Linux-GPIB 4.3.4
  Documentation"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN899"><LINK
+HREF="reference.html#AEN904"><LINK
 REL="PREVIOUS"
 TITLE="ibrsp"
 HREF="reference-function-ibrsp.html"><LINK
 REL="NEXT"
-TITLE="ibsad"
-HREF="reference-function-ibsad.html"></HEAD
+TITLE="ibrsv2"
+HREF="reference-function-ibrsv2.html"></HEAD
 ><BODY
 CLASS="REFENTRY"
 BGCOLOR="#FFFFFF"
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.2.1
+>Linux-GPIB 4.3.4
  Documentation</TH
 ></TR
 ><TR
@@ -61,7 +61,7 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="reference-function-ibsad.html"
+HREF="reference-function-ibrsv2.html"
 ACCESSKEY="N"
 >Next</A
 ></TD
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBRSV"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2197"
+NAME="AEN2203"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2197"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2200"
+NAME="AEN2206"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,11 +95,11 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2201"
+NAME="AEN2207"
 ></A
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
->#include &lt;gpib/ib.h&gt;</PRE
+>#include &#60;gpib/ib.h&#62;</PRE
 ><P
 ><CODE
 ><CODE
@@ -114,7 +114,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2210"
+NAME="AEN2216"
 ></A
 ><H2
 >	Description
@@ -128,17 +128,34 @@ CLASS="PARAMETER"
 CLASS="PARAMETER"
 >status_byte</CODE
 >.
-	If the request service bit (0x40 hexadecimal) in <CODE
+	If MSS (bit 6 in <CODE
 CLASS="PARAMETER"
 >status_byte</CODE
+>)
+	is set, then the IEEE 488.2 local message "reqt" will be set true, causing
+	the board to request service by asserting the SRQ line.
+	If the MSS bit is clear, then the "reqf" message will be set true, causing
+	the board to stop requesting service.
+	</P
+><P
+>	Boards will also automatically stop requesting service when they are
+	serial polled by the controller.
+	</P
+><P
+>	This function follows the implementation technique described in
+	IEEE 488.2 section 11.3.3.4.3.  It is prone to generating spurious requests
+	for service, which are permitted by 488.2 but less than ideal.  In order
+	to avoid spurious requests, use <A
+HREF="reference-function-ibrsv2.html"
+>ibrsv2()</A
 >
-	is set, then the board will also request service by asserting the RQS line.
+	instead.
 	</P
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2216"
+NAME="AEN2225"
 ></A
 ><H2
 >	Return value
@@ -184,7 +201,7 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="reference-function-ibsad.html"
+HREF="reference-function-ibrsv2.html"
 ACCESSKEY="N"
 >Next</A
 ></TD
@@ -200,7 +217,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN899"
+HREF="reference.html#AEN904"
 ACCESSKEY="U"
 >Up</A
 ></TD
@@ -208,7 +225,7 @@ ACCESSKEY="U"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ibsad</TD
+>ibrsv2</TD
 ></TR
 ></TABLE
 ></DIV

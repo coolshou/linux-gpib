@@ -23,7 +23,7 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <asm-generic/dma.h>
-#include <linux/pci.h>
+#include <linux/dma-mapping.h>
 #include <linux/string.h>
 #include <linux/init.h>
 

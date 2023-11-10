@@ -1092,7 +1092,7 @@ static int take_control_ioctl( gpib_board_t *board, unsigned long arg )
 	if( retval )
 		return -EFAULT;
 
-	return ibcac( board, synchronous, 0 );
+	return ibcac( board, synchronous, 1 );
 }
 
 static int line_status_ioctl( gpib_board_t *board, unsigned long arg )

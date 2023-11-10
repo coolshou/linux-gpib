@@ -805,6 +805,10 @@ void ni_isa_detach(gpib_board_t *board)
 	tnt4882_free_private(board);
 }
 
+static int tnt4882_pci_probe(struct pci_dev *dev, const struct pci_device_id *id) {
+	return 0;
+}
+
 static const struct pci_device_id tnt4882_pci_table[] =
 {
 	{PCI_DEVICE(PCI_VENDOR_ID_NATINST, PCI_DEVICE_ID_NI_GPIB)},
@@ -820,6 +824,12 @@ static const struct pci_device_id tnt4882_pci_table[] =
 };
 MODULE_DEVICE_TABLE(pci, tnt4882_pci_table);
 
+static struct pci_driver tnt4882_pci_driver = {
+	.name = "tnt4882",
+	.id_table = tnt4882_pci_table,
+	.probe = &tnt4882_pci_probe
+};
+
 static const struct pnp_device_id tnt4882_pnp_table[] =
 {
 	{.id = "NICC601"},
@@ -829,6 +839,14 @@ MODULE_DEVICE_TABLE(pnp, tnt4882_pnp_table);
 
 static int __init tnt4882_init_module( void )
 {
+	int result;
+	
+	result = pci_register_driver(&tnt4882_pci_driver);
+	if (result) {
+		printk("tnt4882: pci_driver_register failed!\n");
+		return result;
+	}
+
 	gpib_register_driver(&ni_isa_interface, THIS_MODULE);
 	gpib_register_driver(&ni_isa_accel_interface, THIS_MODULE);
 	gpib_register_driver(&ni_nat4882_isa_interface, THIS_MODULE);
@@ -867,6 +885,8 @@ static void __exit tnt4882_exit_module( void )
 #endif
 
 	mite_cleanup();
+	
+	pci_unregister_driver(&tnt4882_pci_driver);
 }
 
 module_init( tnt4882_init_module );

@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.2.1
+TITLE="	Linux-GPIB 4.3.4
  Documentation"
 HREF="index.html"><LINK
 REL="UP"
 TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN899"><LINK
+HREF="reference.html#AEN904"><LINK
 REL="PREVIOUS"
 TITLE="	Linux-GPIB Reference"
 HREF="reference.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.2.1
+>Linux-GPIB 4.3.4
  Documentation</TH
 ></TR
 ><TR
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBASK"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN905"
+NAME="AEN910"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN905"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN908"
+NAME="AEN913"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,11 +95,11 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN909"
+NAME="AEN914"
 ></A
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
->#include &lt;gpib/ib.h&gt;</PRE
+>#include &#60;gpib/ib.h&#62;</PRE
 ><P
 ><CODE
 ><CODE
@@ -114,7 +114,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN920"
+NAME="AEN925"
 ></A
 ><H2
 >	Description
@@ -144,7 +144,7 @@ HREF="reference-function-ibconfig.html"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN928"
+NAME="AEN933"
 ></A
 ><P
 ><B
@@ -522,10 +522,11 @@ HREF="reference-function-ibtmo.html"
 ><TD
 >0x200</TD
 ><TD
->Board index (minor number) of interface board which is
-	the controller-in-charge of this device's GPIB bus.</TD
+>For a device: the board index (minor number) of interface board through
+	which the device is being accessed.  For a board: the board index of the
+	board itself.</TD
 ><TD
->device</TD
+>board or device</TD
 ></TR
 ><TR
 ><TD
@@ -551,7 +552,7 @@ HREF="reference-function-ibeos.html"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1099"
+NAME="AEN1104"
 ></A
 ><H2
 >	Return value
@@ -613,7 +614,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN899"
+HREF="reference.html#AEN904"
 ACCESSKEY="U"
 >Up</A
 ></TD

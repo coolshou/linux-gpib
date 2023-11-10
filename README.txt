@@ -21,22 +21,21 @@ on building and installing.
 Send comments, questions and suggestions to to the linux-gpib mailing
 list at linux-gpib-general@lists.sourceforge.net
 
-Release Notes for linux-gpib-4.3.4
+Release Notes for linux-gpib-4.3.6
 ----------------------------------
 
-Changes since the linux-gpib-4.3.3 release
+Changes since the linux-gpib-4.3.5 release
 
-	New GPIO bitbang driver for Raspberry Pi from Marcello Carla'
+	Major rework of gpib_bitbang driver for RPi gpios
+	with fix for lost edge interrupts on BCM2835 peripheral chip
+	from Marcello Carla'.
 
-	Updated lpvo_usb_gpib to use usb directly from Marcello Carla'
+	Fix to avoid async IO race conditions in ni_usb_gpib.
 
-	Better support for detecting listeners with ibln
-
-	New example programme findlisteners.c
-
-	Various changes for new kernel and autoconf versions
-
-	See ChangeLog since [r1912] for bug fixes and other changes.
+	Fix for unaddressed writes blocking in agilent_82350b with
+	the accelerated interface.
+	
+	See ChangeLog since [r2031] for bug fixes and other changes.
 	  
 Note: If you have any pre 4.3.0 gpib udev rules files in
       /etc/udev/rules.d/ please remove them before installing

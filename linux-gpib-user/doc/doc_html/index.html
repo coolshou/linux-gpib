@@ -2,7 +2,7 @@
 <HTML
 ><HEAD
 ><TITLE
->	Linux-GPIB 4.2.1
+>	Linux-GPIB 4.3.4
  Documentation</TITLE
 ><META
 NAME="GENERATOR"
@@ -25,7 +25,7 @@ CLASS="TITLEPAGE"
 CLASS="TITLE"
 ><A
 NAME="AEN2"
->Linux-GPIB 4.2.1
+>Linux-GPIB 4.3.4
  Documentation</A
 ></H1
 ><H3
@@ -146,11 +146,16 @@ HREF="supported-hardware.html#LPVO-USB-GPIB-NOTES"
 ></DT
 ><DT
 >3.2.7. <A
+HREF="supported-hardware.html#GPIO"
+>GPIO bitbang adapter</A
+></DT
+><DT
+>3.2.8. <A
 HREF="supported-hardware.html#NI-USB-B"
 >National Instruments GPIB-USB-B</A
 ></DT
 ><DT
->3.2.8. <A
+>3.2.9. <A
 HREF="supported-hardware.html#NI-USB-HS"
 >National Instruments GPIB-USB-HS and GPIP-USB-HS+</A
 ></DT
@@ -167,7 +172,7 @@ HREF="reference.html"
 ><DL
 ><DT
 >4.1. <A
-HREF="reference.html#AEN680"
+HREF="reference.html#AEN685"
 >Global Variables</A
 ></DT
 ><DD
@@ -191,7 +196,7 @@ HREF="reference-globals-ibsta.html"
 ></DD
 ><DT
 >4.2. <A
-HREF="reference.html#AEN899"
+HREF="reference.html#AEN904"
 >'Traditional' API Functions</A
 ></DT
 ><DD
@@ -338,6 +343,11 @@ HREF="reference-function-ibrsv.html"
 >&nbsp;--&nbsp;request service (board)</DT
 ><DT
 ><A
+HREF="reference-function-ibrsv2.html"
+>ibrsv2</A
+>&nbsp;--&nbsp;request service (board)</DT
+><DT
+><A
 HREF="reference-function-ibsad.html"
 >ibsad</A
 >&nbsp;--&nbsp;set secondary GPIB address (board or device)</DT
@@ -400,7 +410,7 @@ HREF="reference-function-ibwrtf.html"
 ></DD
 ><DT
 >4.3. <A
-HREF="reference.html#AEN2647"
+HREF="reference.html#AEN2698"
 >"Multidevice" API Functions</A
 ></DT
 ><DD
@@ -554,7 +564,7 @@ HREF="reference-function-waitsrq.html"
 ></DD
 ><DT
 >4.4. <A
-HREF="reference.html#AEN3423"
+HREF="reference.html#AEN3474"
 >Utility Functions</A
 ></DT
 ><DD
@@ -574,6 +584,11 @@ HREF="reference-function-async-iberr.html"
 HREF="reference-function-async-ibsta.html"
 >AsyncIbsta</A
 >&nbsp;--&nbsp;ibsta value for last asynchronous I/O operation</DT
+><DT
+><A
+HREF="reference-function-cfgn.html"
+>CFGn</A
+>&nbsp;--&nbsp;generate 'configure n meters' command byte</DT
 ><DT
 ><A
 HREF="reference-function-get-pad.html"

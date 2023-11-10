@@ -60,12 +60,16 @@ BIBLIOGRAPHY:
 
 */
 
-
+#define _GNU_SOURCE
 #include "gpib/ib.h"
 #include "php.h"
 #include "ext/standard/info.h"
 
 /* ---- macros for declarations -------------------------- */
+
+#if ( PHP_MAJOR_VERSION >= 8)
+#define TSRMLS_CC
+#endif
 
 #define FUN_ACCESSOR(functionName) \
 ZEND_FUNCTION(functionName)\

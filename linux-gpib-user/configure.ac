@@ -1,7 +1,7 @@
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([linux-gpib-user],[4.3.4])
+AC_INIT([linux-gpib-user],[4.3.6])
 # libtool version: current:revision:age
 #
 # If the library source code has changed at all since the last update, then
@@ -59,7 +59,11 @@ dnl Checks for programs.
 AC_PROG_INSTALL
 AC_PROG_CC
 AM_PROG_CC_C_O
-AM_PROG_LEX([noyywrap])
+dnl Cannot use AM_PROG_LEX since it does not pass the [noyywrap] option
+AC_PROG_LEX([noyywrap])
+if test "$LEX" = ":" ; then
+   LEX="$SHELL "$srcdir"/../missing flex"
+fi
 AM_MISSING_PROG(YACC,yacc)
 LT_INIT
 AC_PATH_PROG([JW_PATH], [jw], [no])

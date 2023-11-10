@@ -7,7 +7,7 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.2.1
+TITLE="	Linux-GPIB 4.3.4
  Documentation"
 HREF="index.html"><LINK
 REL="PREVIOUS"
@@ -35,7 +35,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.2.1
+>Linux-GPIB 4.3.4
  Documentation</TH
 ></TR
 ><TR
@@ -91,7 +91,7 @@ NAME="REFERENCE-COMMAND-BYTES"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN3759"
+NAME="AEN3834"
 ></A
 ><P
 ><B
@@ -195,6 +195,14 @@ CLASS="CALSTABLE"
 ></TR
 ><TR
 ><TD
+>0x1f</TD
+><TD
+>CFE</TD
+><TD
+>Configure enable</TD
+></TR
+><TR
+><TD
 >0x20 to 0x3e</TD
 ><TD
 >MLA0 to MLA30</TD
@@ -229,17 +237,24 @@ CLASS="CALSTABLE"
 ><TD
 >0x60 to 0x6f</TD
 ><TD
->MSA0 to MSA15, also PPE</TD
+>MSA0 to MSA15, also PPE, also CFG1 to CFG15</TD
 ><TD
->When following a talk or listen address, this is
-	'my secondary address' 0 to 15.  When following a parallel
-	poll configure, this is 'parallel poll enable'.  For
-	parallel poll enable, the least significant 3 bits
+>	<P
+>	When following a primary talk or primary listen address, this is
+	"my secondary address" MSA0 (0x60) to MSA15 (0x6f).  When following a PPC "parallel
+	poll configure", this is PPE "parallel poll enable".  When
+	following a CFE "configure enable", this is
+	CFG1 (0x61) to CFG15 (0x6f) "configure n meters". </P
+>
+	<P
+>	For parallel poll enable, the least significant 3 bits
 	of the command byte specify which DIO line the device
 	should use to send its parallel poll response.  The
 	fourth least significant bit (0x8)
 	indicates the 'sense' or polarity the device should use
 	when responding.
+	</P
+>
 	</TD
 ></TR
 ><TR
@@ -249,7 +264,7 @@ CLASS="CALSTABLE"
 >MSA16 to MSA30, also PPD</TD
 ><TD
 >When following a talk or listen address, this is
-	'my secondary address' 16 to 29.  When following a parallel
+	'my secondary address' 16 to 30.  When following a parallel
 	poll configure, this is 'parallel poll disable'.</TD
 ></TR
 ><TR
@@ -283,7 +298,7 @@ of how they are used follow:</P
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN3840"
+NAME="AEN3921"
 ></A
 ><P
 ><B
