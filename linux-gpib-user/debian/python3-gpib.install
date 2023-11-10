@@ -1,4 +1,5 @@
-usr/lib/python*/site-packages/gpib.cpython-*.so
-usr/lib/python*/site-packages/__pycache__/Gpib.cpython-*.pyc
-usr/lib/python*/site-packages/gpib-1.0-py*.egg-info
-usr/lib/python*/site-packages/Gpib.py
+usr/lib/python*/site-packages/gpib-*.egg/gpib.cpython-*.so
+usr/lib/python*/site-packages/gpib-*.egg/__pycache__/Gpib.cpython-*.pyc
+usr/lib/python*/site-packages/gpib-*.egg/Gpib.py
+#usr/lib/python*/site-packages/gpib-1.0-py*.egg-info
+

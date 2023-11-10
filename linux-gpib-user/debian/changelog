@@ -1,3 +1,9 @@
+linux-gpib-user (4.3.6-r2066) unstable; urgency=medium
+
+  * new upstream
+
+ -- coolshou <coolshou2060@gmail.com>  Fri, 10 Nov 2023 15:15:34 +0800
+
 linux-gpib-user (4.3.4-20220214) unstable; urgency=medium
 
   * Initial release
