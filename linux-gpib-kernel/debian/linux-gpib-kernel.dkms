@@ -1,6 +1,6 @@
 PACKAGE_NAME="linux-gpib-kernel"
 PACKAGE_VERSION="#MODULE_VERSION#"
-MAKE[0]="make clean;make all"
+MAKE[0]="make clean;make all LINUX_SRCDIR=/usr/src/linux-headers-\${kernelver}"
 CLEAN[0]="make clean"
 DEST_MODULE_LOCATION[0]="/updates/dkms"
 DEST_MODULE_LOCATION[1]="/updates/dkms"
