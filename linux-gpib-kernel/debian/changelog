@@ -1,3 +1,9 @@
+linux-gpib-kernel (4.3.6-r2106) unstable; urgency=medium
+
+  * new upstream
+
+ -- coolshou <coolshou2060@gmail.com>  Tue, 05 Nov 2024 09:09:22 +0800
+
 linux-gpib-kernel (4.3.6-r2066) unstable; urgency=medium
 
   * new upstream
