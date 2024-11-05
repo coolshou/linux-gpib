@@ -43,6 +43,7 @@ static char * mProg;                     // Programme name
 static char * mHist     = (char *)NULL;  // History filename pointer
 static int mAutoRead    = true;          // Automatically read from device
 static int mHex         = false;         // Force hex output flag
+static int mUnTUnL      = false;         // send untalk/unlisten
 static int devdesc  = -1;  // device descriptor
 static int minor    = 0;   // gpib driver major
 static int pad      = -1;  // device primary bus address
@@ -71,6 +72,7 @@ static const char * help_string =
 #ifdef READLINE
   " -f <history file>  (optional, default=\".ibterm_hist_<pad>\")\n"
 #endif
+  " -u Send Untalk/Unlisten after each read and write\n"
   " -N No automatic read on device, enter return at prompt to read.\n"
   " -X forces hexadecimal output.\n"
   " -h prints this help info and exits.\n"
@@ -105,7 +107,7 @@ static const char * usage_options =
 #ifdef READLINE
   " [-f history_file]"
 #endif
-  " [-N] [-X]\n";
+  " [-u] [-N] [-X] [-h]\n";
 
 #define EMES(var) fputs(var,stderr)
 
@@ -171,7 +173,7 @@ void parse_options(int argc, char ** argv) {
 
   mProg = argv[0];
 
-  while ((c = getopt (argc, argv, "d:m:s:i:e:r:b:x:t:f:p:NXh")) != -1)
+  while ((c = getopt (argc, argv, "d:m:s:i:e:r:b:x:t:f:p:uNXh")) != -1)
     switch (c)  {
     case 'd': pad       = atoi(optarg);    break;
     case 'm': minor     = atoi(optarg);    break;
@@ -184,6 +186,7 @@ void parse_options(int argc, char ** argv) {
     case 't': timeout   = atoi(optarg);    break;
     case 'f': mHist     = optarg;          break;
     case 'p': mPrompt   = optarg;          break;
+    case 'u': mUnTUnL   = true;            break;
     case 'N': mAutoRead = false;           break;
     case 'X': mHex      = true;            break;
     case 'h':
@@ -263,6 +266,13 @@ int main (int argc, char ** argv) {
     abend("ibdev error\n");
   }
 
+  if (mUnTUnL) {
+    if(ERR & ibconfig(devdesc, IbcUnAddr, 1))
+      EMES("Could not set IbcUnAddr\n");
+    ibask(devdesc, IbaUnAddr, &i);
+    printf("IbaUnAddr %d\n",i);
+  }
+
   read_history(mHist);
 
   /* prompt user - read term - write device - read device - print term loop */
@@ -270,7 +280,7 @@ int main (int argc, char ** argv) {
 
     /* write to device */
     if (*line) { /* send to device only if we got something */
-     if (ibwrt(devdesc,line,strlen(line)) & ERR ) {
+      if (ibwrt(devdesc,line,strlen(line)) & ERR ) {
 	sprintf(errmes,"Unable to write to device at pad %d\n",pad);
 	showError(errmes);
 	free(line);

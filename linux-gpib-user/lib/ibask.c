@@ -175,7 +175,7 @@ int ibask( int ud, int option, int *value )
 	ibBoard_t *board;
 	int retval;
 
-	conf = general_enter_library( ud, 1, 0 );
+	conf = general_enter_library( ud, 0, 0 );
 	if( conf == NULL )
 		return exit_library( ud, 1);
 
@@ -373,10 +373,7 @@ int ibask( int ud, int option, int *value )
 				return exit_library( ud, 0 );
 				break;
 			case IbaUnAddr:
-				/* XXX sending UNT and UNL after device level read/write
-				 * not supported yet, I suppose it could be since it
-				 * is harmless. */
-				*value = 0;
+				*value = conf->settings.send_unt_unl;
 				return exit_library( ud, 0 );
 				break;
 			default:

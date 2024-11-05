@@ -45,7 +45,7 @@ int ppoll_configure_device( ibConf_t *conf, const Addr4882_t addressList[],
 	cmd[ i++ ] = PPC;
 	cmd[ i++ ] = ppc_configuration;
 
-	retval = my_ibcmd( conf, cmd, i );
+	retval = my_ibcmd( conf, conf->settings.usec_timeout, cmd, i );
 
 	free( cmd );
 	cmd = NULL;
@@ -232,7 +232,7 @@ void PPollUnconfig( int boardID, const Addr4882_t addressList[] )
 	{
 		uint8_t cmd = PPU;
 
-		retval = my_ibcmd( conf, &cmd, 1 );
+		retval = my_ibcmd( conf, conf->settings.usec_timeout, &cmd, 1 );
 	}
 	if( retval < 0 )
 	{

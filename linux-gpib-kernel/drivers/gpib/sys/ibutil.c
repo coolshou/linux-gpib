@@ -91,7 +91,7 @@ int general_ibstatus( gpib_board_t *board, const gpib_status_queue_t *device,
 	short line_status;
 
 	smp_mb__before_atomic();
-	
+
 	if( board->private_data )
 	{
 		status = board->interface->update_status( board, clear_mask );
@@ -122,7 +122,7 @@ int general_ibstatus( gpib_board_t *board, const gpib_status_queue_t *device,
 			atomic_set(&desc->io_in_progress, 0);
 		else if( clear_mask & CMPL )
 			atomic_set(&desc->io_in_progress, 1);
-		
+
 		if( atomic_read(&desc->io_in_progress) )
 			status &= ~CMPL;
 		else

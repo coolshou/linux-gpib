@@ -104,7 +104,7 @@ void gpib_unregister_driver(gpib_interface_t *interface)
 	printk("gpib: unregistered %s interface\n", interface->name);
 }
 
-void init_gpib_board_config(gpib_board_config_t *config)
+static void init_gpib_board_config(gpib_board_config_t *config)
 {
 	memset(config, 0, sizeof(gpib_board_config_t));
 	config->pci_bus = -1;
@@ -176,7 +176,7 @@ void gpib_deallocate_board( gpib_board_t *board )
 
 }
 
-void init_board_array( gpib_board_t *board_array, unsigned int length )
+static void init_board_array( gpib_board_t *board_array, unsigned int length )
 {
 	int i;
 	for( i = 0; i < length; i++)

@@ -42,7 +42,7 @@ int ibclr( int ud )
 	cmd[ i++ ] = SDC;
 
 	//XXX detect no listeners (EBUS) error
-	count = my_ibcmd( conf, cmd, i );
+	count = my_ibcmd( conf, conf->settings.usec_timeout, cmd, i );
 	if(count != i)
 	{
 		return exit_library( ud, 1 );
@@ -97,7 +97,7 @@ int InternalDevClearList( ibConf_t *conf, const Addr4882_t addressList[] )
 		cmd[ i++ ] = DCL;
 	}
 	//XXX detect no listeners (EBUS) error
-	count = my_ibcmd( conf, cmd, i );
+	count = my_ibcmd( conf, conf->settings.usec_timeout, cmd, i );
 
 	free( cmd );
 	cmd = NULL;

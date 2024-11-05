@@ -70,7 +70,6 @@ int insert_descriptor( ibConf_t p, int ud )
 		setIbcnt( ENOMEM );
 		return -1;
 	}
-	init_ibconf(ibConfigs[ ud ]);
 	/* put entry to the table */
 	*ibConfigs[ud] = p;
 
@@ -236,6 +235,7 @@ void init_descriptor_settings( descriptor_settings_t *settings )
 	settings->send_eoi = 1;
 	settings->local_lockout = 0;
 	settings->readdr = 0;
+	settings->send_unt_unl = 0;
 }
 
 void init_ibconf( ibConf_t *conf )

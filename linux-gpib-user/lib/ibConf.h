@@ -44,6 +44,7 @@ struct async_operation
 	volatile int ibsta;
 	volatile long ibcntl;
 	volatile short in_progress;
+	volatile short aio_type;  /* The type of aio in progress */
 	volatile short abort;
 };
 
@@ -61,6 +62,7 @@ typedef struct
 	unsigned send_eoi : 1;	/* assert EOI at end of writes */
 	unsigned local_lockout : 1;	/* send local lockout when device is brought online */
 	unsigned readdr : 1;	/* useless, exists for compatibility only at present */
+	unsigned send_unt_unl : 1;      /* flag to send untalk unlisten after ibrd/ibwrt */
 }descriptor_settings_t;
 
 typedef struct ibConfStruct

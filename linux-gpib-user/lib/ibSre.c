@@ -121,7 +121,7 @@ int InternalEnableRemote( ibConf_t *conf, const Addr4882_t addressList[] )
 	i = create_send_setup( board, addressList, cmd );
 
 	//XXX detect no listeners (EBUS) error
-	count = my_ibcmd( conf, cmd, i );
+	count = my_ibcmd( conf, conf->settings.usec_timeout, cmd, i );
 
 	free( cmd );
 	cmd = NULL;

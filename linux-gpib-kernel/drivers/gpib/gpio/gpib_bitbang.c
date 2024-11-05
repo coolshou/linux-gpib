@@ -177,6 +177,8 @@ struct gpio_desc * all_descriptors[GPIB_PINS+SN7516X_PINS];
 #define TE all_descriptors[18]
 #define ACT_LED all_descriptors[19]
 
+static int gpio_offset=0;
+module_param(gpio_offset,int,0660);
 int gpios_vector[] = {
         D01_pin_nr,
         D02_pin_nr,
@@ -277,7 +279,7 @@ static char printable (char x) {
  *                                                                         *
  ***************************************************************************/
 
-int bb_read(gpib_board_t *board, uint8_t *buffer, size_t length,
+static int bb_read(gpib_board_t *board, uint8_t *buffer, size_t length,
             int *end, size_t *bytes_read)
 {
         bb_private_t *priv = board->private_data;
@@ -342,7 +344,7 @@ read_end:
  *                                                                         *
  ***************************************************************************/
 
-irqreturn_t bb_DAV_interrupt (int irq, void * arg) {
+static irqreturn_t bb_DAV_interrupt (int irq, void * arg) {
 
         gpib_board_t * board = arg;
         bb_private_t *priv = board->private_data;
@@ -400,7 +402,7 @@ dav_exit:
  *                                                                         *
  ***************************************************************************/
 
-int bb_write(gpib_board_t *board, uint8_t *buffer, size_t length,
+static int bb_write(gpib_board_t *board, uint8_t *buffer, size_t length,
              int send_eoi, size_t *bytes_written)
 {
 	unsigned long flags;
@@ -475,7 +477,7 @@ write_end:
  *                                                                         *
  ***************************************************************************/
 
-irqreturn_t bb_NRFD_interrupt(int irq, void * arg)
+static irqreturn_t bb_NRFD_interrupt(int irq, void * arg)
 {
         gpib_board_t * board = arg;
         bb_private_t *priv = board->private_data;
@@ -537,7 +539,7 @@ nrfd_exit:
  *                                                                         *
  ***************************************************************************/
 
-irqreturn_t bb_NDAC_interrupt(int irq, void * arg)
+static irqreturn_t bb_NDAC_interrupt(int irq, void * arg)
 {
         gpib_board_t * board = arg;
         bb_private_t *priv = board->private_data;
@@ -585,7 +587,7 @@ ndac_exit:
  *                                                                         *
  ***************************************************************************/
 
-irqreturn_t bb_SRQ_interrupt(int irq, void * arg)
+static irqreturn_t bb_SRQ_interrupt(int irq, void * arg)
 {
         gpib_board_t  * board = arg;
 
@@ -600,7 +602,7 @@ irqreturn_t bb_SRQ_interrupt(int irq, void * arg)
         return IRQ_HANDLED;
 }
 
-int bb_command(gpib_board_t *board, uint8_t *buffer,
+static int bb_command(gpib_board_t *board, uint8_t *buffer,
                    size_t length, size_t *bytes_written)
 {
         size_t ret;
@@ -732,7 +734,7 @@ static void set_atn(bb_private_t *priv, int atn_asserted) {
 
 }
 
-int bb_take_control(gpib_board_t *board, int synchronous)
+static int bb_take_control(gpib_board_t *board, int synchronous)
 {
         dbg_printk(1,"%d\n", synchronous);
         set_atn(board->private_data, 1);
@@ -740,14 +742,14 @@ int bb_take_control(gpib_board_t *board, int synchronous)
         return 0;
 }
 
-int bb_go_to_standby(gpib_board_t *board)
+static int bb_go_to_standby(gpib_board_t *board)
 {
 	dbg_printk(1,"\n");
 	set_atn(board->private_data, 0);
         return 0;
 }
 
-void bb_request_system_control(gpib_board_t *board, int request_control )
+static void bb_request_system_control(gpib_board_t *board, int request_control )
 {
 	dbg_printk(1,"%d\n", request_control);
         if (request_control) {
@@ -758,7 +760,7 @@ void bb_request_system_control(gpib_board_t *board, int request_control )
         }
 }
 
-void bb_interface_clear(gpib_board_t *board, int assert)
+static void bb_interface_clear(gpib_board_t *board, int assert)
 {
         bb_private_t *priv = board->private_data;
 	dbg_printk(1,"%d\n", assert);
@@ -771,7 +773,7 @@ void bb_interface_clear(gpib_board_t *board, int assert)
 	}
 }
 
-void bb_remote_enable(gpib_board_t *board, int enable)
+static void bb_remote_enable(gpib_board_t *board, int enable)
 {
 	dbg_printk(1,"%d\n", enable);
         if (enable) {
@@ -783,7 +785,7 @@ void bb_remote_enable(gpib_board_t *board, int enable)
         }
 }
 
-int bb_enable_eos(gpib_board_t *board, uint8_t eos_byte, int compare_8_bits)
+static int bb_enable_eos(gpib_board_t *board, uint8_t eos_byte, int compare_8_bits)
 {
         bb_private_t *priv = board->private_data;
         dbg_printk(1,"%s\n", "EOS_en");
@@ -794,14 +796,14 @@ int bb_enable_eos(gpib_board_t *board, uint8_t eos_byte, int compare_8_bits)
         return 0;
 }
 
-void bb_disable_eos(gpib_board_t *board)
+static void bb_disable_eos(gpib_board_t *board)
 {
         bb_private_t *priv = board->private_data;
         dbg_printk(1,"\n");
         priv->eos_flags &= ~REOS;
 }
 
-unsigned int bb_update_status(gpib_board_t *board, unsigned int clear_mask )
+static unsigned int bb_update_status(gpib_board_t *board, unsigned int clear_mask )
 {
         bb_private_t *priv = board->private_data;
 
@@ -832,14 +834,14 @@ unsigned int bb_update_status(gpib_board_t *board, unsigned int clear_mask )
         return board->status;
 }
 
-int bb_primary_address(gpib_board_t *board, unsigned int address)
+static int bb_primary_address(gpib_board_t *board, unsigned int address)
 {
         dbg_printk(1,"%d\n", address);
         board->pad = address;
         return 0;
 }
 
-int bb_secondary_address(gpib_board_t *board, unsigned int address, int enable)
+static int bb_secondary_address(gpib_board_t *board, unsigned int address, int enable)
 {
         dbg_printk(1,"%d %d\n", address, enable);
         if (enable)
@@ -847,28 +849,28 @@ int bb_secondary_address(gpib_board_t *board, unsigned int address, int enable)
         return 0;
 }
 
-int bb_parallel_poll(gpib_board_t *board, uint8_t *result)
+static int bb_parallel_poll(gpib_board_t *board, uint8_t *result)
 {
         dbg_printk(1,"%s\n", "not implemented");
         return -ENOSYS;
 }
-void bb_parallel_poll_configure(gpib_board_t *board, uint8_t config )
+static void bb_parallel_poll_configure(gpib_board_t *board, uint8_t config )
 {
 	dbg_printk(1,"%s\n", "not implemented");
 }
-void bb_parallel_poll_response(gpib_board_t *board, int ist )
+static void bb_parallel_poll_response(gpib_board_t *board, int ist )
 {
 }
-void bb_serial_poll_response(gpib_board_t *board, uint8_t status)
+static void bb_serial_poll_response(gpib_board_t *board, uint8_t status)
 {
         dbg_printk(1,"%s\n", "not implemented");
 }
-uint8_t bb_serial_poll_status(gpib_board_t *board )
+static uint8_t bb_serial_poll_status(gpib_board_t *board )
 {
         dbg_printk(1,"%s\n", "not implemented");
         return 0; // -ENOSYS;
 }
-unsigned int bb_t1_delay( gpib_board_t *board,  unsigned int nano_sec )
+static unsigned int bb_t1_delay( gpib_board_t *board,  unsigned int nano_sec )
 {
 	bb_private_t *priv = board->private_data;
 	unsigned int retval;
@@ -882,12 +884,12 @@ unsigned int bb_t1_delay( gpib_board_t *board,  unsigned int nano_sec )
 	return retval;
 }
 
-void bb_return_to_local(gpib_board_t *board )
+static void bb_return_to_local(gpib_board_t *board )
 {
         dbg_printk(1,"%s\n", "not implemented");
 }
 
-int bb_line_status(const gpib_board_t *board )
+static int bb_line_status(const gpib_board_t *board )
 {
         int line_status = ValidALL;
 
@@ -963,15 +965,15 @@ static int allocate_gpios(void) {
         int j;
         int last = sn7516x ? GPIB_PINS + SN7516X_PINS : GPIB_PINS ;
         for ( j=0 ; j<last ; j++ ) {
-                if (gpio_request_one (gpios_vector[j], GPIOF_DIR_IN, NULL)) break;
-                all_descriptors[j] = gpio_to_desc (gpios_vector[j]);
+                if (gpio_request_one (gpios_vector[j]+gpio_offset, GPIOF_DIR_IN, NULL)) break;
+                all_descriptors[j] = gpio_to_desc (gpios_vector[j]+gpio_offset);
         }
         if ( j != last) {                    /* error - undo what already done */
                 dbg_printk (0, "request for gpios failed at %d.\n", j);
                 while (j) {
                         gpiod_put(all_descriptors[--j]);
                         all_descriptors[j] = 0;
-                        gpio_free (gpios_vector[j]);
+                        gpio_free (gpios_vector[j]+gpio_offset);
                 }
                 return -1;
         }
@@ -985,12 +987,12 @@ static void release_gpios(void) {
                 if (all_descriptors[--j]) {
                         gpiod_put(all_descriptors[j]);
                         all_descriptors[j] = 0;
-                        gpio_free (gpios_vector[j]);
+                        gpio_free (gpios_vector[j]+gpio_offset);
                 }
         }
 }
 
-void bb_detach(gpib_board_t *board)
+static void bb_detach(gpib_board_t *board)
 {
         bb_private_t *priv = board->private_data;
 
@@ -1013,7 +1015,7 @@ void bb_detach(gpib_board_t *board)
         free_private(board);
 }
 
-int bb_attach(gpib_board_t *board, const gpib_board_config_t *config)
+static int bb_attach(gpib_board_t *board, const gpib_board_config_t *config)
 {
         bb_private_t *priv;
 

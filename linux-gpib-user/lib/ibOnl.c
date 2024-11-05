@@ -68,8 +68,10 @@ int reinit_descriptor( ibConf_t *conf )
 	if( retval < 0 ) return retval;
 	retval = internal_ibsad( conf, conf->defaults.sad );
 	if( retval < 0 ) return retval;
-	retval = my_ibbna( conf, conf->defaults.board );
-	if( retval < 0 ) return retval;
+	if (conf->is_interface == 0) { /* ibbna is device only */
+		retval = my_ibbna( conf, conf->defaults.board );
+		if( retval < 0 ) return retval;
+	}
 	conf->settings.usec_timeout = conf->defaults.usec_timeout;
 	conf->settings.spoll_usec_timeout = conf->defaults.usec_timeout;
 	conf->settings.ppoll_usec_timeout = conf->defaults.usec_timeout;
