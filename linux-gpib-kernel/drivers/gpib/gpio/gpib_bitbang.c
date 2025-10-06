@@ -965,7 +965,7 @@ static int allocate_gpios(void) {
         int j;
         int last = sn7516x ? GPIB_PINS + SN7516X_PINS : GPIB_PINS ;
         for ( j=0 ; j<last ; j++ ) {
-                if (gpio_request_one (gpios_vector[j]+gpio_offset, GPIOF_DIR_IN, NULL)) break;
+                if (gpio_request_one (gpios_vector[j]+gpio_offset, GPIOD_IN, NULL)) break;
                 all_descriptors[j] = gpio_to_desc (gpios_vector[j]+gpio_offset);
         }
         if ( j != last) {                    /* error - undo what already done */
