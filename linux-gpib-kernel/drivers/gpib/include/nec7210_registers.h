@@ -1,53 +1,43 @@
-/***************************************************************************
-                                   nec7210_registers.h
-                             -------------------
-    copyright            : (C) 2002 by Frank Mori Hess <fmhess@users.sourceforge.net>
- ***************************************************************************/
+/* SPDX-License-Identifier: GPL-2.0 */
 
 /***************************************************************************
- *                                                                         *
- *   This program is free software; you can redistribute it and/or modify  *
- *   it under the terms of the GNU General Public License as published by  *
- *   the Free Software Foundation; either version 2 of the License, or     *
- *   (at your option) any later version.                                   *
- *                                                                         *
+ *    copyright            : (C) 2002 by Frank Mori Hess
  ***************************************************************************/
 
 #ifndef _NEC7210_REGISTERS_H
 #define _NEC7210_REGISTERS_H
 
-enum nec7210_chipset
-{
+enum nec7210_chipset {
 	NEC7210,	// The original
 	TNT4882,	// NI
 	NAT4882,	// NI
-	CB7210,	// measurement computing
+	CB7210,		// measurement computing
 	IOT7210,	// iotech
-	iGPIB7210,	// Ines
+	IGPIB7210,	// Ines
 	TNT5004,	// NI (minor differences to TNT4882)
 };
 
-// nec7210 has 8 registers
-static const int nec7210_num_registers = 8;
-
-/* nec7210 register numbers (might need to be multiplied by
+/*
+ * nec7210 register numbers (might need to be multiplied by
  * a board-dependent offset to get actually io address offset)
  */
 // write registers
-enum nec7210_write_regs
-{
+enum nec7210_write_regs {
 	CDOR,	// command/data out
 	IMR1,	// interrupt mask 1
 	IMR2,	// interrupt mask 2
 	SPMR,	// serial poll mode
 	ADMR,	// address mode
-	AUXMR,	// auxilliary mode
+	AUXMR,	// auxiliary mode
 	ADR,	// address
 	EOSR,	// end-of-string
+
+	// nec7210 has 8 registers
+	nec7210_num_registers = 8,
 };
+
 // read registers
-enum nec7210_read_regs
-{
+enum nec7210_read_regs {
 	DIR,	// data in
 	ISR1,	// interrupt status 1
 	ISR2,	// interrupt status 2
@@ -58,119 +48,108 @@ enum nec7210_read_regs
 	ADR1,	// address 2
 };
 
-//bit definitions common to nec-7210 compatible registers
+// bit definitions common to nec-7210 compatible registers
 
 // ISR1: interrupt status register 1
-enum isr1_bits
-{
-	HR_DI = ( 1 << 0 ),
-	HR_DO = ( 1 << 1 ),
-	HR_ERR = ( 1 << 2 ),
-	HR_DEC = ( 1 << 3 ),
-	HR_END = ( 1 << 4 ),
-	HR_DET = ( 1 << 5 ),
-	HR_APT = ( 1 << 6 ),
-	HR_CPT = ( 1 << 7 ),
+enum isr1_bits {
+	HR_DI = (1 << 0),
+	HR_DO = (1 << 1),
+	HR_ERR = (1 << 2),
+	HR_DEC = (1 << 3),
+	HR_END = (1 << 4),
+	HR_DET = (1 << 5),
+	HR_APT = (1 << 6),
+	HR_CPT = (1 << 7),
 };
 
 // IMR1: interrupt mask register 1
-enum imr1_bits
-{
-	HR_DIIE = ( 1 << 0 ),
-	HR_DOIE = ( 1 << 1 ),
-	HR_ERRIE = ( 1 << 2 ),
-	HR_DECIE = ( 1 << 3 ),
-	HR_ENDIE = ( 1 << 4 ),
-	HR_DETIE = ( 1 << 5 ),
-	HR_APTIE = ( 1 << 6 ),
-	HR_CPTIE = ( 1 << 7 ),
+enum imr1_bits {
+	HR_DIIE = (1 << 0),
+	HR_DOIE = (1 << 1),
+	HR_ERRIE = (1 << 2),
+	HR_DECIE = (1 << 3),
+	HR_ENDIE = (1 << 4),
+	HR_DETIE = (1 << 5),
+	HR_APTIE = (1 << 6),
+	HR_CPTIE = (1 << 7),
 };
 
 // ISR2, interrupt status register 2
-enum isr2_bits
-{
-	HR_ADSC = ( 1 << 0 ),
-	HR_REMC = ( 1 << 1 ),
-	HR_LOKC = ( 1 << 2 ),
-	HR_CO = ( 1 << 3 ),
-	HR_REM = ( 1 << 4 ),
-	HR_LOK = ( 1 << 5 ),
-	HR_SRQI = ( 1 << 6 ),
-	HR_INT = ( 1 << 7 ),
+enum isr2_bits {
+	HR_ADSC = (1 << 0),
+	HR_REMC = (1 << 1),
+	HR_LOKC = (1 << 2),
+	HR_CO = (1 << 3),
+	HR_REM = (1 << 4),
+	HR_LOK = (1 << 5),
+	HR_SRQI = (1 << 6),
+	HR_INT = (1 << 7),
 };
 
 // IMR2, interrupt mask register 2
-enum imr2_bits
-{
+enum imr2_bits {
 	// all the bits in this register that enable interrupts
 	IMR2_ENABLE_INTR_MASK = 0x4f,
-	HR_ACIE = ( 1 << 0 ),
-	HR_REMIE = ( 1 << 1 ),
-	HR_LOKIE = ( 1 << 2 ),
-	HR_COIE = ( 1 << 3 ),
-	HR_DMAI = ( 1 << 4 ),
-	HR_DMAO = ( 1 << 5 ),
-	HR_SRQIE = ( 1 << 6 ),
+	HR_ACIE = (1 << 0),
+	HR_REMIE = (1 << 1),
+	HR_LOKIE = (1 << 2),
+	HR_COIE = (1 << 3),
+	HR_DMAI = (1 << 4),
+	HR_DMAO = (1 << 5),
+	HR_SRQIE = (1 << 6),
 };
 
 // SPSR, serial poll status register
-enum spsr_bits
-{
-	HR_PEND = ( 1 << 6 ),
+enum spsr_bits {
+	HR_PEND = (1 << 6),
 };
 
 // SPMR, serial poll mode register
-enum spmr_bits
-{
-	HR_RSV = ( 1 << 6 ),
+enum spmr_bits {
+	HR_RSV = (1 << 6),
 };
 
 // ADSR, address status register
-enum adsr_bits
-{
-	HR_MJMN = ( 1 << 0 ),
-	HR_TA = ( 1 << 1 ),
-	HR_LA = ( 1 << 2 ),
-	HR_TPAS = ( 1 << 3 ),
-	HR_LPAS = ( 1 << 4 ),
-	HR_SPMS = ( 1 << 5 ),
-	HR_NATN = ( 1 << 6 ),
-	HR_CIC = ( 1 << 7 ),
+enum adsr_bits {
+	HR_MJMN = (1 << 0),
+	HR_TA = (1 << 1),
+	HR_LA = (1 << 2),
+	HR_TPAS = (1 << 3),
+	HR_LPAS = (1 << 4),
+	HR_SPMS = (1 << 5),
+	HR_NATN = (1 << 6),
+	HR_CIC = (1 << 7),
 };
 
 // ADMR, address mode register
-enum admr_bits
-{
-	HR_ADM0 = ( 1 << 0 ),
-	HR_ADM1 = ( 1 << 1 ),
-	HR_TRM0 = ( 1 << 4 ),
-	HR_TRM1 = ( 1 << 5 ),
+enum admr_bits {
+	HR_ADM0 = (1 << 0),
+	HR_ADM1 = (1 << 1),
+	HR_TRM0 = (1 << 4),
+	HR_TRM1 = (1 << 5),
 	HR_TRM_EOIOE_TRIG = 0,
 	HR_TRM_CIC_TRIG = HR_TRM0,
 	HR_TRM_CIC_EOIOE = HR_TRM1,
 	HR_TRM_CIC_PE = HR_TRM0 | HR_TRM1,
-	HR_LON = ( 1 << 6 ),
-	HR_TON = ( 1 << 7 ),
+	HR_LON = (1 << 6),
+	HR_TON = (1 << 7),
 };
 
 // ADR, bits used in address0, address1 and address0/1 registers
-enum adr_bits
-{
+enum adr_bits {
 	ADDRESS_MASK = 0x1f,	/* mask to specify lower 5 bits */
-	HR_DL = ( 1 << 5 ),
-	HR_DT = ( 1 << 6 ),
-	HR_ARS = ( 1 << 7 ),
+	HR_DL = (1 << 5),
+	HR_DT = (1 << 6),
+	HR_ARS = (1 << 7),
 };
 
 // ADR1, address1 register
-enum adr1_bits
-{
-	HR_EOI = ( 1 << 7 ),
+enum adr1_bits {
+	HR_EOI = (1 << 7),
 };
 
 // AUXMR, auxiliary mode register
-enum auxmr_bits
-{
+enum auxmr_bits {
 	ICR = 0x20,
 	PPR = 0x60,
 	AUXRA = 0x80,
@@ -179,8 +158,7 @@ enum auxmr_bits
 };
 
 // auxra, auxiliary register A
-enum auxra_bits
-{
+enum auxra_bits {
 	HR_HANDSHAKE_MASK = 0x3,
 	HR_HLDA = 0x1,
 	HR_HLDE = 0x2,
@@ -191,31 +169,27 @@ enum auxra_bits
 };
 
 // auxrb, auxiliary register B
-enum auxrb_bits
-{
-	HR_CPTE = ( 1 << 0 ),
-	HR_SPEOI = ( 1 << 1 ),
-	HR_TRI = ( 1 << 2 ),
-	HR_INV = ( 1 << 3 ),
-	HR_ISS = ( 1 << 4 ),
+enum auxrb_bits {
+	HR_CPTE = (1 << 0),
+	HR_SPEOI = (1 << 1),
+	HR_TRI = (1 << 2),
+	HR_INV = (1 << 3),
+	HR_ISS = (1 << 4),
 };
 
-enum auxre_bits
-{
+enum auxre_bits {
 	HR_DAC_HLD_DCAS = 0x1,	/* perform DAC holdoff on receiving clear */
 	HR_DAC_HLD_DTAS = 0x2,	/* perform DAC holdoff on receiving trigger */
 };
 
 // parallel poll register
-enum ppr_bits
-{
-	HR_PPS = ( 1 << 3 ),
-	HR_PPU = ( 1 << 4 ),
+enum ppr_bits {
+	HR_PPS = (1 << 3),
+	HR_PPU = (1 << 4),
 };
 
 /* 7210 Auxiliary Commands */
-enum aux_cmds
-{
+enum aux_cmds {
 	AUX_PON = 0x0,	/* Immediate Execute pon                  */
 	AUX_CPPF = 0x1,	/* Clear Parallel Poll Flag               */
 	AUX_CR = 0x2,	/* Chip Reset                             */

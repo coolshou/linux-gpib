@@ -1,0 +1,10 @@
+#
+# .gitignore for linux-gpib-git/linux-gpib-kernel
+#
+# Kernel Module Compile Results
+*.mod*
+*.ko
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers

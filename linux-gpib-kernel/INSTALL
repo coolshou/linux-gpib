@@ -101,7 +101,9 @@ o)	For custom builds these are the environment variables that can
 	  To enable PCMCIA support: make ENABLE_PCMCIA=1 
 
 	  GPIB_DEBUG=<0 | 1>
-	  GPIB_DEBUG is used to control the console output of the drivers.
+	  GPIB_DEBUG is used to control the debug output of the drivers
+	  on the console. This is only needed if dynamic debug is not
+	  enabled in your kernel (see section D).
 	  By default it is set to 0 which disables debug output.
 	  To enable driver debug output: make GPIB_DEBUG=1
 
@@ -175,3 +177,11 @@ o) PCI and ISA boards
 
 o) For PCMCIA and USB adaptors see the linux-gpib-user-x.x.x/INSTALL file.
 
+o) Dynamic debug
+   To enable debug for a particular moduel use the "dyndbg +p" option
+   at the end of the modprobe command.
+   For this to work you need to have dynamic debug enabled for your kernel.
+   i.e. it must be built with CONFIG_DYNAMIC_DEBUG=y
+   For more information see the file
+   Documentation/admin-guide/dynamic-debug-howto.rst
+   in the kernel source directory.

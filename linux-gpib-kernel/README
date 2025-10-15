@@ -17,6 +17,12 @@ of the Linux kernel.
 2.6.x kernels older than 2.6.8 are not supported.  
 2.4.x kernels are supported by Linux-GPIB versions 3.1.x.
 
+Note that for 6.13 and later kernels the drivers are
+included in the standard kernel source in the
+drivers/staging/gpib directory. They can be built and installed
+using the standard kernel build tools if the modules are not provided
+by your distro.
+
 See the INSTALL file for instructions on building and
 installing this software package.
 
