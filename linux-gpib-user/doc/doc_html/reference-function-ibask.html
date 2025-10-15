@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,15 +7,15 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
-TITLE="	Linux-GPIB Reference"
-HREF="reference.html"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="NEXT"
 TITLE="ibbna"
 HREF="reference-function-ibbna.html"></HEAD
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -47,9 +47,9 @@ WIDTH="10%"
 ALIGN="left"
 VALIGN="bottom"
 ><A
-HREF="reference.html"
+HREF="traditional-api.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibbna.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBASK"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN910"
+NAME="AEN1254"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN910"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN913"
+NAME="AEN1257"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,44 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN914"
+NAME="AEN1258"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibask</CODE
->(int ud, int option, int *result);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibask</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>option</I
+></TT
+>, int *<TT
+CLASS="PARAMETER"
+><I
+>result</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,25 +141,31 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN925"
+NAME="AEN1269"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	Queries various configuration settings associated with the
-	board or device descriptor <CODE
+	board or device descriptor <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >.  The
-	<CODE
+	<TT
 CLASS="PARAMETER"
->option</CODE
+><I
+>option</I
+></TT
 > argument specifies the particular
 	setting you wish to query.  The result of the query is written
-	to the location specified by <CODE
+	to the location specified by <TT
 CLASS="PARAMETER"
->result</CODE
+><I
+>result</I
+></TT
 >.
 	To change the descriptor's configuration, see
 	<A
@@ -144,7 +177,7 @@ HREF="reference-function-ibconfig.html"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN933"
+NAME="AEN1277"
 ></A
 ><P
 ><B
@@ -152,10 +185,12 @@ NAME="AEN933"
 ></P
 ><TABLE
 BORDER="1"
-RULES="all"
 WIDTH="100%"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
 CLASS="CALSTABLE"
-><COL><COL><COL><THEAD
+><THEAD
 ><TR
 ><TH
 >option</TH
@@ -184,8 +219,8 @@ CLASS="CALSTABLE"
 ><TD
 >0x2</TD
 ><TD
->GPIB secondary address (0 for none, 0x60 to 0x7e for secondary
-	addresses 0 to 30)</TD
+>GPIB secondary address (0 for none, 0x60 to 0x7f for secondary
+	addresses 0 to 31)</TD
 ><TD
 >board or device</TD
 ></TR
@@ -285,11 +320,11 @@ HREF="reference-function-ibrsc.html"
 ><TD
 >0xb</TD
 ><TD
->Nonzero if board autmatically asserts REN line when
+>Nonzero if board automatically asserts the REN line when
 	it becomes the system controller.  See
 	<A
-HREF="reference-function-ibsre.html"
->ibsre()</A
+HREF="reference-function-ibrsc.html"
+>ibrsc()</A
 >.
 	</TD
 ><TD
@@ -481,7 +516,7 @@ HREF="reference-function-ibtmo.html"
 >0x1b</TD
 ><TD
 >Nonzero if UNT (untalk) and UNL (unlisten) commands are automatically
-	sent after a completed io operation using this descriptor.</TD
+	sent after a completed ibrd* or ibwrt* operation using this descriptor.</TD
 ><TD
 >device</TD
 ></TR
@@ -552,7 +587,7 @@ HREF="reference-function-ibeos.html"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1104"
+NAME="AEN1448"
 ></A
 ><H2
 >	Return value
@@ -580,16 +615,16 @@ WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
 ><A
-HREF="reference.html"
+HREF="traditional-api.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -600,7 +635,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibbna.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -608,13 +643,13 @@ ACCESSKEY="N"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->Linux-GPIB Reference</TD
+>Traditional API Functions</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

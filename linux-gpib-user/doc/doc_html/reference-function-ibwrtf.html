@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,18 +7,18 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibwrta"
 HREF="reference-function-ibwrta.html"><LINK
 REL="NEXT"
-TITLE="AllSPoll"
-HREF="reference-function-allspoll.html"></HEAD
+TITLE='	"Multidevice" API Functions'
+HREF="x3047.html"></HEAD
 ><BODY
 CLASS="REFENTRY"
 BGCOLOR="#FFFFFF"
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibwrta.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -61,9 +61,9 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="reference-function-allspoll.html"
+HREF="x3047.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBWRTF"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2676"
+NAME="AEN3025"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2676"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2679"
+NAME="AEN3028"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2680"
+NAME="AEN3029"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibwrtf</CODE
->(int ud, const char *file_path);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibwrtf</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, const char *<TT
+CLASS="PARAMETER"
+><I
+>file_path</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +136,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2689"
+NAME="AEN3038"
 ></A
 ><H2
 >	Description
@@ -125,9 +147,11 @@ HREF="reference-function-ibwrt.html"
 >ibwrt()</A
 >
 	except that the data to be written is taken from a file instead
-	of an array in memory.  <CODE
+	of an array in memory.  <TT
 CLASS="PARAMETER"
->file_path</CODE
+><I
+>file_path</I
+></TT
 > specifies
 	the file, which is written byte for byte onto the bus.
 	</P
@@ -135,7 +159,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2694"
+NAME="AEN3043"
 ></A
 ><H2
 >	Return value
@@ -165,14 +189,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibwrta.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -181,9 +205,9 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="reference-function-allspoll.html"
+HREF="x3047.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -197,7 +221,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD
@@ -205,7 +229,7 @@ ACCESSKEY="U"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->AllSPoll</TD
+>"Multidevice" API Functions</TD
 ></TR
 ></TABLE
 ></DIV

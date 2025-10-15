@@ -23,7 +23,7 @@
 #include "ib_internal.h"
 
 // sets up bus to receive data from device with address pad/sad
-int InternalReceiveSetup( ibConf_t *conf, unsigned int usec_timeout, Addr4882_t address )
+int InternalReceiveSetup(ibConf_t *conf, unsigned int usec_timeout, Addr4882_t address)
 {
 	ibBoard_t *board;
 	uint8_t cmdString[8];
@@ -31,32 +31,31 @@ int InternalReceiveSetup( ibConf_t *conf, unsigned int usec_timeout, Addr4882_t 
 	unsigned int pad, board_pad;
 	int sad, board_sad;
 
-	if( addressIsValid( address ) == 0 ||
-		address == NOADDR )
-	{
-		setIberr( EARG );
+	if (addressIsValid(address) == 0 || address == NOADDR) {
+		setIberr(EARG);
 		return -1;
 	}
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	if( query_pad( board, &board_pad ) < 0 ) return -1;
-	if( query_sad( board, &board_sad ) < 0 ) return -1;
+	if (query_pad(board, &board_pad) < 0)
+		return -1;
+	if (query_sad(board, &board_sad) < 0)
+		return -1;
 
-	pad = extractPAD( address );
-	sad = extractSAD( address );
+	pad = extractPAD(address);
+	sad = extractSAD(address);
 
 	cmdString[ i++ ] = UNL;
 
-	cmdString[ i++ ] = MLA( board_pad );	/* controller's listen address */
-	if ( board_sad >= 0 )
-		cmdString[ i++ ] = MSA( board_sad );
-	cmdString[ i++ ] = MTA( pad );
-	if( sad >= 0 )
-		cmdString[ i++ ] = MSA( sad );
+	cmdString[ i++ ] = MLA(board_pad);	/* controller's listen address */
+	if (board_sad >= 0)
+		cmdString[ i++ ] = MSA(board_sad);
+	cmdString[ i++ ] = MTA(pad);
+	if (sad >= 0)
+		cmdString[ i++ ] = MSA(sad);
 
-	if ( my_ibcmd( conf, usec_timeout, cmdString, i ) < 0)
-	{
-		fprintf(stderr, "%s: command failed\n", __FUNCTION__ );
+	if (my_ibcmd(conf, usec_timeout, cmdString, i) < 0) {
+		fprintf(stderr, "%s: command failed\n", __FUNCTION__);
 		return -1;
 	}
 
@@ -66,10 +65,10 @@ int InternalReceiveSetup( ibConf_t *conf, unsigned int usec_timeout, Addr4882_t 
 static int read_data(ibConf_t *conf, unsigned int usec_timeout, uint8_t *buffer, size_t count, size_t *bytes_read)
 {
 	ibBoard_t *board;
-	read_write_ioctl_t read_cmd;
+	struct gpib_read_write_ioctl read_cmd;
 	int retval;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
 	assert(sizeof(buffer) <= sizeof(read_cmd.buffer_ptr));
 	read_cmd.buffer_ptr = (uintptr_t)buffer;
@@ -78,20 +77,18 @@ static int read_data(ibConf_t *conf, unsigned int usec_timeout, uint8_t *buffer,
 	read_cmd.handle = conf->handle;
 	read_cmd.end = 0;
 
-	set_timeout( board, usec_timeout );
+	set_timeout(board, usec_timeout);
 	conf->end = 0;
 
-	retval = ioctl( board->fileno, IBRD, &read_cmd );
-	if( retval < 0 )
-	{
-		switch( errno )
-		{
+	retval = ioctl(board->fileno, IBRD, &read_cmd);
+	if (retval < 0)	{
+		switch (errno) {
 			case ETIMEDOUT:
 				conf->timed_out = 1;
 				setIberr(EABO);
 				break;
 			case EINTR:
-				setIberr( EABO );
+				setIberr(EABO);
 				break;
 			default:
 				setIberr(EDVR);
@@ -100,34 +97,32 @@ static int read_data(ibConf_t *conf, unsigned int usec_timeout, uint8_t *buffer,
 		}
 	}
 
-	if( read_cmd.end ) conf->end = 1;
+	if (read_cmd.end)
+		conf->end = 1;
 
 	*bytes_read = read_cmd.completed_transfer_count;
 
 	return retval;
 }
 
-int my_ibrd( ibConf_t *conf, unsigned int usec_timeout, uint8_t *buffer, size_t count, size_t *bytes_read)
+int my_ibrd(ibConf_t *conf, unsigned int usec_timeout, uint8_t *buffer, size_t count, size_t *bytes_read)
 {
 	int retval;
 	*bytes_read = 0;
 	// set eos mode
-	iblcleos( conf );
+	iblcleos(conf);
 
-	if( conf->is_interface == 0 )
-	{
+	if (conf->is_interface == 0) {
 		// set up addressing
-		if( InternalReceiveSetup( conf, usec_timeout, packAddress( conf->settings.pad, conf->settings.sad ) ) < 0 )
-		{
+		if (InternalReceiveSetup(conf, usec_timeout, packAddress(conf->settings.pad, conf->settings.sad)) < 0)
 			return -1;
-		}
 	}
 
 	retval =  read_data(conf, usec_timeout, buffer, count, bytes_read);
 
-	if ( !conf->is_interface && conf->settings.send_unt_unl ) {
+	if (!conf->is_interface && conf->settings.send_unt_unl)
 		retval = unlisten_untalk(conf);
-	}
+
 	return retval;
 }
 
@@ -137,42 +132,40 @@ int ibrd(int ud, void *rd, long cnt)
 	ssize_t retval;
 	size_t bytes_read;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
-		return exit_library( ud, 1 );
+	conf = enter_library(ud);
+	if (conf == NULL)
+		return exit_library(ud, 1);
 
 	retval = my_ibrd(conf, conf->settings.usec_timeout, rd, cnt, &bytes_read);
-	if(retval < 0)
-	{
-		if(ThreadIberr() != EDVR)
+	if (retval < 0) {
+		if (ThreadIberr() != EDVR)
 			setIbcnt(bytes_read);
-		return exit_library( ud, 1 );
-	}else
-	{
+		return exit_library(ud, 1);
+	} else {
 		setIbcnt(bytes_read);
 	}
 
-	return general_exit_library( ud, 0, 0, 0, DCAS, 0, 0 );
+	return general_exit_library(ud, 0, 0, 0, DCAS, 0, 0);
 }
 
-int ibrda( int ud, void *buffer, long cnt )
+int ibrda(int ud, void *buffer, long cnt)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = general_enter_library( ud, 1, 0 );
-	if( conf == NULL )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	conf = general_enter_library(ud, 1, 0);
+	if (conf == NULL)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	retval = gpib_aio_launch( ud, conf, GPIB_AIO_READ,
-		buffer, cnt );
-	if( retval < 0 )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	retval = gpib_aio_launch(ud, conf, GPIB_AIO_READ,
+		buffer, cnt);
+	if (retval < 0)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	return general_exit_library( ud, 0, 0, 0, 0, 0, 1 );
+	return general_exit_library(ud, 0, 0, 0, 0, 0, 1);
 }
 
-int ibrdf(int ud, const char *file_path )
+int ibrdf(int ud, const char *file_path)
 {
 	ibConf_t *conf;
 	int retval;
@@ -181,198 +174,180 @@ int ibrdf(int ud, const char *file_path )
 	FILE *save_file;
 	int error;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
-		return exit_library( ud, 1 );
+	conf = enter_library(ud);
+	if (conf == NULL)
+		return exit_library(ud, 1);
 
-	save_file = fopen( file_path, "a" );
-	if( save_file == NULL )
-	{
-		setIberr( EFSO );
-		setIbcnt( errno );
-		return exit_library( ud, 1 );
+	save_file = fopen(file_path, "a");
+	if (save_file == NULL) {
+		setIberr(EFSO);
+		setIbcnt(errno);
+		return exit_library(ud, 1);
 	}
 
-	if( conf->is_interface == 0 )
-	{
+	if (conf->is_interface == 0) {
 		// set up addressing
-		if( InternalReceiveSetup( conf, conf->settings.usec_timeout, packAddress( conf->settings.pad, conf->settings.sad ) ) < 0 )
-		{
-			return exit_library( ud, 1 );
-		}
+		if (InternalReceiveSetup(conf, conf->settings.usec_timeout, packAddress(conf->settings.pad, conf->settings.sad)) < 0)
+			return exit_library(ud, 1);
 	}
 
 	// set eos mode
-	iblcleos( conf );
+	iblcleos(conf);
 
 	byte_count = error = 0;
-	do
-	{
+	do {
 		int fwrite_count;
 		size_t bytes_read;
 
 		retval = read_data(conf, conf->settings.usec_timeout,  buffer, sizeof(buffer), &bytes_read);
-		fwrite_count = fwrite( buffer, 1, bytes_read, save_file );
-		if( fwrite_count != bytes_read )
-		{
-			setIberr( EFSO );
-			setIbcnt( errno );
+		fwrite_count = fwrite(buffer, 1, bytes_read, save_file);
+		if (fwrite_count != bytes_read)		{
+			setIberr(EFSO);
+			setIbcnt(errno);
 			error++;
 		}
 		byte_count += fwrite_count;
-		if( retval < 0 )
+		if (retval < 0)
 		{
 			error++;
 			break;
 		}
-	}while( conf->end == 0 && error == 0 );
+	} while (conf->end == 0 && error == 0);
 
-	if ( !conf->is_interface && conf->settings.send_unt_unl ) {
+	if (!conf->is_interface && conf->settings.send_unt_unl) {
 		retval = unlisten_untalk(conf);
-		if ( retval < 0)
+		if (retval < 0)
 			error++;
 	}
 
-	if ( !error )
-	{
-		setIbcnt( byte_count );
-	}
+	if (!error)
+		setIbcnt(byte_count);
 
-	if( fclose( save_file ) )
-	{
-		setIberr( EFSO );
-		setIbcnt( errno );
-		return exit_library( ud, 1 );
+	if (fclose(save_file)) {
+		setIberr(EFSO);
+		setIbcnt(errno);
+		return exit_library(ud, 1);
 	}
-	if( error ) return exit_library( ud, error );
+	if (error)
+		return exit_library(ud, error);
 
-	return general_exit_library( ud, 0, 0, 0, DCAS, 0, 0 );
+	return general_exit_library(ud, 0, 0, 0, DCAS, 0, 0);
 }
 
-int InternalRcvRespMsg( ibConf_t *conf, void *buffer, long count, int termination )
+int InternalRcvRespMsg(ibConf_t *conf, void *buffer, long count, int termination)
 {
 	ibBoard_t *board;
 	int retval;
 	int use_eos;
 	size_t bytes_read;
 
-	if( conf->is_interface == 0 )
-	{
+	if (conf->is_interface == 0) {
 		setIberr(EARG);
 		return -1;
 	}
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	if( is_cic( board ) == 0 )
-	{
-		setIberr( ECIC );
+	retval = is_cic(board);
+	if (retval <= 0) {
+		if (retval == 0)
+			setIberr(ECIC);
 		return -1;
 	}
 
-	if( termination != ( termination & 0xff ) &&
-		termination != STOPend )
-	{
-		setIberr( EARG );
+	if (termination != (termination & 0xff) && termination != STOPend) {
+		setIberr(EARG);
 		return -1;
 	}
 	// XXX check for listener active state
 
 	//XXX detect no listeners (EBUS) error
-	use_eos = ( termination != STOPend );
-	retval = config_read_eos( board, use_eos, termination, 1 );
-	if( retval < 0 )
-	{
+	use_eos = (termination != STOPend);
+	retval = config_read_eos(board, use_eos, termination, 1);
+	if (retval < 0)
 		return retval;
-	}
 
 	retval = read_data(conf, conf->settings.usec_timeout, buffer, count, &bytes_read);
 	setIbcnt(bytes_read);
-	if(retval < 0)
-	{
+	if (retval < 0)
 		return -1;
-	}
 
 	return 0;
 }
 
-void RcvRespMsg( int boardID, void *buffer, long count, int termination )
+void RcvRespMsg(int boardID, void *buffer, long count, int termination)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalRcvRespMsg( conf, buffer, count, termination );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = InternalRcvRespMsg(conf, buffer, count, termination);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	general_exit_library( boardID, 0, 0, 0, DCAS, 0, 0 );
+	general_exit_library(boardID, 0, 0, 0, DCAS, 0, 0);
 }
 
-void ReceiveSetup( int boardID, Addr4882_t address )
+void ReceiveSetup(int boardID, Addr4882_t address)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalReceiveSetup( conf, conf->settings.usec_timeout, address );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = InternalReceiveSetup(conf, conf->settings.usec_timeout, address);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	exit_library( boardID, 0 );
+	exit_library(boardID, 0);
 }
 
-int InternalReceive( ibConf_t *conf, Addr4882_t address,
-	void *buffer, long count, int termination )
+int InternalReceive(ibConf_t *conf, Addr4882_t address,
+	void *buffer, long count, int termination)
 {
 	int retval;
 
-	retval = InternalReceiveSetup( conf, conf->settings.usec_timeout, address );
-	if( retval < 0 ) return retval;
+	retval = InternalReceiveSetup(conf, conf->settings.usec_timeout, address);
+	if (retval < 0)
+		return retval;
 
-	retval = InternalRcvRespMsg( conf, buffer, count, termination );
-	if( retval < 0 )return retval;
+	retval = InternalRcvRespMsg(conf, buffer, count, termination);
+	if (retval < 0)
+		return retval;
 
 	return 0;
 }
 
-void Receive( int boardID, Addr4882_t address,
-	void *buffer, long count, int termination )
+void Receive(int boardID, Addr4882_t address,
+	void *buffer, long count, int termination)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalReceive( conf, address, buffer, count, termination );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = InternalReceive(conf, address, buffer, count, termination);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	general_exit_library( boardID, 0, 0, 0, DCAS, 0, 0 );
+	general_exit_library(boardID, 0, 0, 0, DCAS, 0, 0);
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibwait"
 HREF="reference-function-ibwait.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibwait.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibwrta.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBWRT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2604"
+NAME="AEN2953"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2604"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2607"
+NAME="AEN2956"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,44 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2608"
+NAME="AEN2957"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibwrt</CODE
->(int ud, const void *data, long num_bytes);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibwrt</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, const void *<TT
+CLASS="PARAMETER"
+><I
+>data</I
+></TT
+>, long <TT
+CLASS="PARAMETER"
+><I
+>num_bytes</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,24 +141,30 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2619"
+NAME="AEN2968"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	ibwrt() is used to write data bytes to a device or board.  The argument
-	<CODE
+	<TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > can be either a device or board descriptor.
-	<CODE
+	<TT
 CLASS="PARAMETER"
->num_bytes</CODE
+><I
+>num_bytes</I
+></TT
 > specifies how many bytes
-	are written from the user-supplied array <CODE
+	are written from the user-supplied array <TT
 CLASS="PARAMETER"
->data</CODE
+><I
+>data</I
+></TT
 >.
 	EOI may be asserted with the last byte sent or when the end-of-string
 	character is sent (see <A
@@ -148,17 +181,21 @@ HREF="reference-function-ibtmo.html"
 	receiving an interface clear.
 	</P
 ><P
->	If <CODE
+>	If <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > is a device descriptor, then the library
 	automatically handles addressing the device as listener and the interface
 	board as talker, before sending the data bytes onto the bus.
 	</P
 ><P
->	If <CODE
+>	If <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >
 	is a board descriptor, the board simply writes the data onto the bus.  The
 	controller-in-charge must address the board as talker.
@@ -171,7 +208,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2633"
+NAME="AEN2982"
 ></A
 ><H2
 >	Return value
@@ -201,14 +238,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibwait.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -219,7 +256,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibwrta.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -233,7 +270,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

@@ -18,123 +18,109 @@
 #include "ib_internal.h"
 #include <stdlib.h>
 
-int ibclr( int ud )
+int ibclr(int ud)
 {
 	uint8_t cmd[ 16 ];
 	ibConf_t *conf;
-	ibBoard_t *board;
 	ssize_t count;
 	int i;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
-		return exit_library( ud, 1 );
+	conf = enter_library(ud);
+	if (conf == NULL)
+		return exit_library(ud, 1);
 
-	board = interfaceBoard( conf );
-
-	if( conf->is_interface )
-	{
-		setIberr( EARG );
-		return exit_library( ud, 1 );
+	if (conf->is_interface)	{
+		setIberr(EARG);
+		return exit_library(ud, 1);
 	}
 
-	i = send_setup_string( conf, cmd );
-	cmd[ i++ ] = SDC;
+	i = send_setup_string(conf, cmd);
+	cmd[i++] = SDC;
 
 	//XXX detect no listeners (EBUS) error
-	count = my_ibcmd( conf, conf->settings.usec_timeout, cmd, i );
-	if(count != i)
-	{
-		return exit_library( ud, 1 );
-	}
+	count = my_ibcmd(conf, conf->settings.usec_timeout, cmd, i);
+	if (count != i)
+		return exit_library(ud, 1);
 
-	return exit_library( ud, 0 );
+	return exit_library(ud, 0);
 }
 
 
-int InternalDevClearList( ibConf_t *conf, const Addr4882_t addressList[] )
+int InternalDevClearList(ibConf_t *conf, const Addr4882_t addressList[])
 {
 	int i;
 	ibBoard_t *board;
 	uint8_t *cmd;
 	int count;
+	int retval;
 
-	if( addressListIsValid( addressList ) == 0 )
-	{
+	if (addressListIsValid(addressList) == 0)
+		return -1;
+
+	if (conf->is_interface == 0) {
+		setIberr(EDVR);
 		return -1;
 	}
 
-	if( conf->is_interface == 0 )
-	{
-		setIberr( EDVR );
+	board = interfaceBoard(conf);
+
+	retval = is_cic(board);
+	if (retval <= 0) {
+		if (retval == 0)
+			setIberr(ECIC);
 		return -1;
 	}
 
-	board = interfaceBoard( conf );
-
-	if( is_cic( board ) == 0 )
-	{
-		setIberr( ECIC );
-		return -1;
-	}
-
-	cmd = malloc( 16 + 2 * numAddresses( addressList ) );
-	if( cmd == NULL )
-	{
-		setIberr( EDVR );
-		setIbcnt( ENOMEM );
+	cmd = malloc(16 + 2 * numAddresses(addressList));
+	if (cmd == NULL) {
+		setIberr(EDVR);
+		setIbcnt(ENOMEM);
 		return -1;
 	}
 
 	i = 0;
-	if( numAddresses( addressList ) )
-	{
-		i += create_send_setup( board, addressList, cmd );
-		cmd[ i++ ] = SDC;
-	}
-	else
-	{
+	if (numAddresses(addressList)) {
+		i += create_send_setup(board, addressList, cmd);
+		cmd[i++] = SDC;
+	} else {
 		cmd[ i++ ] = DCL;
 	}
 	//XXX detect no listeners (EBUS) error
-	count = my_ibcmd( conf, conf->settings.usec_timeout, cmd, i );
+	count = my_ibcmd(conf, conf->settings.usec_timeout, cmd, i);
 
-	free( cmd );
+	free(cmd);
 	cmd = NULL;
 
-	if(count != i)
-	{
+	if (count != i)
 		return -1;
-	}
 
 	return 0;
 }
 
-void DevClearList( int boardID, const Addr4882_t addressList[] )
+void DevClearList(int boardID, const Addr4882_t addressList[])
 {
 	int retval;
 	ibConf_t *conf;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (conf == NULL) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalDevClearList( conf, addressList );
-	if( retval < 0 )
-		exit_library( boardID, 1 );
+	retval = InternalDevClearList(conf, addressList);
+	if (retval < 0)
+		exit_library(boardID, 1);
 
-	exit_library( boardID, 0 );
+	exit_library(boardID, 0);
 }
 
-void DevClear( int boardID, Addr4882_t address )
+void DevClear(int boardID, Addr4882_t address)
 {
 	Addr4882_t addressList[2];
 
 	addressList[0] = address;
 	addressList[1] = NOADDR;
 
-	DevClearList( boardID, addressList );
+	DevClearList(boardID, addressList);
 }

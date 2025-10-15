@@ -1,0 +1,60 @@
+'\" t
+.\"     Title: ibcac
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBCAC" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibcac \- assert ATN (board)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibcac('u
+.BI "int ibcac(int\ " "ud" ", int\ " "synchronous" ");"
+.SH "DESCRIPTION"
+.PP
+ibcac() causes the board specified by the board descriptor
+\fIud\fR
+to become active controller by asserting the ATN line\&. The board must be controller\-in\-change in order to assert ATN\&. If
+\fIsynchronous\fR
+is nonzero, then the board will wait for a data byte on the bus to complete its transfer before asserting ATN\&. If the synchronous attempt times out, or
+\fIsynchronous\fR
+is zero, then ATN will be asserted immediately\&.
+.PP
+It is generally not necessary to call ibcac()\&. It is provided for advanced users who want direct, low\-level access to the GPIB bus\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

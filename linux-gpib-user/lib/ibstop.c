@@ -17,50 +17,46 @@
 #include "ib_internal.h"
 #include <pthread.h>
 
-int internal_ibstop( ibConf_t *conf )
+int internal_ibstop(ibConf_t *conf)
 {
 	int retval;
 
-	pthread_mutex_lock( &conf->async.lock );
-	if( conf->async.in_progress == 0 )
-	{
-		pthread_mutex_unlock( &conf->async.lock );
+	pthread_mutex_lock(&conf->async.lock);
+	if (!conf->async.in_progress) {
+		pthread_mutex_unlock(&conf->async.lock);
 		return 0;
 	}
-	retval = pthread_cancel( conf->async.thread );
-	if( retval )
-	{
-		pthread_mutex_unlock( &conf->async.lock );
+	retval = pthread_cancel(conf->async.thread);
+	if (retval) {
+		pthread_mutex_unlock(&conf->async.lock);
 		return 0;
 	}
-	pthread_mutex_unlock( &conf->async.lock );
-	retval = gpib_aio_join( &conf->async );
-	if( retval )
-	{
+	pthread_mutex_unlock(&conf->async.lock);
+	retval = gpib_aio_join(&conf->async);
+	if (retval)
 		return -1;
-	}
-	pthread_mutex_lock( &conf->async.lock );
+	pthread_mutex_lock(&conf->async.lock);
 	conf->async.in_progress = 0;
-	pthread_mutex_unlock( &conf->async.lock );
+	pthread_mutex_unlock(&conf->async.lock);
 
-	setIberr( conf->async.iberr );
-	setIbcnt( conf->async.ibcntl );
+	setIberr(conf->async.iberr);
+	setIbcnt(conf->async.ibcntl);
 
 	return 0;
 }
 
-int ibstop( int ud )
+int ibstop(int ud)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = general_enter_library( ud, 1, 1 );
-	if( conf == NULL )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	conf = general_enter_library(ud, 1, 1);
+	if (!conf)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	retval = internal_ibstop( conf );
-	if( retval < 0 )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	retval = internal_ibstop(conf);
+	if (retval < 0)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	return general_exit_library( ud, conf->async.ibsta & ERR, 0, 0, 0, 0, 1 );
+	return general_exit_library(ud, conf->async.ibsta & ERR, 0, 0, 0, 0, 1);
 }

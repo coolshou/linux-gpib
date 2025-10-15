@@ -1,0 +1,52 @@
+'\" t
+.\"     Title: SendLLO
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "SENDLLO" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+SendLLO \- put devices into local lockout mode
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ SendLLO('u
+.BI "void SendLLO(int\ " "board_desc" ");"
+.SH "DESCRIPTION"
+.PP
+SendLLO() asserts the \*(Aqremote enable\*(Aq bus line, then sends the LLO
+command byte\&. Any devices currently addressed as listener will be put into RWLS (remote with lockout state), and all other devices will enter LWLS (local with lockout state)\&. Local lockout means the remote/local mode of devices cannot be changed though the devices\*(Aq front\-panel controls\&. Unasserting the REN line should bring the devices out of lockout state\&.
+.PP
+The
+SetRWLS()
+performs a similar function, except it lets you specify which devices you wish to address as listener before sending the LLO command\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

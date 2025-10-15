@@ -1,0 +1,50 @@
+'\" t
+.\"     Title: ibcnt
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Linux-GPIB Reference
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBCNT" "3" "10/04/2025" "linux-gpib 4.3.7" "Linux-GPIB Reference"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibcnt \- hold number of bytes transferred, or errno
+.SH "SYNOPSIS"
+.sp
+.nf
+#include <gpib/ib\&.h>
+
+volatile int ibcnt;
+volatile long ibcntl;
+.fi
+.SH "DESCRIPTION"
+.PP
+ibcnt and ibcntl are set after IO operations to the the the number of bytes sent or received\&. They are also set to the value of errno after EDVR or EFSO errors\&.
+.PP
+If you wish to avoid using a global variable, you may instead use
+ThreadIbcnt() or ThreadIbcntl()
+which return thread\-specific values\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

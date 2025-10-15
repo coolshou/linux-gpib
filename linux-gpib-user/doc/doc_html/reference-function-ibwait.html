@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibvers"
 HREF="reference-function-ibvers.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibvers.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibwrt.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBWAIT"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2566"
+NAME="AEN2915"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2566"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2569"
+NAME="AEN2918"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2570"
+NAME="AEN2919"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibwait</CODE
->(int ud, int status_mask);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibwait</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>status_mask</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,20 +136,24 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2579"
+NAME="AEN2928"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	ibwait() will sleep until one of the conditions specified in
-	<CODE
+	<TT
 CLASS="PARAMETER"
->status_mask</CODE
+><I
+>status_mask</I
+></TT
 > is true.  The meaning of
-	the bits in <CODE
+	the bits in <TT
 CLASS="PARAMETER"
->status_mask</CODE
+><I
+>status_mask</I
+></TT
 > are the same
 	as the bits of the <A
 HREF="reference-globals-ibsta.html"
@@ -136,18 +162,22 @@ HREF="reference-globals-ibsta.html"
 	status variable.
 	</P
 ><P
->	If <CODE
+>	If <TT
 CLASS="PARAMETER"
->status_mask</CODE
+><I
+>status_mask</I
+></TT
 > is zero, then ibwait() will
 	return immediately.  This is useful if you simply wish to get an
 	updated ibsta.
 	</P
 ><P
 >	When calling ibwait() on a device, only the following
-	condition bits in the <CODE
+	condition bits in the <TT
 CLASS="PARAMETER"
->status_mask</CODE
+><I
+>status_mask</I
+></TT
 > are
 	valid: TIMO, END, CMPL, and RQS. For the RQS bit to be set in
 	the returned ibsta automatic serial polling must be enabled
@@ -164,17 +194,21 @@ HREF="reference-function-ibrsp.html"
 	</P
 ><P
 >	If you wish to resynchronize and obtain the results from an asynchronous I/O operation,
-	you must wait on CMPL by setting its bit in the <CODE
+	you must wait on CMPL by setting its bit in the <TT
 CLASS="PARAMETER"
->status_mask</CODE
+><I
+>status_mask</I
+></TT
 > parameter.
 	Then if ibwait returns with CMPL set, it will have updated iberr, ibcnt, and the ERR bit of ibsta
 	with the most recent asynchronous I/O results.
 	</P
 ><P
->	If TIMO is set in the <CODE
+>	If TIMO is set in the <TT
 CLASS="PARAMETER"
->status_mask</CODE
+><I
+>status_mask</I
+></TT
 > parameter, then ibwait
 	will timeout after the time period set by <A
 HREF="reference-function-ibtmo.html"
@@ -186,7 +220,7 @@ HREF="reference-function-ibtmo.html"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2596"
+NAME="AEN2945"
 ></A
 ><H2
 >	Return value
@@ -216,14 +250,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibvers.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -234,7 +268,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibwrt.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -248,7 +282,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

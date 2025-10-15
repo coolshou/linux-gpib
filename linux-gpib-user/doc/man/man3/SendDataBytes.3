@@ -1,0 +1,103 @@
+'\" t
+.\"     Title: SendDataBytes
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "SENDDATABYTES" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+SendDataBytes \- write data
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ SendDataBytes('u
+.BI "void SendDataBytes(int\ " "board_desc" ", const\ void\ *" "data" ", long\ " "count" ", int\ " "eot_mode" ");"
+.SH "DESCRIPTION"
+.PP
+SendDataBytes() writes data to the bus\&. One or more devices must have already been addressed as listener (and the board as talker) before calling this function\&. Addressing may be accomplished with the
+SendSetup()
+function\&.
+.PP
+\fIcount\fR
+bytes are written from the array specified by
+\fIdata\fR\&. The
+\fIeot_mode\fR
+argument specifies how the message should be terminated, and may be any of the following values:
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&12.\ \&eot modes
+.TS
+allbox tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value
+T}:T{
+description
+T}
+.T&
+l l l
+l l l
+l l l.
+T{
+NULLend
+T}:T{
+0
+T}:T{
+Do not assert EOI or add a newline at the end of the write\&.
+T}
+T{
+DABend
+T}:T{
+1
+T}:T{
+Assert EOI with the last byte of the write\&.
+T}
+T{
+NLend
+T}:T{
+2
+T}:T{
+Append a newline, and assert EOI with the newline at the end of the write\&.
+T}
+.TE
+.sp 1
+.PP
+You may find it simpler to use the slightly higher level functions
+Send()
+or
+SendList(), since they does not require addressing and writing of data to be performed separately\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

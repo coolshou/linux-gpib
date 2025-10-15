@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="SendCmds"
 HREF="reference-function-sendcmds.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-sendcmds.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-sendifc.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-SENDDATABYTES"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3189"
+NAME="AEN3537"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3189"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3192"
+NAME="AEN3540"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,49 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3193"
+NAME="AEN3541"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void SendDataBytes</CODE
->(int board_desc, const void *data, long count, int eot_mode);</CODE
+>void <TT
+CLASS="FUNCTION"
+>SendDataBytes</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>, const void *<TT
+CLASS="PARAMETER"
+><I
+>data</I
+></TT
+>, long <TT
+CLASS="PARAMETER"
+><I
+>count</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>eot_mode</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +146,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3206"
+NAME="AEN3554"
 ></A
 ><H2
 >	Description
@@ -131,16 +163,22 @@ HREF="reference-function-sendsetup.html"
 	function.
 	</P
 ><P
->	<CODE
+>	<TT
 CLASS="PARAMETER"
->count</CODE
+><I
+>count</I
+></TT
 > bytes are written from the array
-	specified by <CODE
+	specified by <TT
 CLASS="PARAMETER"
->data</CODE
->.  The <CODE
+><I
+>data</I
+></TT
+>.  The <TT
 CLASS="PARAMETER"
->eot_mode</CODE
+><I
+>eot_mode</I
+></TT
 >
 	argument specifies how the message should be terminated, and may be any of
 	the following values:
@@ -149,7 +187,7 @@ CLASS="PARAMETER"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN3215"
+NAME="AEN3563"
 ></A
 ><P
 ><B
@@ -157,9 +195,11 @@ NAME="AEN3215"
 ></P
 ><TABLE
 BORDER="1"
-RULES="all"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
 CLASS="CALSTABLE"
-><COL><COL><COL><THEAD
+><THEAD
 ><TR
 ><TH
 >constant</TH
@@ -231,14 +271,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-sendcmds.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -249,7 +289,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-sendifc.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -263,7 +303,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

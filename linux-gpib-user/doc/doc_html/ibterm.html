@@ -1,0 +1,878 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>ibterm</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.3.7
+ Documentation"
+HREF="t1.html"><LINK
+REL="UP"
+TITLE="	GPIB utility programme"
+HREF="util-prog.html"><LINK
+REL="PREVIOUS"
+TITLE="	GPIB utility programme"
+HREF="util-prog.html"><LINK
+REL="NEXT"
+TITLE="	Linux-GPIB Reference"
+HREF="reference.html"></HEAD
+><BODY
+CLASS="REFENTRY"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.3.7
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="util-prog.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><H1
+><A
+NAME="IBTERM"
+></A
+>ibterm</H1
+><DIV
+CLASS="REFNAMEDIV"
+><A
+NAME="AEN761"
+></A
+><H2
+>Name</H2
+>ibterm&nbsp;--&nbsp;Interactive GPIB terminal</DIV
+><DIV
+CLASS="REFSYNOPSISDIV"
+><A
+NAME="AEN764"
+></A
+><H2
+>Synopsis</H2
+><P
+><B
+CLASS="COMMAND"
+>ibterm</B
+> {-d <TT
+CLASS="REPLACEABLE"
+><I
+>primary_address</I
+></TT
+>} [-m <TT
+CLASS="REPLACEABLE"
+><I
+>minor</I
+></TT
+>] [-s <TT
+CLASS="REPLACEABLE"
+><I
+>secondary_address</I
+></TT
+>] [-i <TT
+CLASS="REPLACEABLE"
+><I
+>eoi</I
+></TT
+>] [-e <TT
+CLASS="REPLACEABLE"
+><I
+>eos</I
+></TT
+>] [-r <TT
+CLASS="REPLACEABLE"
+><I
+>reos</I
+></TT
+>] [-b <TT
+CLASS="REPLACEABLE"
+><I
+>bin</I
+></TT
+>] [-x <TT
+CLASS="REPLACEABLE"
+><I
+>xeos</I
+></TT
+>] [-t <TT
+CLASS="REPLACEABLE"
+><I
+>timeout</I
+></TT
+>] [-p <TT
+CLASS="REPLACEABLE"
+><I
+>prompt</I
+></TT
+>] [-f <TT
+CLASS="REPLACEABLE"
+><I
+>history_file</I
+></TT
+>] [-N] [-X] [-h]</P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN792"
+></A
+><H2
+>Description</H2
+><P
+>      An interactive terminal program for sending commands to a device over an
+      IEEE-488 general purpose instrument bus and printing the responses.
+    </P
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN795"
+></A
+><H2
+>Options</H2
+><P
+></P
+><DIV
+CLASS="VARIABLELIST"
+><DL
+><DT
+><CODE
+CLASS="OPTION"
+>-d</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>address</I
+></TT
+></DT
+><DD
+><P
+>	    Sets the device's primary address (pad). The
+	    <TT
+CLASS="REPLACEABLE"
+><I
+>address</I
+></TT
+> must be between
+	    <CODE
+CLASS="OPTION"
+>0</CODE
+> and <CODE
+CLASS="OPTION"
+>30</CODE
+>.
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-m</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>number</I
+></TT
+></DT
+><DD
+><P
+>	    Specify the minor number of the device file this interface board
+	    will use. A <TT
+CLASS="REPLACEABLE"
+><I
+>number</I
+></TT
+> of <CODE
+CLASS="OPTION"
+>0</CODE
+>
+	    corresponds to <TT
+CLASS="FILENAME"
+>/dev/gpib0</TT
+>,
+	    <CODE
+CLASS="OPTION"
+>1</CODE
+> is <TT
+CLASS="FILENAME"
+>/dev/gpib1</TT
+>,
+	    etc. Defaults to <CODE
+CLASS="OPTION"
+>0</CODE
+>.
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-s</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>address</I
+></TT
+></DT
+><DD
+><P
+>	    Sets the device's secondary address (sad).
+	    The <TT
+CLASS="REPLACEABLE"
+><I
+>address</I
+></TT
+> must be <CODE
+CLASS="OPTION"
+>0</CODE
+>
+	    (disabled) or between <CODE
+CLASS="OPTION"
+>96</CODE
+> and <CODE
+CLASS="OPTION"
+>126</CODE
+>
+	    (0x60 and 0x7e hexadecimal). Defaults to <CODE
+CLASS="OPTION"
+>0</CODE
+>.
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-i</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>0|1</I
+></TT
+></DT
+><DD
+><P
+>	    Assert EIO with last byte sent.
+	    Defaults to <CODE
+CLASS="OPTION"
+>1</CODE
+> (true).
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-e</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>code</I
+></TT
+></DT
+><DD
+><P
+>	    ASCII code of end-of-string (eos) character.
+	    The <TT
+CLASS="REPLACEABLE"
+><I
+>code</I
+></TT
+> must be between
+	    <CODE
+CLASS="OPTION"
+>0</CODE
+> and <CODE
+CLASS="OPTION"
+>255</CODE
+>.
+	    Defaults to <CODE
+CLASS="OPTION"
+>0</CODE
+> (no code).
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-r</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>0|1</I
+></TT
+></DT
+><DD
+><P
+>	    Terminate read on eos character (reos) flag. Defaults to
+	    <CODE
+CLASS="OPTION"
+>0</CODE
+> (false).
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-b</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>0|1</I
+></TT
+></DT
+><DD
+><P
+>	    Binary eos character match mode (bin) flag. Defaults to
+	    <CODE
+CLASS="OPTION"
+>0</CODE
+> (false).
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-x</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>0|1</I
+></TT
+></DT
+><DD
+><P
+>	    Assert EOI when transmitting eos (xeos) flag. Defaults to
+	    <CODE
+CLASS="OPTION"
+>0</CODE
+> (false).
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-t</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>timeout</I
+></TT
+></DT
+><DD
+><P
+>	    Sets the IO timeout for the device.
+	    The <TT
+CLASS="REPLACEABLE"
+><I
+>timeout</I
+></TT
+> must be a value from
+	    the below table. The default value is <CODE
+CLASS="OPTION"
+>10</CODE
+>,
+	    corresponding to 300 milliseconds.
+	  </P
+><DIV
+CLASS="INFORMALTABLE"
+><P
+></P
+><A
+NAME="TIMEOUT-CONSTANTS"
+></A
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+><TT
+CLASS="REPLACEABLE"
+><I
+>timeout</I
+></TT
+></TH
+><TH
+>Length</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>0</CODE
+></TD
+><TD
+>Never timeout</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>1</CODE
+></TD
+><TD
+>10 microseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>2</CODE
+></TD
+><TD
+>30 microseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>3</CODE
+></TD
+><TD
+>100 microseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>4</CODE
+></TD
+><TD
+>300 microseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>5</CODE
+></TD
+><TD
+>1 millisecond</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>6</CODE
+></TD
+><TD
+>3 milliseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>7</CODE
+></TD
+><TD
+>10 milliseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>8</CODE
+></TD
+><TD
+>30 milliseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>9</CODE
+></TD
+><TD
+>100 milliseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>10</CODE
+></TD
+><TD
+>300 milliseconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>11</CODE
+></TD
+><TD
+>1 second</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>12</CODE
+></TD
+><TD
+>3 seconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>13</CODE
+></TD
+><TD
+>10 seconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>14</CODE
+></TD
+><TD
+>30 seconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>15</CODE
+></TD
+><TD
+>100 seconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>16</CODE
+></TD
+><TD
+>300 seconds</TD
+></TR
+><TR
+><TD
+><CODE
+CLASS="OPTION"
+>17</CODE
+></TD
+><TD
+>1000 seconds</TD
+></TR
+></TBODY
+></TABLE
+><P
+></P
+></DIV
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-p</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>string</I
+></TT
+></DT
+><DD
+><P
+>	    Sets the prompt. Defaults to <SPAN
+CLASS="QUOTE"
+>"<TT
+CLASS="PROMPT"
+>ibterm&#62;</TT
+>"</SPAN
+>
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-u</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>string</I
+></TT
+></DT
+><DD
+><P
+>            Send Untalk/Unlisten after each read and write
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-f</CODE
+> <TT
+CLASS="REPLACEABLE"
+><I
+>file</I
+></TT
+></DT
+><DD
+><P
+>	    Command history file. Defaults to
+	    <SPAN
+CLASS="QUOTE"
+>"<TT
+CLASS="FILENAME"
+>.ibterm_hist_&#60;<TT
+CLASS="REPLACEABLE"
+><I
+>primary_address</I
+></TT
+>&#62;</TT
+>"</SPAN
+>
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-N</CODE
+></DT
+><DD
+><P
+>	    No automatic read on device, enter <B
+CLASS="KEYCAP"
+>return</B
+> at prompt to read.
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-X</CODE
+></DT
+><DD
+><P
+>	    Force hexadecimal output.
+	  </P
+></DD
+><DT
+><CODE
+CLASS="OPTION"
+>-h</CODE
+></DT
+><DD
+><P
+>	    Print help and exit.
+	  </P
+></DD
+></DL
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN995"
+></A
+><H2
+>Notes</H2
+><P
+>      To quit the program enter the <SPAN
+CLASS="KEYSYM"
+>EOF</SPAN
+> character (<B
+CLASS="KEYCAP"
+>Ctrl</B
+>-<B
+CLASS="KEYCAP"
+>D</B
+>) at the prompt.
+    </P
+><P
+>      For interactivity, <TT
+CLASS="REPLACEABLE"
+><I
+>timeout</I
+></TT
+> should not be
+      greater than <CODE
+CLASS="OPTION"
+>13</CODE
+> i.e. 10 secs.
+    </P
+><P
+>      A device read can always be triggered by hitting
+      <B
+CLASS="KEYCAP"
+>enter</B
+> at the prompt. Interrupting the
+      program while reading from the device may cause hangs.
+    </P
+><DIV
+CLASS="REFSECT2"
+><A
+NAME="AEN1007"
+></A
+><H3
+>Implementation details</H3
+><P
+>The program is implemented as follows:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>loop:
+	Print <TT
+CLASS="REPLACEABLE"
+><I
+>prompt</I
+></TT
+> to stdout
+	Read a line of text from stdin
+	Write the text (if any) to the device at <TT
+CLASS="REPLACEABLE"
+><I
+>pad</I
+></TT
+>
+	If <CODE
+CLASS="OPTION"
+>-N</CODE
+> is not set, or no text was entered:
+        Attempt to read response from the device
+        If no response is received before <TT
+CLASS="REPLACEABLE"
+><I
+>timeout</I
+></TT
+>:
+        go to loop
+        else:
+        print the response on stdout
+	Go back to loop.</PRE
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="REFSECT1"
+><A
+NAME="AEN1015"
+></A
+><H2
+>See also</H2
+><P
+>      See the <SPAN
+CLASS="CITEREFENTRY"
+><SPAN
+CLASS="REFENTRYTITLE"
+>readline</SPAN
+>(3)</SPAN
+> man page for editing input and searching history.
+    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="util-prog.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>GPIB utility programme</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="util-prog.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Linux-GPIB Reference</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

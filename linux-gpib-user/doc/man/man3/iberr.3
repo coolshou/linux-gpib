@@ -1,0 +1,224 @@
+'\" t
+.\"     Title: iberr
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Linux-GPIB Reference
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBERR" "3" "10/04/2025" "linux-gpib 4.3.7" "Linux-GPIB Reference"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+iberr \- holds error code
+.SH "SYNOPSIS"
+.sp
+.nf
+#include <gpib/ib\&.h>
+
+volatile int iberr;
+.fi
+.SH "DESCRIPTION"
+.PP
+iberr is set whenever a function from the \*(Aqtraditional\*(Aq or \*(Aqmultidevice\*(Aq API fails with an error\&. The meaning of each possible value of iberr is summarized in the following table:
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&3.\ \&iberr error codes
+.TS
+allbox expand tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value
+T}:T{
+meaning
+T}
+.T&
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l.
+T{
+EDVR
+T}:T{
+0
+T}:T{
+A system call has failed\&.  ibcnt/ibcntl will be set to the
+	value of errno\&.
+T}
+T{
+ECIC
+T}:T{
+1
+T}:T{
+Your interface board needs to be controller\-in\-charge, but
+	is not\&.
+T}
+T{
+ENOL
+T}:T{
+2
+T}:T{
+You have attempted to write data or command bytes, but
+	there are no listeners currently addressed\&.
+T}
+T{
+EADR
+T}:T{
+3
+T}:T{
+The interface board has failed to address itself properly
+	before starting an io operation\&.
+T}
+T{
+EARG
+T}:T{
+4
+T}:T{
+One or more arguments to the function call were invalid\&.
+T}
+T{
+ESAC
+T}:T{
+5
+T}:T{
+The interface board needs to be system controller, but is not\&.
+T}
+T{
+EABO
+T}:T{
+6
+T}:T{
+A read or write of data bytes has been aborted, possibly due
+	to a timeout or reception of a device clear command\&.
+T}
+T{
+ENEB
+T}:T{
+7
+T}:T{
+The GPIB interface board does not exist, its driver is not
+	loaded, or it is not configured properly\&.
+T}
+T{
+EDMA
+T}:T{
+8
+T}:T{
+Not used (DMA error), included for compatibility purposes\&.
+T}
+T{
+EOIP
+T}:T{
+10
+T}:T{
+Function call can not proceed due to an asynchronous IO operation
+	(ibrda(), ibwrta(), or ibcmda()) in progress\&.
+T}
+T{
+ECAP
+T}:T{
+11
+T}:T{
+Incapable of executing function call, due the GPIB board lacking
+	the capability, or
+	the capability being disabled in software\&.
+T}
+T{
+EFSO
+T}:T{
+12
+T}:T{
+File system error\&.  ibcnt/ibcntl will be set to the value of errno\&.
+T}
+T{
+EBUS
+T}:T{
+14
+T}:T{
+An attempt to write command bytes to the bus has timed out\&.
+T}
+T{
+ESTB
+T}:T{
+15
+T}:T{
+One or more serial poll status bytes have been lost\&.  This can
+	occur due to
+	too many status bytes accumulating (through automatic serial polling)
+	without being read\&.
+T}
+T{
+ESRQ
+T}:T{
+16
+T}:T{
+The serial poll request service line is stuck on\&.  This can occur
+	if a physical device on the bus requests service, but its GPIB address has
+	not been opened
+	(via ibdev() for example) by any process\&.  Thus the automatic serial
+	polling routines are unaware of the device\*(Aqs existence and will never
+	serial poll it\&.
+T}
+T{
+ECNF
+T}:T{
+17
+T}:T{
+There is a syntax or value error in the configuration file\&. This error
+	  can be returned by ibfind() and ibdev()\&.
+T}
+T{
+ETAB
+T}:T{
+20
+T}:T{
+This error can be returned by
+	ibevent(), FindLstn(), or
+	FindRQS()\&.  See their descriptions for more information\&.
+T}
+.TE
+.sp 1
+.PP
+If you wish to avoid using a global variable, you may instead use
+ThreadIberr()
+which returns a thread\-specific value\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

@@ -34,17 +34,17 @@ guile_ibdev (SCM board_index, SCM pad, SCM sad, SCM timeout, SCM eoi, SCM eos)
 {
   int fd, _eoi;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (board_index), board_index, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (board_index), board_index,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (pad), pad, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (pad), pad,
 		   SCM_ARG2, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (sad), sad, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (sad), sad,
 		   SCM_ARG3, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (timeout), timeout, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (timeout), timeout,
 		   SCM_ARG4, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (eoi) || SCM_BOOLP (eoi), eoi, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (eoi) || SCM_BOOLP (eoi), eoi,
 		   SCM_ARG5, FUNC_NAME, "exact or bool");
-  SCM_ASSERT_TYPE (SCM_EXACTP (eos), eos, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (eos), eos,
 		   SCM_ARG6, FUNC_NAME, "exact");
 
   if (SCM_BOOLP (eoi))
@@ -53,7 +53,7 @@ guile_ibdev (SCM board_index, SCM pad, SCM sad, SCM timeout, SCM eoi, SCM eos)
     _eoi = SCM_NUM2INT (SCM_ARG5, eoi);
 
 
-  if ((fd = ibdev (SCM_NUM2INT (SCM_ARG1, board_index), 
+  if ((fd = ibdev (SCM_NUM2INT (SCM_ARG1, board_index),
 		   SCM_NUM2INT (SCM_ARG2, pad),
 		   SCM_NUM2INT (SCM_ARG3, sad),
 		   SCM_NUM2INT (SCM_ARG4, timeout),
@@ -71,14 +71,14 @@ guile_ibwrt (SCM ud, SCM data)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_STRINGP (data), data, 
+  SCM_ASSERT_TYPE (SCM_STRINGP (data), data,
 		   SCM_ARG2, FUNC_NAME, "string");
 
-  if ((ret = ibwrt (SCM_NUM2INT (SCM_ARG1, ud), 
+  if ((ret = ibwrt (SCM_NUM2INT (SCM_ARG1, ud),
 		    SCM_STRING_CHARS (data),
-		    SCM_NUM2INT (SCM_ARG2, 
+		    SCM_NUM2INT (SCM_ARG2,
 				 scm_string_length (data)))) & ERR) {
     return SCM_BOOL_F;
   }
@@ -92,12 +92,12 @@ guile_ibcmd (SCM ud, SCM commands)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_STRINGP (commands), commands, 
+  SCM_ASSERT_TYPE (SCM_STRINGP (commands), commands,
 		   SCM_ARG2, FUNC_NAME, "string");
 
-  if ((ret = ibcmd (SCM_NUM2INT (SCM_ARG1, ud), 
+  if ((ret = ibcmd (SCM_NUM2INT (SCM_ARG1, ud),
 		    SCM_STRING_CHARS (commands),
 		    SCM_NUM2INT (SCM_ARG2,
 				 scm_string_length (commands)))) & ERR) {
@@ -115,9 +115,9 @@ guile_ibrd (SCM ud, SCM bytes)
   char *data;
   SCM val;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (bytes), bytes, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (bytes), bytes,
 		   SCM_ARG2, FUNC_NAME, "exact");
   len = SCM_NUM2INT (SCM_ARG2, bytes);
 
@@ -143,10 +143,10 @@ guile_ibfind (SCM name)
   char *str;
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_STRINGP (name), name, 
+  SCM_ASSERT_TYPE (SCM_STRINGP (name), name,
 		   SCM_ARG1, FUNC_NAME, "string");
   str = guile_to_string (name);
-  
+
   if ((ret = ibfind (str)) < 0) {
     free (str);
     return SCM_BOOL_F;
@@ -162,16 +162,16 @@ guile_ibsre (SCM ud, SCM enable)
 {
   int ret, val;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (enable) || SCM_BOOLP (enable), enable, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (enable) || SCM_BOOLP (enable), enable,
 		   SCM_ARG2, FUNC_NAME, "exact or bool");
 
   if (SCM_BOOLP (enable))
     val = SCM_NFALSEP (enable);
   else
     val = SCM_NUM2INT (SCM_ARG2, enable);
-  
+
   if ((ret = ibsre (SCM_NUM2INT (SCM_ARG1, ud), val)) & ERR) {
     return SCM_BOOL_F;
   }
@@ -185,9 +185,9 @@ guile_ibsic (SCM ud)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  
+
   if ((ret = ibsic (SCM_NUM2INT (SCM_ARG1, ud))) & ERR) {
     return SCM_BOOL_F;
   }
@@ -201,9 +201,9 @@ guile_ibclr (SCM ud)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  
+
   if ((ret = ibclr (SCM_NUM2INT (SCM_ARG1, ud))) & ERR) {
     return SCM_BOOL_F;
   }
@@ -217,16 +217,16 @@ guile_ibonl (SCM ud, SCM online)
 {
   int ret, val;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (online) || SCM_BOOLP (online), online, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (online) || SCM_BOOLP (online), online,
 		   SCM_ARG2, FUNC_NAME, "exact or bool");
-  
+
   if (SCM_BOOLP (online))
     val = SCM_NFALSEP (online);
   else
     val = SCM_NUM2INT (SCM_ARG2, online);
-  
+
   if ((ret = ibonl (SCM_NUM2INT (SCM_ARG1, ud), val)) & ERR) {
     return SCM_BOOL_F;
   }
@@ -240,9 +240,9 @@ guile_ibwait (SCM ud, SCM status_mask)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (status_mask), status_mask, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (status_mask), status_mask,
 		   SCM_ARG2, FUNC_NAME, "exact");
 
   if ((ret = ibwait (SCM_NUM2INT (SCM_ARG1, ud),
@@ -260,9 +260,9 @@ guile_ibrsp (SCM ud)
   int ret;
   char poll[16];
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  
+
   if ((ret = ibrsp (SCM_NUM2INT (SCM_ARG1, ud), poll)) & ERR) {
     return SCM_BOOL_F;
   }
@@ -276,9 +276,9 @@ guile_ibtrg (SCM ud)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  
+
   if ((ret = ibtrg (SCM_NUM2INT (SCM_ARG1, ud))) & ERR) {
     return SCM_BOOL_F;
   }
@@ -292,11 +292,11 @@ guile_ibrsv (SCM ud, SCM status_byte)
 {
   int ret;
 
-  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (ud), ud,
 		   SCM_ARG1, FUNC_NAME, "exact");
-  SCM_ASSERT_TYPE (SCM_EXACTP (status_byte), status_byte, 
+  SCM_ASSERT_TYPE (SCM_EXACTP (status_byte), status_byte,
 		   SCM_ARG2, FUNC_NAME, "exact");
-  
+
   if ((ret = ibrsv (SCM_NUM2INT (SCM_ARG1, ud),
 		    SCM_NUM2INT (SCM_ARG2, status_byte))) & ERR) {
     return SCM_BOOL_F;
@@ -318,7 +318,7 @@ SCM guile_ibcnt (void)
   return scm_long2num (ibcntl);
 }
 #undef FUNC_NAME
-
+#pragma GCC diagnostic warning "-Wincompatible-pointer-types"
 void
 gpib_bindings (void)
 {

@@ -1,0 +1,56 @@
+'\" t
+.\"     Title: SendSetup
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "SENDSETUP" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+SendSetup \- perform send addressing
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ SendSetup('u
+.BI "void SendSetup(int\ " "board_desc" ", const\ Addr4882_t\ " "addressList[]" ");"
+.SH "DESCRIPTION"
+.PP
+SendSetup() addresses the devices in
+\fIaddressList\fR
+as listeners, and addresses the interface board as talker\&. A subsequent
+SendDataBytes()
+call will write data to the devices\&.
+.PP
+You may find it simpler to use the slightly higher level functions
+Send()
+or
+SendList(), since they does not require addressing and writing of data to be performed separately\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

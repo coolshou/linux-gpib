@@ -1,0 +1,91 @@
+'\" t
+.\"     Title: ibrsv2
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBRSV2" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibrsv2 \- request service (board)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibrsv2('u
+.BI "int ibrsv2(int\ " "ud" ", int\ " "status_byte" ", int\ " "new_reason_for_request" ");"
+.SH "DESCRIPTION"
+.PP
+The serial poll response byte of the board specified by the board descriptor
+\fIud\fR
+is set to
+\fIstatus_byte\fR\&. A service request may be generated, cleared, or left unaffected depending on the values of MSS (bit 6 in
+\fIstatus_byte\fR) and
+\fInew_reason_for_request\fR\&.
+.PP
+There are three valid possibilities for MSS and
+\fInew_reason_for_request\fR\&. If MSS is 1 and
+\fInew_reason_for_request\fR
+is nonzero, then the IEEE 488\&.2 local message "reqt" will be set true\&. reqt sets local message "rsv" true which in turn causes the board to request service by asserting the SRQ line\&. If the MSS bit is 0 and
+\fInew_reason_for_request\fR
+is also 0, then the "reqf" message will be set true, causing rsv to clear and the board to stop requesting service\&. Finally, if MSS is 1 and
+\fInew_reason_for_request\fR
+is 0, then ibrsv2 will have no effect on the service request state (it will only update the status byte)\&. The fourth possibility of MSS is 0 (which implies no service request) and
+\fInew_reason_for_request\fR
+is nonzero (which implies there is a service request) is contradictory and will be rejected with an EARG error\&.
+.PP
+Boards will also automatically stop requesting service when they are serial polled by the controller\&.
+.PP
+This function follows the preferred implementation technique described in IEEE 488\&.2 section 11\&.3\&.3\&.4\&.1\&. It can be used to avoid the spurious requests for service that
+ibrsv()
+is prone to\&. However, not all drivers/hardware implement support for this function\&. In such a case, this function may result in a ECAP error, and you will have to fall back on using the simpler ibrsv()\&.
+.PP
+If you are implementing a 488\&.2 device, this function should be called every time either the status byte changes, or the service request enable register changes\&. The value for
+\fInew_reason_for_request\fR
+may be calculated from:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+	new_reason_for_request = (status_byte &	service_request_enable) &
+	~(old_status_byte & old_service_request_enable);
+	
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

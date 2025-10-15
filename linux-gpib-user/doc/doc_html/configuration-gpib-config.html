@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,9 +7,9 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="	Configuration"
 HREF="configuration.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="configuration-gpib-conf.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="supported-hardware.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="CONFIGURATION-GPIB-CONFIG"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN156"
+NAME="AEN196"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN156"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN159"
+NAME="AEN199"
 ></A
 ><H2
 >Synopsis</H2
@@ -94,7 +94,7 @@ NAME="AEN159"
 ><B
 CLASS="COMMAND"
 >gpib_config</B
->  [--minor <TT
+> [--minor <TT
 CLASS="REPLACEABLE"
 ><I
 >number</I
@@ -104,7 +104,7 @@ CLASS="REPLACEABLE"
 ><B
 CLASS="COMMAND"
 >gpib_config</B
->  [--board-type <TT
+> [--board-type <TT
 CLASS="REPLACEABLE"
 ><I
 >board_type</I
@@ -179,19 +179,19 @@ CLASS="REPLACEABLE"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN203"
+NAME="AEN243"
 ></A
 ><H2
 >Description</H2
 ><P
->gpib_config must be run after the kernel driver module for
-a GPIB interface board is loaded.  It performs configuration of
-driver settings
-that cannot be performed by libgpib at runtime.  This includes
-configuration which requires root privilege (for example, setting the
-base address or irq of a board), and configuration which should only
-be performed once and not automatically redone every time a program
-using libgpib is run (for example, setting the board's GPIB address).</P
+>gpib_config must be run after the kernel driver module for a GPIB
+interface board is loaded.  It performs configuration of driver
+settings that cannot be performed by libgpib at runtime.  This
+includes configuration which requires root privilege (for example,
+setting the base address or irq of a board), and configuration which
+should only be performed once and not automatically redone every time
+a program using libgpib is run (for example, setting the board's GPIB
+address).</P
 ><P
 >The board to be configured by gpib_config is selected by the
 <CODE
@@ -209,7 +209,7 @@ overiden by use of command-line options (see below).</P
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN209"
+NAME="AEN249"
 ></A
 ><H2
 >Options</H2
@@ -272,12 +272,18 @@ CLASS="REPLACEABLE"
 ></CODE
 ></P
 ><P
->Specify file path for configuration file.  The values in the configuration
-file will be used as defaults for unspecified options.  If this option
-is not specified, then the value of the IB_CONFIG environment variable will
-be used if it is set.  Otherwise, the default configuration
-file is "sysconfdir/gpib.conf" where sysconfdir is specified when the library
-is configured before compilation (it is usually /etc or /usr/local/etc).</P
+>Specify file path for configuration file.  The values in the
+configuration file will be used as defaults for unspecified options
+for the minor being configured.  If this option is not specified, then
+the value of the IB_CONFIG environment variable will be used if it is
+set.  Otherwise, the default configuration file is
+"sysconfdir/gpib.conf" where sysconfdir is specified when the library
+is configured before compilation (it is usually /etc or
+/usr/local/etc). Note: The configuration file read by the library is
+not affected by this option. It will either use the value of the
+IB_CONFIG environment variable, if it is set, or the default
+configuration file. The configuration file read by the library is used
+to resolve the 'name' in ibfind() calls.</P
 ><P
 ><CODE
 CLASS="OPTION"
@@ -452,7 +458,7 @@ CLASS="REPLACEABLE"
 >number</I
 ></TT
 >
-should be 0 (disabled) or in the range 96 through 126 (0x60 through 0x7e hexadecimal).</P
+should be 0 (disabled) or in the range 96 through 127 (0x60 through 0x7f hexadecimal).</P
 ><P
 ><CODE
 CLASS="OPTION"
@@ -511,14 +517,14 @@ VALIGN="top"
 ><A
 HREF="configuration-gpib-conf.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -529,7 +535,7 @@ VALIGN="top"
 ><A
 HREF="supported-hardware.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR

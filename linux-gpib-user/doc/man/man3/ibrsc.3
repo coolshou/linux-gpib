@@ -1,0 +1,63 @@
+'\" t
+.\"     Title: ibrsc
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBRSC" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibrsc \- request system control (board)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibrsc('u
+.BI "int ibrsc(int\ " "ud" ", int\ " "request_control" ");"
+.SH "DESCRIPTION"
+.PP
+If
+\fIrequest_control\fR
+is nonzero, then the board specified by the board descriptor
+\fIud\fR
+is made system controller\&. If
+\fIrequest_control\fR
+is zero, then the board releases system control\&.
+.PP
+The system controller has the ability to assert the REN and IFC lines, and is typically also the controller\-in\-charge\&. Automatic assertion of REN is controlled with
+ibconfig()\&. If the IbcSRE configuration option has been set for the board descriptor
+\fIud\fR
+then REN will automatically be asserted when the board becomes system controller\&. The configuration option IbcSRE is set by default\&. A GPIB bus may not have more than one system controller\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

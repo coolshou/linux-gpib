@@ -32,8 +32,8 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  libgpib (tested with version 3.1.93)
-  libguile (tested with version 1.4)
+  libgpib (tested with linux-gpib version 4.3.7)
+  libguile (tested with guile version 1.8.8)
 
 
 COPYRIGHT AND LICENCE

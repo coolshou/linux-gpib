@@ -25,49 +25,42 @@
 #include <assert.h>
 #include "parse.h"
 
-ibConf_t *ibConfigs[ GPIB_CONFIGS_LENGTH ] = {NULL};
-ibConf_t ibFindConfigs[ FIND_CONFIGS_LENGTH ];
+ibConf_t *ibConfigs[GPIB_CONFIGS_LENGTH] = {NULL};
+ibConf_t ibFindConfigs[FIND_CONFIGS_LENGTH];
 
-int insert_descriptor( ibConf_t p, int ud )
+int insert_descriptor(ibConf_t p, int ud)
 {
 	int i;
 
-	if( ud < 0 )
-	{
-		for( i = GPIB_MAX_NUM_BOARDS; i < GPIB_CONFIGS_LENGTH; i++ )
-		{
-			if( ibConfigs[ i ] == NULL ) break;
+	if (ud < 0) {
+		for (i = GPIB_MAX_NUM_BOARDS; i < GPIB_CONFIGS_LENGTH; i++) {
+			if (ibConfigs[ i ] == NULL) break;
 		}
-		if( i == GPIB_CONFIGS_LENGTH )
-		{
-			fprintf( stderr, "libgpib: out of room in ibConfigs[]\n" );
-			setIberr( ENEB ); // ETAB?
+		if (i == GPIB_CONFIGS_LENGTH) {
+			fprintf(stderr, "libgpib: out of room in ibConfigs[]\n");
+			setIberr(ETAB);
 			return -1;
 		}
 		ud = i;
-	}else
-	{
-		if( ud >= GPIB_CONFIGS_LENGTH )
-		{
-			fprintf( stderr, "libgpib: bug! tried to allocate past end if ibConfigs array\n" );
-			setIberr( EDVR );
-			setIbcnt( EINVAL );
+	} else {
+		if (ud >= GPIB_CONFIGS_LENGTH) {
+			fprintf(stderr, "libgpib: bug! tried to allocate past end if ibConfigs array\n");
+			setIberr(EDVR);
+			setIbcnt(EINVAL);
 			return -1;
 		}
-		if( ibConfigs[ ud ] )
-		{
-			fprintf( stderr, "libgpib: bug! tried to allocate board descriptor twice\n" );
-			setIberr( EDVR );
-			setIbcnt( EINVAL );
+		if (ibConfigs[ud]) {
+			fprintf(stderr, "libgpib: bug! tried to allocate board descriptor twice\n");
+			setIberr(EDVR);
+			setIbcnt(EINVAL);
 			return -1;
 		}
 	}
-	ibConfigs[ ud ] = malloc( sizeof( ibConf_t ) );
-	if( ibConfigs[ ud ] == NULL )
-	{
-		fprintf( stderr, "libgpib: out of memory\n" );
-		setIberr( EDVR );
-		setIbcnt( ENOMEM );
+	ibConfigs[ud] = malloc(sizeof(ibConf_t));
+	if (ibConfigs[ud] == NULL) {
+		fprintf(stderr, "libgpib: out of memory\n");
+		setIberr(EDVR);
+		setIbcnt(ENOMEM);
 		return -1;
 	}
 	/* put entry to the table */
@@ -76,26 +69,33 @@ int insert_descriptor( ibConf_t p, int ud )
 	return ud;
 }
 
-int setup_global_board_descriptors( void )
+int release_descriptor(int ud)
+{
+	if (ud >= GPIB_MAX_NUM_BOARDS  && ud < GPIB_CONFIGS_LENGTH && ibConfigs[ud]) {
+		// need to take more care to clean up before freeing XXX
+		free(ibConfigs[ud]);
+		ibConfigs[ud] = NULL;
+		return 0;
+	}
+	return -1;
+}
+
+int setup_global_board_descriptors(void)
 {
 	int i;
 	int retval = 0;
 
-	for( i = 0; i < FIND_CONFIGS_LENGTH; i++ )
-	{
-		if(ibFindConfigs[ i ].is_interface && ibFindConfigs[ i ].settings.board >= 0 &&
-			ibFindConfigs[ i ].settings.board < GPIB_MAX_NUM_BOARDS)
-		{
-			if(insert_descriptor( ibFindConfigs[ i ], ibFindConfigs[ i ].settings.board) < 0 )
-			{
+	for (i = 0; i < FIND_CONFIGS_LENGTH; i++) {
+		if (ibFindConfigs[i].is_interface && ibFindConfigs[i].settings.board >= 0 &&
+		    ibFindConfigs[i].settings.board < GPIB_MAX_NUM_BOARDS) {
+			if (insert_descriptor(ibFindConfigs[i], ibFindConfigs[i].settings.board) < 0)
 				retval = -1;
-			}
 		}
 	}
 	/* boards use handle 0 */
-	for( i = 0; i < GPIB_MAX_NUM_BOARDS; i++ )
-		if( ibConfigs[ i ] )
-			ibConfigs[ i ]->handle = 0;
+	for (i = 0; i < GPIB_MAX_NUM_BOARDS; i++)
+		if (ibConfigs[i])
+			ibConfigs[i]->handle = 0;
 	return retval;
 }
 
@@ -105,9 +105,8 @@ static void gpib_atfork_prepare(void)
 {
 	int i;
 
-	for(i = 0; i < GPIB_CONFIGS_LENGTH; i++)
-		if(ibConfigs[i])
-		{
+	for (i = 0; i < GPIB_CONFIGS_LENGTH; i++)
+		if (ibConfigs[i]) {
 			pthread_mutex_lock(&ibConfigs[i]->async.lock);
 			pthread_mutex_lock(&ibConfigs[i]->async.join_lock);
 		}
@@ -119,9 +118,8 @@ static void gpib_atfork_parent(void)
 	int i;
 
 	pthread_mutex_unlock(&config_lock);
-	for(i = 0; i < GPIB_CONFIGS_LENGTH; i++)
-		if(ibConfigs[i])
-		{
+	for (i = 0; i < GPIB_CONFIGS_LENGTH; i++)
+		if (ibConfigs[i]) {
 			pthread_mutex_unlock(&ibConfigs[i]->async.join_lock);
 			pthread_mutex_unlock(&ibConfigs[i]->async.lock);
 		}
@@ -132,96 +130,115 @@ static void gpib_atfork_child(void)
 	int i;
 
 	pthread_mutex_init(&config_lock, NULL);
-	for(i = 0; i < GPIB_CONFIGS_LENGTH; i++)
-		if(ibConfigs[i])
-		{
+	for (i = 0; i < GPIB_CONFIGS_LENGTH; i++)
+		if (ibConfigs[i]) {
 			pthread_mutex_init(&ibConfigs[i]->async.join_lock, NULL);
 			pthread_mutex_init(&ibConfigs[i]->async.lock, NULL);
 		}
 }
 
-int ibParseConfigFile( void )
+int ibParseConfigFile(int minor)
 {
 	int retval = 0;
 	static volatile int config_parsed = 0;
+	static volatile int config_error = 0;
 	char *filename, *envptr;
+	ibBoard_t *board;
+	ibConf_t *conf;
+	struct gpib_board_info_ioctl info;
 
-	pthread_mutex_lock( &config_lock );
-	if( config_parsed )
-	{
-		pthread_mutex_unlock( &config_lock );
-		return 0;
+	pthread_mutex_lock(&config_lock);
+	if (config_parsed) {
+		pthread_mutex_unlock(&config_lock);
+		return config_error;
 	}
 
 	envptr = getenv("IB_CONFIG");
-	if( envptr ) filename = envptr;
-	else filename = DEFAULT_CONFIG_FILE;
+	if (envptr)
+		filename = envptr;
+	else
+		filename = DEFAULT_CONFIG_FILE;
 
-	retval = parse_gpib_conf( filename, ibFindConfigs, FIND_CONFIGS_LENGTH,
-		ibBoard, GPIB_MAX_NUM_BOARDS );
-	if( retval < 0 )
-	{
-		pthread_mutex_unlock( &config_lock );
+	retval = parse_gpib_conf(filename, ibFindConfigs, FIND_CONFIGS_LENGTH,
+				 ibBoard, GPIB_MAX_NUM_BOARDS ,minor);
+	if (retval < 0)	{
+		setIberr(ECNF);
+		pthread_mutex_unlock(&config_lock);
 		return retval;
 	}
 	retval = setup_global_board_descriptors();
 
-	config_parsed = 1;
-	/* be extra safe about dealing with forks */
-	pthread_atfork(gpib_atfork_prepare, gpib_atfork_parent,
-		gpib_atfork_child);
-	pthread_mutex_unlock( &config_lock );
+	if (minor < 0)  /* called from ibfind so interface entry must be present */
+		goto done;
 
-	return retval;
-}
+	/* check whether parse_gpib_config created an interface entry and if so
+	   update the details set by gpib_config from driver */
+	conf = ibConfigs[minor];
+	if (conf->settings.pad == -1) {
+		if (conf->settings.board != minor) {
+			fprintf(stderr,"Inconsistent config detected board %d != minor %d\n",
+				conf->settings.board, minor);
+			setIberr(ECNF);
+			retval = -1;
+			goto done;
+		}
+		board = interfaceBoard(conf);
+		retval = ibBoardOpen(board, 1);
+		if (retval < 0)
+			goto done;
 
-/**********************************************************************/
-
-int ibGetDescriptor( ibConf_t p )
-{
-	int retval;
-
-	/* XXX should go somewhere else XXX check validity of values */
-	if(p.settings.pad > gpib_addr_max || p.settings.sad > gpib_addr_max)
-	{
-		setIberr( ETAB );
-		return -1;
+		retval = ioctl(board->fileno, IBBOARD_INFO, &info);
+		if (retval < 0) {
+			setIberr(EDVR);
+			setIbcnt(errno);
+			goto done;
+		}
+		ibBoardClose(board);
+		conf->defaults.pad = info.pad;
+		conf->defaults.sad = info.sad;
+		conf->settings = conf->defaults;
+		board->is_system_controller = info.is_system_controller;
+		// fprintf(stderr, "updated config pad %d, sad %d, sc %d\n",
+		//	info.pad, info.sad, info.is_system_controller);
 	}
-
-	retval = insert_descriptor( p, -1 );
-	if( retval < 0 )
-		return retval;
+done:
+	config_parsed = 1;
+	config_error  = retval;
+	/* be extra safe about dealing with forks */
+	pthread_atfork(gpib_atfork_prepare, gpib_atfork_parent, gpib_atfork_child);
+	pthread_mutex_unlock(&config_lock);
 
 	return retval;
 }
 
-int ibFindDevIndex( const char *name )
+
+int ibFindDevIndex(const char *name)
 {
 	int i;
 
-	if( strcmp( "", name ) == 0 ) return -1;
+	if (strcmp("", name) == 0)
+		return -1;
 
-	for(i = 0; i < FIND_CONFIGS_LENGTH; i++)
-	{
-		if(!strcmp(ibFindConfigs[i].name, name)) return i;
+	for (i = 0; i < FIND_CONFIGS_LENGTH; i++) {
+		if (!strcmp(ibFindConfigs[i].name, name))
+			return i;
 	}
 
 	return -1;
 }
 
-static int ibCheckDescriptor( int ud )
+static int ibCheckDescriptor(int ud)
 {
-	if( ud < 0 || ud >= GPIB_CONFIGS_LENGTH || ibConfigs[ud] == NULL )
-	{
-		fprintf( stderr, "libgpib: invalid descriptor\n" );
-		setIberr( EARG );
+	if (ud < 0 || ud >= GPIB_CONFIGS_LENGTH || ibConfigs[ud] == NULL) {
+		fprintf(stderr, "libgpib: invalid descriptor\n");
+		setIberr(EARG);
 		return -1;
 	}
 
 	return 0;
 }
 
-void init_descriptor_settings( descriptor_settings_t *settings )
+void init_descriptor_settings(descriptor_settings_t *settings)
 {
 	settings->pad = -1;
 	settings->sad = -1;
@@ -238,15 +255,15 @@ void init_descriptor_settings( descriptor_settings_t *settings )
 	settings->send_unt_unl = 0;
 }
 
-void init_ibconf( ibConf_t *conf )
+void init_ibconf(ibConf_t *conf)
 {
 	conf->handle = -1;
 	memset(conf->name, 0, sizeof(conf->name));
-	init_descriptor_settings( &conf->defaults );
-	init_descriptor_settings( &conf->settings );
+	init_descriptor_settings(&conf->defaults);
+	init_descriptor_settings(&conf->settings);
 	memset(conf->init_string, 0, sizeof(conf->init_string));
 	conf->flags = 0;
-	init_async_op( &conf->async );
+	init_async_op(&conf->async);
 	conf->end = 0;
 	conf->is_interface = 0;
 	conf->board_is_open = 0;
@@ -255,26 +272,26 @@ void init_ibconf( ibConf_t *conf )
 	conf->error_msg_disable = 0;
 }
 
-int open_gpib_handle( ibConf_t *conf )
+int open_gpib_handle(ibConf_t *conf)
 {
-	open_dev_ioctl_t open_cmd;
+	struct gpib_open_dev_ioctl open_cmd;
 	int retval;
 	ibBoard_t *board;
 
-	if( conf->handle >= 0 ) return 0;
+	if (conf->handle >= 0) return 0;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
 	open_cmd.handle = 0;
 	open_cmd.pad = conf->settings.pad;
 	open_cmd.sad = conf->settings.sad;
 	open_cmd.is_board = conf->is_interface;
-	retval = ioctl( board->fileno, IBOPENDEV, &open_cmd );
-	if( retval < 0 )
-	{
-		fprintf( stderr, "libgpib: IBOPENDEV ioctl failed\n" );
-		setIberr( EDVR );
-		setIbcnt( errno );
+	retval = ioctl(board->fileno, IBOPENDEV, &open_cmd);
+	if (retval < 0)	{
+		if (!conf->error_msg_disable)
+			fprintf(stderr, "libgpib: IBOPENDEV ioctl failed\n");
+		setIberr(EDVR);
+		setIbcnt(errno);
 		return retval;
 	}
 
@@ -283,22 +300,22 @@ int open_gpib_handle( ibConf_t *conf )
 	return 0;
 }
 
-int close_gpib_handle( ibConf_t *conf )
+int close_gpib_handle(ibConf_t *conf)
 {
-	close_dev_ioctl_t close_cmd;
+	struct gpib_close_dev_ioctl close_cmd;
 	int retval;
 	ibBoard_t *board;
 
-	if( conf->handle < 0 ) return 0;
+	if (conf->handle < 0)
+		return 0;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
 	close_cmd.handle = conf->handle;
-	retval = ioctl( board->fileno, IBCLOSEDEV, &close_cmd );
-	if( retval < 0 )
-	{
-		setIberr( EDVR );
-		setIbcnt( errno );
+	retval = ioctl(board->fileno, IBCLOSEDEV, &close_cmd);
+	if (retval < 0)	{
+		setIberr(EDVR);
+		setIbcnt(errno);
 		return retval;
 	}
 
@@ -307,246 +324,238 @@ int close_gpib_handle( ibConf_t *conf )
 	return 0;
 }
 
-int lock_board_mutex( ibBoard_t *board )
+int lock_board_mutex(ibBoard_t *board)
 {
 	static const int lock = 1;
 	int retval;
 
-	retval = ioctl( board->fileno, IBMUTEX, &lock );
-	if( retval < 0 )
-	{
-		fprintf( stderr, "libgpib: error locking board mutex!\n");
-		setIberr( EDVR );
-		setIbcnt( errno );
+	retval = ioctl(board->fileno, IBMUTEX, &lock);
+	if (retval < 0)	{
+		fprintf(stderr, "libgpib: error locking board mutex!\n");
+		setIberr(EDVR);
+		setIbcnt(errno);
 	}
 
 	return retval;
 }
 
-int unlock_board_mutex( ibBoard_t *board )
+int unlock_board_mutex(ibBoard_t *board)
 {
 	static const int unlock = 0;
 	int retval;
 
-	retval = ioctl( board->fileno, IBMUTEX, &unlock );
-	if( retval < 0 )
-	{
-		fprintf( stderr, "libgpib: error unlocking board mutex!\n");
-		setIberr( EDVR );
-		setIbcnt( errno );
+	retval = ioctl(board->fileno, IBMUTEX, &unlock);
+	if (retval < 0)	{
+		fprintf(stderr, "libgpib: error unlocking board mutex!\n");
+		setIberr(EDVR);
+		setIbcnt(errno);
 	}
 	return retval;
 }
 
-int conf_lock_board( ibConf_t *conf )
+int conf_lock_board(ibConf_t *conf)
 {
 	ibBoard_t *board;
 	int retval;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	assert( conf->has_lock == 0 );
+	assert(conf->has_lock == 0);
 
-	retval = lock_board_mutex( board );
-	if( retval < 0 ) return retval;
+	retval = lock_board_mutex(board);
+	if (retval < 0)
+		return retval;
 
 	conf->has_lock = 1;
 
 	return retval;
 }
 
-void conf_unlock_board( ibConf_t *conf )
+void conf_unlock_board(ibConf_t *conf)
 {
 	ibBoard_t *board;
 	int retval;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	assert( conf->has_lock );
+	assert(conf->has_lock);
 
 	conf->has_lock = 0;
 
-	retval = unlock_board_mutex( board );
-	assert( retval == 0 );
+	retval = unlock_board_mutex(board);
+	assert(retval == 0);
 }
 
-ibConf_t * enter_library( int ud )
+ibConf_t * enter_library(int ud)
 {
-	return general_enter_library( ud, 0, 0 );
+	return general_enter_library(ud, 0, 0);
 }
 
-ibConf_t * general_enter_library( int ud, int no_lock_board, int ignore_eoip )
+ibConf_t * general_enter_library(int ud, int no_lock_board, int ignore_eoip)
 {
 	ibConf_t *conf;
-	ibBoard_t *board;
 	int retval;
 
-	retval = ibParseConfigFile();
-	if(retval < 0)
-	{
+	retval = ibParseConfigFile(ud);
+	if (retval < 0)
 		return NULL;
-	}
 
-	setIberr( 0 );
-	setIbcnt( 0 );
+	setIberr(0);
+	setIbcnt(0);
 
-	if( ibCheckDescriptor( ud ) < 0 )
-	{
+	if (ibCheckDescriptor(ud) < 0)
 		return NULL;
-	}
-	conf = ibConfigs[ ud ];
+	conf = ibConfigs[ud];
 
-	retval = conf_online( conf, 1 );
-	if( retval < 0 ) return NULL;
+	retval = conf_online(conf, 1);
+	if (retval < 0)
+		return NULL;
 
 	conf->timed_out = 0;
 
-	board = interfaceBoard( conf );
-
-	if( no_lock_board == 0 )
-	{
-		if( ignore_eoip == 0 )
-		{
-			pthread_mutex_lock( &conf->async.lock );
-			if( conf->async.in_progress )
-			{
-				pthread_mutex_unlock( &conf->async.lock );
-				setIberr( EOIP );
+	if (no_lock_board == 0)	{
+		if (ignore_eoip == 0) {
+			pthread_mutex_lock(&conf->async.lock);
+			if (conf->async.in_progress) {
+				pthread_mutex_unlock(&conf->async.lock);
+				setIberr(EOIP);
 				return NULL;
 			}
-			pthread_mutex_unlock( &conf->async.lock );
+			pthread_mutex_unlock(&conf->async.lock);
 		}
 
-		retval = conf_lock_board( conf );
-		if( retval < 0 )
-		{
+		retval = conf_lock_board(conf);
+		if (retval < 0)
 			return NULL;
-		}
 	}
 
 	return conf;
 }
 
-int ibstatus( ibConf_t *conf, int error, int clear_mask, int set_mask )
+int ibstatus(ibConf_t *conf, int error, int clear_mask, int set_mask)
 {
 	int status = 0;
 	int retval;
 
-	retval = my_wait( conf, 0, clear_mask, set_mask, &status);
-	if( retval < 0 ) error = 1;
+	if (!error) {
+		retval = my_wait(conf, 0, clear_mask, set_mask, &status);
+		if (retval < 0)
+			error = 1;
+	}
 
-	if( error ) status |= ERR;
-	if( conf->timed_out )
+	if (error)
+		status |= ERR;
+	if (conf->timed_out)
 		status |= TIMO;
-	if( conf->end )
+	if (conf->end)
 		status |= END;
 
-	setIbsta( status );
+	setIbsta(status);
 
 	return status;
 }
 
-int exit_library( int ud, int error )
+int exit_library(int ud, int error)
 {
-	return general_exit_library( ud, error, 0, 0, 0, 0, 0 );
+	return general_exit_library(ud, error, 0, 0, 0, 0, 0);
 }
 
-int general_exit_library( int ud, int error, int no_sync_globals, int no_update_ibsta,
-	int status_clear_mask, int status_set_mask, int no_unlock_board )
+int general_exit_library(int ud, int error, int no_sync_globals, int no_update_ibsta,
+	int status_clear_mask, int status_set_mask, int no_unlock_board)
 {
 	ibConf_t *conf = ibConfigs[ ud ];
-	ibBoard_t *board;
 	int status;
 
-	if( ibCheckDescriptor( ud ) < 0 )
-	{
-		setIbsta( ERR );
-		if( no_sync_globals == 0 )
+	if (ibCheckDescriptor(ud) < 0) {
+		setIbsta(ERR);
+		if (no_sync_globals == 0)
 			sync_globals();
 		return ERR;
 	}
 
-	board = interfaceBoard( conf );
-
-	if( no_update_ibsta )
+	if (no_update_ibsta)
 		status = ThreadIbsta();
 	else
-		status = ibstatus( conf, error, status_clear_mask, status_set_mask );
+		status = ibstatus(conf, error, status_clear_mask, status_set_mask);
 
-	if( no_unlock_board == 0 && conf->has_lock )
-		conf_unlock_board( conf );
+	if (no_unlock_board == 0 && conf->has_lock)
+		conf_unlock_board(conf);
 
-	if( no_sync_globals == 0 )
+	if (no_sync_globals == 0)
 		sync_globals();
 
 	return status;
 }
 
-int extractPAD( Addr4882_t address )
+int extractPAD(Addr4882_t address)
 {
 	int pad = address & 0xff;
 
-	if( address == NOADDR ) return ADDR_INVALID;
+	if (address == NOADDR)
+		return ADDR_INVALID;
 
-	if( pad < 0 || pad > gpib_addr_max ) return ADDR_INVALID;
+	if (pad < 0 || pad > gpib_addr_max)
+		return ADDR_INVALID;
 
 	return pad;
 }
 
-int extractSAD( Addr4882_t address )
+int extractSAD(Addr4882_t address)
 {
-	int sad = ( address >> 8 ) & 0xff;
+	int sad = (address >> 8) & 0xff;
 
-	if( address == NOADDR ) return ADDR_INVALID;
+	if (address == NOADDR)
+		return ADDR_INVALID;
 
-	if( sad == NO_SAD ) return SAD_DISABLED;
+	if (sad == NO_SAD)
+		return SAD_DISABLED;
 
-	if( ( sad & 0x60 ) == 0 ) return ADDR_INVALID;
+	if ((sad & 0x60) == 0)
+		return ADDR_INVALID;
 
 	sad &= ~0x60;
 
-	if( sad < 0 || sad > gpib_addr_max ) return ADDR_INVALID;
+	if (sad < 0 || sad > gpib_sad_max)
+		return ADDR_INVALID;
 
 	return sad;
 }
 
-Addr4882_t packAddress( unsigned int pad, int sad )
+Addr4882_t packAddress(unsigned int pad, int sad)
 {
 	Addr4882_t address;
 
 	address = 0;
 	address |= pad & 0xff;
-	if( sad >= 0 )
-		address |= ( ( sad | sad_offset ) << 8 ) & 0xff00;
+	if (sad >= 0)
+		address |= ((sad | sad_offset) << 8) & 0xff00;
 
 	return address;
 }
 
-int addressIsValid( Addr4882_t address )
+int addressIsValid(Addr4882_t address)
 {
-	if( address == NOADDR ) return 1;
+	if (address == NOADDR)
+		return 1;
 
-	if( extractPAD( address ) == ADDR_INVALID ||
-		extractSAD( address ) == ADDR_INVALID )
-	{
-		setIberr( EARG );
+	if (extractPAD(address) == ADDR_INVALID ||
+	    extractSAD(address) == ADDR_INVALID) {
+		setIberr(EARG);
 		return 0;
 	}
 
 	return 1;
 }
 
-int addressListIsValid( const Addr4882_t addressList[] )
+int addressListIsValid(const Addr4882_t addressList[])
 {
 	int i;
 
-	if( addressList == NULL ) return 1;
+	if (addressList == NULL) return 1;
 
-	for( i = 0; addressList[ i ] != NOADDR; i++ )
-	{
-		if( addressIsValid( addressList[ i ] ) == 0 )
-		{
-			setIbcnt( i );
+	for (i = 0; addressList[i] != NOADDR; i++) {
+		if (!addressIsValid(addressList[i])) {
+			setIbcnt(i);
 			return 0;
 		}
 	}
@@ -554,26 +563,24 @@ int addressListIsValid( const Addr4882_t addressList[] )
 	return 1;
 }
 
-unsigned int numAddresses( const Addr4882_t addressList[] )
+unsigned int numAddresses(const Addr4882_t addressList[])
 {
 	unsigned int count;
 
-	if( addressList == NULL )
+	if (addressList == NULL)
 		return 0;
 
 	count = 0;
-	while( addressList[ count ] != NOADDR )
-	{
+	while (addressList[ count ] != NOADDR)
 		count++;
-	}
 
 	return count;
 }
 
-int is_cic( const ibBoard_t *board )
+int is_cic(const ibBoard_t *board)
 {
 	int retval;
-	wait_ioctl_t cmd;
+	struct gpib_wait_ioctl cmd;
 
 	cmd.usec_timeout = 0;
 	cmd.wait_mask = 0;
@@ -583,37 +590,37 @@ int is_cic( const ibBoard_t *board )
 	cmd.sad = NOADDR;
 	cmd.handle = 0;
 	cmd.ibsta = 0;
-	retval = ioctl( board->fileno, IBWAIT, &cmd );
-	if( retval < 0 )
-	{
-		setIberr( EDVR );
-		setIbcnt( errno );
-		fprintf( stderr, "libgpib: error in is_cic()!\n");
+	retval = ioctl(board->fileno, IBWAIT, &cmd);
+	if (retval < 0)	{
+		setIberr(EDVR);
+		setIbcnt(errno);
+//		fprintf(stderr, "libgpib: error in is_cic()!\n");
 		return -1;
 	}
 
-	if( cmd.ibsta & CIC )
+	if (cmd.ibsta & CIC)
 		return 1;
 
 	return 0;
 }
 
-int is_system_controller( const ibBoard_t *board )
+int is_system_controller(const ibBoard_t *board)
 {
 	int retval;
-	board_info_ioctl_t info;
+	struct gpib_board_info_ioctl info;
 
-	retval = ioctl( board->fileno, IBBOARD_INFO, &info );
-	if( retval < 0 )
-	{
-		fprintf( stderr, "libgpib: error in is_system_controller()!\n");
-		return retval;
+	retval = ioctl(board->fileno, IBBOARD_INFO, &info);
+	if (retval < 0)	{
+		setIberr(EDVR);
+		setIbcnt(errno);
+//	fprintf(stderr, "libgpib: error in is_system_controller()!\n");
+		return -1;
 	}
 
 	return info.is_system_controller;
 }
 
-const char* gpib_error_string( int error )
+const char* gpib_error_string(int error)
 {
 	static const char* error_descriptions[] =
 	{
@@ -634,15 +641,15 @@ const char* gpib_error_string( int error )
 		"EBUS 14: Bus error",
 		"ESTB 15: Lost status byte",
 		"ESRQ 16: Stuck service request",
-		"libgpib: Unknown error code 17",
+		"ECNF 17: Configuration file error",
 		"libgpib: Unknown error code 18",
 		"libgpib: Unknown error code 19",
 		"ETAB 20: Table problem",
 	};
 	static const int max_error_code = ETAB;
 
-	if( error < 0 || error > max_error_code )
+	if (error < 0 || error > max_error_code)
 		return "libgpib: Unknown error code";
 
-	return error_descriptions[ error ];
+	return error_descriptions[error];
 }

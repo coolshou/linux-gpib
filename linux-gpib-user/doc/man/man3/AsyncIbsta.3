@@ -1,0 +1,61 @@
+'\" t
+.\"     Title: AsyncIbsta
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Utility Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "ASYNCIBSTA" "3" "10/04/2025" "linux-gpib 4.3.7" "Utility Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+AsyncIbsta \- ibsta value for last asynchronous I/O operation
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ AsyncIbsta('u
+.BI "int AsyncIbsta(void);"
+.SH "DESCRIPTION"
+.PP
+AsyncIbsta() returns a thread\-local status value related to the global variable
+ibsta\&. Its value corresponds to the result of the last asynchronous I/O operation resynchronized to the current thread by an
+ibwait
+or
+ibstop
+call\&. This function only reflects the result of the asynchronous I/O operation itself and not, for example, the ibwait which resynchronized the asynchronous result to the current thread\&. Thus the result from AsyncIbsta() is easier to interpret than ThreadIbsta(), since it is unambiguous whether the value is associated with the asynchronous I/O result, or with the function call used to resynchronize (ibwait or ibstop)\&.
+.PP
+Only the status bits END | ERR | TIMO | CMPL are valid in the returned status byte\&. The rest of the bits should be ignored and will be set to zero\&.
+.PP
+This function is a Linux\-GPIB extension\&.
+.SH "RETURN VALUE"
+.PP
+A value related to
+ibsta
+corresponding to the last asynchronous I/O operation resynchronized to the current thread\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

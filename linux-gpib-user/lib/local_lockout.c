@@ -17,68 +17,65 @@
 
 #include "ib_internal.h"
 
-static int local_lockout( ibConf_t *conf, const Addr4882_t addressList[] )
+static int local_lockout(ibConf_t *conf, const Addr4882_t addressList[])
 {
 	uint8_t cmd;
 	int retval;
 
-	retval = InternalEnableRemote( conf, addressList );
-	if( retval < 0 ) return retval;
+	retval = InternalEnableRemote(conf, addressList);
+	if (retval < 0)
+		return retval;
 
 	cmd = LLO;
-	retval = my_ibcmd( conf, conf->settings.usec_timeout, &cmd, 1 );
-	if( retval < 0 ) return retval;
+	retval = my_ibcmd(conf, conf->settings.usec_timeout, &cmd, 1);
+	if(retval < 0)
+		return retval;
 
 	return 0;
 }
 
-void SendLLO( int boardID )
+void SendLLO(int boardID)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = local_lockout( conf, NULL );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = local_lockout(conf, NULL);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	exit_library( boardID, 0 );
+	exit_library(boardID, 0);
 }
 
-void SetRWLS( int boardID, const Addr4882_t addressList[] )
+void SetRWLS(int boardID, const Addr4882_t addressList[])
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	if( numAddresses( addressList ) == 0 )
-	{
-		setIberr( EARG );
-		exit_library( boardID, 1 );
+	if (!numAddresses(addressList))	{
+		setIberr(EARG);
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = local_lockout( conf, addressList );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = local_lockout(conf, addressList);
+	if(retval < 0) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	exit_library( boardID, 0 );
+	exit_library(boardID, 0);
 }

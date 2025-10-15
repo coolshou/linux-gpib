@@ -6,7 +6,7 @@ includedir=@includedir@
 
 Name: libgpib
 Description:  Linux-GPIB the IEEE-488 card support package and measurement suite for LINUX
-Version: @GPIB_SO_VERSION@
+Version: @VERSION@
 Requires: 
 Libs: -lgpib
 Cflags: -I${includedir}

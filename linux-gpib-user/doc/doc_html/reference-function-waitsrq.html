@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,18 +7,18 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="TriggerList"
 HREF="reference-function-triggerlist.html"><LINK
 REL="NEXT"
-TITLE="AsyncIbcnt and AsyncIbcntl"
-HREF="reference-function-async-ibcnt.html"></HEAD
+TITLE="	Utility Functions"
+HREF="x3822.html"></HEAD
 ><BODY
 CLASS="REFENTRY"
 BGCOLOR="#FFFFFF"
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-triggerlist.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -61,9 +61,9 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="reference-function-async-ibcnt.html"
+HREF="x3822.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-WAITSRQ"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3455"
+NAME="AEN3803"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3455"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3458"
+NAME="AEN3806"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3459"
+NAME="AEN3807"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void WaitSRQ</CODE
->(int board_desc, short *result);</CODE
+>void <TT
+CLASS="FUNCTION"
+>WaitSRQ</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>, short *<TT
+CLASS="PARAMETER"
+><I
+>result</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +136,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3468"
+NAME="AEN3816"
 ></A
 ><H2
 >	Description
@@ -122,7 +144,7 @@ NAME="AEN3468"
 ><P
 >	WaitSRQ() sleeps until either the SRQ
 	<A
-HREF="gpib-protocol.html#GPIB-PROTOCOL-BUS-LINES"
+HREF="x4176.html#GPIB-PROTOCOL-BUS-LINES"
 >bus line</A
 > is
 	asserted, or a timeout (see <A
@@ -130,9 +152,11 @@ HREF="reference-function-ibtmo.html"
 >ibtmo()</A
 >)
 	occurs.  A '1' will be written to the location specified by
-	<CODE
+	<TT
 CLASS="PARAMETER"
->result</CODE
+><I
+>result</I
+></TT
 > if SRQ was asserted, and a
 	'0' will be written if the function timed out.
 	</P
@@ -155,14 +179,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-triggerlist.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -171,9 +195,9 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="reference-function-async-ibcnt.html"
+HREF="x3822.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -187,7 +211,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD
@@ -195,7 +219,7 @@ ACCESSKEY="U"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->AsyncIbcnt and AsyncIbcntl</TD
+>Utility Functions</TD
 ></TR
 ></TABLE
 ></DIV

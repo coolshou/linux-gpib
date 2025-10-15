@@ -1,0 +1,70 @@
+'\" t
+.\"     Title: ibppc
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBPPC" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibppc \- parallel poll configure (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibppc('u
+.BI "int ibppc(int\ " "ud" ", int\ " "configuration" ");"
+.SH "DESCRIPTION"
+.PP
+Configures the parallel poll response of the device or board specified by
+\fIud\fR\&. The
+\fIconfiguration\fR
+should either be set to the \*(AqPPD\*(Aq constant to disable parallel poll responses, or set to the return value of the
+PPE_byte()
+inline function to enable and configure the parallel poll response\&.
+.PP
+If
+\fIud\fR
+is a device descriptor then the device will be remotely configured by the controller\&.
+.PP
+If
+\fIud\fR
+is a board descriptor then the board will be locally configured\&. Note, in order to do a local parallel poll configuration IbcPP2 must be set using
+ibconfig()\&. IEEE 488\&.2 prohibits local parallel poll configuration (IEEE 488\&.1 PP2 subset), requiring support for remote parallel poll configuration (IEEE 488\&.1 PP1 subset) instead\&.
+.PP
+After configuring the parallel poll response of devices on a bus, you may use
+ibrpp()
+to parallel poll the devices\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

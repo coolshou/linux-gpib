@@ -1,0 +1,220 @@
+'\" t
+.\"     Title: ibtmo
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBTMO" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibtmo \- adjust io timeout (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibtmo('u
+.BI "int ibtmo(int\ " "ud" ", int\ " "timeout" ");"
+.SH "DESCRIPTION"
+.PP
+ibtmo() sets the timeout for IO operations and
+ibwait
+calls performed using the board or device descriptor
+\fIud\fR\&. The actual amount of time before a timeout occurs may be greater than the period specified, but never less\&.
+\fItimeout\fR
+is specified by using one of the following constants:
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&11.\ \&Timeout constants
+.TS
+allbox tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value
+T}:T{
+timeout
+T}
+.T&
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l.
+T{
+TNONE
+T}:T{
+0
+T}:T{
+Never timeout\&.
+T}
+T{
+T10us
+T}:T{
+1
+T}:T{
+10 microseconds
+T}
+T{
+T30us
+T}:T{
+2
+T}:T{
+30 microseconds
+T}
+T{
+T100us
+T}:T{
+3
+T}:T{
+100 microseconds
+T}
+T{
+T300us
+T}:T{
+4
+T}:T{
+300 microseconds
+T}
+T{
+T1ms
+T}:T{
+5
+T}:T{
+1 millisecond
+T}
+T{
+T3ms
+T}:T{
+6
+T}:T{
+3 milliseconds
+T}
+T{
+T10ms
+T}:T{
+7
+T}:T{
+10 milliseconds
+T}
+T{
+T30ms
+T}:T{
+8
+T}:T{
+30 milliseconds
+T}
+T{
+T100ms
+T}:T{
+9
+T}:T{
+100 milliseconds
+T}
+T{
+T300ms
+T}:T{
+10
+T}:T{
+300 milliseconds
+T}
+T{
+T1s
+T}:T{
+11
+T}:T{
+1 second
+T}
+T{
+T3s
+T}:T{
+12
+T}:T{
+3 seconds
+T}
+T{
+T10s
+T}:T{
+13
+T}:T{
+10 seconds
+T}
+T{
+T30s
+T}:T{
+14
+T}:T{
+30 seconds
+T}
+T{
+T100s
+T}:T{
+15
+T}:T{
+100 seconds
+T}
+T{
+T300s
+T}:T{
+16
+T}:T{
+300 seconds
+T}
+T{
+T1000s
+T}:T{
+17
+T}:T{
+1000 seconds
+T}
+.TE
+.sp 1
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

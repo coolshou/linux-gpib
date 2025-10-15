@@ -32,19 +32,17 @@ libgpib_la_CFLAGS = $(LIBGPIB_CFLAGS) -DDEFAULT_CONFIG_FILE="\"$(sysconfdir)/gpi
 libgpib_la_LDFLAGS = -version-info @GPIB_SO_VERSION@ -Wl,--version-script=$(srcdir)/gpib_version_script -lpthread
 
 $(srcdir)/ibConfLex.c $(srcdir)/ibConfLex.h: $(srcdir)/ibConfLex.l
-	$(LEX) $<
+	$(LEX) -DYY_NO_INPUT $<
 
 $(srcdir)/ibConfYacc.c $(srcdir)/ibConfYacc.h: $(srcdir)/ibConfYacc.y
 	$(YACC) -Wno-yacc -d -p gpib_yy -o $(srcdir)/ibConfYacc.c $<
 
 $(srcdir)/ibVers.h: 
-	if [ `svn info . 2> /dev/null | wc -l` -ne 0 ] && which svnversion >/dev/null 2>&1 ;  then \
-		echo "#define GPIB_SCM_VERSION $(VERSION) r[`svnversion -n .`]" >$(srcdir)/ibVers.h ;\
+	if git status >/dev/null 2>&1 ; then \
+		echo "#define GPIB_SCM_VERSION $(VERSION) [`git show --oneline -s | cut -d ' ' -f 1`]" >$(srcdir)/ibVers.h ;\
 	else \
 		echo "#define GPIB_SCM_VERSION $(VERSION)" >$(srcdir)/ibVers.h ;\
 	fi
-
-
 
 # pkg-config
 pkgconfigdir=$(libdir)/pkgconfig

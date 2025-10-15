@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="EnableRemote"
 HREF="reference-function-enableremote.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-enableremote.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-findrqs.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-FINDLSTN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2836"
+NAME="AEN3184"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2836"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2839"
+NAME="AEN3187"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,49 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2840"
+NAME="AEN3188"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void FindLstn</CODE
->(int board_desc, const Addr4882_t padList[], Addr4882_t resultList[], int maxNumResults);</CODE
+>void <TT
+CLASS="FUNCTION"
+>FindLstn</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>, const Addr4882_t <TT
+CLASS="PARAMETER"
+><I
+>padList[]</I
+></TT
+>, Addr4882_t <TT
+CLASS="PARAMETER"
+><I
+>resultList[]</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>maxNumResults</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,46 +146,58 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2853"
+NAME="AEN3201"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	FindLstn() will check the primary addresses in the <CODE
+>	FindLstn() will check the primary addresses in the <TT
 CLASS="PARAMETER"
->padList</CODE
+><I
+>padList</I
+></TT
 >
 	array for devices.  The GPIB addresses of all devices found will be stored in the
-	<CODE
+	<TT
 CLASS="PARAMETER"
->resultList</CODE
+><I
+>resultList</I
+></TT
 > array, and
 	<A
 HREF="reference-globals-ibcnt.html"
 >ibcnt</A
 >
 	will be set to the number
-	of devices found.  The <CODE
+	of devices found.  The <TT
 CLASS="PARAMETER"
->maxNumResults</CODE
+><I
+>maxNumResults</I
+></TT
 > parameter
 	limits the maximum number of results that will be returned, and is usually
-	set to the number of elements in the <CODE
+	set to the number of elements in the <TT
 CLASS="PARAMETER"
->resultList</CODE
+><I
+>resultList</I
+></TT
 > array.
-	If more than <CODE
+	If more than <TT
 CLASS="PARAMETER"
->maxNumResults</CODE
+><I
+>maxNumResults</I
+></TT
 > devices are found, an
 	ETAB error is returned in <A
 HREF="reference-globals-iberr.html"
 >iberr</A
 >.
-	The <CODE
+	The <TT
 CLASS="PARAMETER"
->padList</CODE
+><I
+>padList</I
+></TT
 > should consist of primary addresses only,
 	with no secondary addresses (all possible secondary addresses will be checked
 	as necessary).
@@ -193,14 +237,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-enableremote.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -211,7 +255,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-findrqs.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -225,7 +269,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

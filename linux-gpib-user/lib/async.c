@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-static void* do_aio( void *varg );
+static void* do_aio(void *varg);
 
 struct gpib_aio_arg
 {
@@ -31,10 +31,10 @@ struct gpib_aio_arg
 	unsigned int usec_timeout;
 };
 
-void init_async_op( struct async_operation *async )
+void init_async_op(struct async_operation *async)
 {
-	pthread_mutex_init( &async->lock, NULL );
-	pthread_mutex_init( &async->join_lock, NULL );
+	pthread_mutex_init(&async->lock, NULL);
+	pthread_mutex_init(&async->join_lock, NULL);
 	pthread_cond_init(&async->condition, NULL);
 	async->buffer = NULL;
 	async->buffer_length = 0;
@@ -45,27 +45,26 @@ void init_async_op( struct async_operation *async )
 	async->abort = 0;
 }
 
-static void cleanup_aio( void *varg )
+static void cleanup_aio(void *varg)
 {
 	struct gpib_aio_arg arg = *((struct gpib_aio_arg*) varg);
 	ibBoard_t *board = interfaceBoard(arg.conf);
-	ibstatus( arg.conf, 0, 0, CMPL); // set CMPL flag
+	ibstatus(arg.conf, 0, 0, CMPL); // set CMPL flag
 	int retval = unlock_board_mutex(board);
 	assert(retval == 0);
 }
 
-int gpib_aio_launch( int ud, ibConf_t *conf, int gpib_aio_type,
-	void *buffer, long cnt )
+int gpib_aio_launch(int ud, ibConf_t *conf, int gpib_aio_type,
+	void *buffer, long cnt)
 {
 	int retval;
 	struct gpib_aio_arg *arg;
 	pthread_attr_t attributes;
 
-	arg = malloc( sizeof( *arg ) );
-	if( arg == NULL )
-	{
-		setIberr( EDVR );
-		setIbcnt( ENOMEM );
+	arg = malloc(sizeof(*arg));
+	if (arg == NULL) {
+		setIberr(EDVR);
+		setIbcnt(ENOMEM);
 		return -1;
 	}
 	arg->ud = ud;
@@ -74,11 +73,10 @@ int gpib_aio_launch( int ud, ibConf_t *conf, int gpib_aio_type,
 	arg->condition_flag = 0;
 	arg->usec_timeout = conf->settings.usec_timeout; // Copy timeout
 
-	pthread_mutex_lock( &conf->async.lock );
-	if( conf->async.in_progress )
-	{
-		pthread_mutex_unlock( &conf->async.lock );
-		setIberr( EOIP );
+	pthread_mutex_lock(&conf->async.lock);
+	if (conf->async.in_progress) {
+		pthread_mutex_unlock(&conf->async.lock);
+		setIberr(EOIP);
 		return -1;
 	}
 	conf->async.ibsta = 0;
@@ -89,29 +87,28 @@ int gpib_aio_launch( int ud, ibConf_t *conf, int gpib_aio_type,
 	conf->async.abort = 0;
 	conf->async.aio_type = gpib_aio_type; /* used in my_ibcmd to suppress setting CMPL */
 
-	pthread_attr_init( &attributes );
-	pthread_attr_setstacksize( &attributes, 0x10000 );
-	retval = pthread_create( &conf->async.thread,
-		&attributes, do_aio, arg );
-	pthread_attr_destroy( &attributes );
+	pthread_attr_init(&attributes);
+	pthread_attr_setstacksize(&attributes, 0x10000);
+	retval = pthread_create(&conf->async.thread,
+		&attributes, do_aio, arg);
+	pthread_attr_destroy(&attributes);
 	conf->async.in_progress = (retval == 0);
-	while(arg->condition_flag == 0)
-	{
+	while (arg->condition_flag == 0)
 		pthread_cond_wait(&conf->async.condition, &conf->async.lock);
-	}
-	pthread_mutex_unlock( &conf->async.lock );
-	free( arg ); arg = NULL;
-	if( retval )
-	{
-		setIberr( EDVR );
-		setIbcnt( retval );
+
+	pthread_mutex_unlock(&conf->async.lock);
+	free(arg);
+	arg = NULL;
+	if (retval) {
+		setIberr(EDVR);
+		setIbcnt(retval);
 		return -1;
 	}
 
 	return 0;
 }
 
-static void* do_aio( void *varg )
+static void* do_aio(void *varg)
 {
 	size_t count;
 	struct gpib_aio_arg * const arg_p = (struct gpib_aio_arg*) varg;
@@ -122,15 +119,13 @@ static void* do_aio( void *varg )
 	int retval;
 
 	arg = *arg_p;
-
 	conf = arg.conf;
 	usec_timeout = arg.usec_timeout;
 	board = interfaceBoard(conf);
 	retval = lock_board_mutex(board);
-	if(retval == 0)
-	{
+	if (retval == 0)
 		ibstatus(conf, 0, CMPL, 0);  // clear CMPL flag
-	}
+
 	pthread_mutex_lock(&conf->async.lock);
 	arg_p->condition_flag = 1;
 	pthread_cond_broadcast(&conf->async.condition);
@@ -138,60 +133,57 @@ static void* do_aio( void *varg )
 	// don't use arg_p after this point, it may be
 	// deallocated by the thread which launched this one.
 
-	if( retval < 0 ) return NULL;
+	if (retval < 0)
+		return NULL;
 
-	pthread_cleanup_push( cleanup_aio, &arg );
-	pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
-	pthread_setcancelstate( PTHREAD_CANCEL_ENABLE, NULL );
+	pthread_cleanup_push(cleanup_aio, &arg);
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+	pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
 
-	switch( arg.gpib_aio_type )
-	{
+	switch(arg.gpib_aio_type) {
 	case GPIB_AIO_COMMAND:
-		count = retval = my_ibcmd( conf, usec_timeout, conf->async.buffer, conf->async.buffer_length );
+		count = retval = my_ibcmd(conf, usec_timeout, conf->async.buffer, conf->async.buffer_length);
 		break;
 	case GPIB_AIO_READ:
-		retval = my_ibrd( conf, usec_timeout, conf->async.buffer, conf->async.buffer_length, &count);
+		retval = my_ibrd(conf, usec_timeout, conf->async.buffer, conf->async.buffer_length, &count);
 		break;
 	case GPIB_AIO_WRITE:
 		retval = my_ibwrt(conf, usec_timeout, conf->async.buffer, conf->async.buffer_length, &count);
 		break;
 	default:
 		retval = -1;
-		fprintf( stderr, "libgpib: bug! in %s\n", __FUNCTION__ );
+		fprintf(stderr, "libgpib: bug! in %s\n", __FUNCTION__);
 		break;
 	}
-	pthread_setcancelstate( PTHREAD_CANCEL_DISABLE, NULL );
-	pthread_mutex_lock( &conf->async.lock );
-	if(retval < 0)
-	{
-		if(ThreadIberr() != EDVR)
+	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
+	pthread_mutex_lock(&conf->async.lock);
+	if (retval < 0)	{
+		if (ThreadIberr() != EDVR)
 			conf->async.ibcntl = count;
 		else
 			conf->async.ibcntl = ThreadIbcntl();
 		conf->async.iberr = ThreadIberr();
 		conf->async.ibsta = CMPL | ERR;
-	}else
-	{
+	} else {
 		conf->async.ibcntl = count;
 		conf->async.iberr = 0;
 		conf->async.ibsta = CMPL;
-		if(conf->end) conf->async.ibsta |= END;
-		if(conf->timed_out) conf->async.ibsta |= TIMO;
+		if (conf->end) conf->async.ibsta |= END;
+		if (conf->timed_out) conf->async.ibsta |= TIMO;
 	}
-	pthread_mutex_unlock( &conf->async.lock );
-	pthread_cleanup_pop( 1 );
+	pthread_mutex_unlock(&conf->async.lock);
+	pthread_cleanup_pop(1);
 	return NULL;
 }
 
-int gpib_aio_join( struct async_operation *async )
+int gpib_aio_join(struct async_operation *async)
 {
 	int retval;
 
-	pthread_mutex_lock( &async->join_lock );
-	retval = pthread_join( async->thread, NULL );
-	pthread_mutex_unlock( &async->join_lock );
-	switch( retval )
-	{
+	pthread_mutex_lock(&async->join_lock);
+	retval = pthread_join(async->thread, NULL);
+	pthread_mutex_unlock(&async->join_lock);
+	switch(retval) {
 	case 0:
 		setAsyncIbsta(async->ibsta);
 		setAsyncIberr(async->iberr);
@@ -201,10 +193,10 @@ int gpib_aio_join( struct async_operation *async )
 		retval = 0;
 		break;
 	default:
-		fprintf( stderr, "libgpib: pthread_join() returned %i in %s\n",
-			retval, __FUNCTION__ );
-		setIberr( EDVR );
-		setIbcnt( retval );
+		fprintf(stderr, "libgpib: pthread_join() returned %i in %s\n",
+			retval, __FUNCTION__);
+		setIberr(EDVR);
+		setIbcnt(retval);
 		break;
 	}
 	return retval;

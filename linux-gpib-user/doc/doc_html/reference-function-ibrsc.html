@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibrpp"
 HREF="reference-function-ibrpp.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibrpp.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibrsp.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBRSC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2123"
+NAME="AEN2470"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2123"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2126"
+NAME="AEN2473"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2127"
+NAME="AEN2474"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibrsc</CODE
->(int ud, int request_control);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibrsc</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>request_control</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,37 +136,56 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2136"
+NAME="AEN2483"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	If <CODE
+>	If <TT
 CLASS="PARAMETER"
->request_control</CODE
+><I
+>request_control</I
+></TT
 > is nonzero, then the board
-	specified by the board descriptor <CODE
+	specified by the board descriptor <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > is
-	made system controller.  If <CODE
+	made system controller.  If <TT
 CLASS="PARAMETER"
->request_control</CODE
+><I
+>request_control</I
+></TT
 >
 	is zero, then the board releases system control.
 	</P
 ><P
 >	The system controller has the ability
 	to assert the REN and IFC lines, and is typically also the
-	controller-in-charge.  A GPIB bus may not have more than one
-	system controller.
+	controller-in-charge. Automatic assertion of REN is controlled with
+	<A
+HREF="reference-function-ibconfig.html"
+>ibconfig()</A
+>.
+	If the IbcSRE configuration option has been set for the
+	board descriptor <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>
+	then REN will automatically be asserted when the board becomes
+	system controller. The configuration option IbcSRE is set by default.
+	A GPIB bus may not have more than one system controller.
 	</P
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2143"
+NAME="AEN2492"
 ></A
 ><H2
 >	Return value
@@ -174,14 +215,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibrpp.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -192,7 +233,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibrsp.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -206,7 +247,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

@@ -1,0 +1,53 @@
+'\" t
+.\"     Title: TestSRQ
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "TESTSRQ" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+TestSRQ \- query state of SRQ bus line
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ TestSRQ('u
+.BI "void TestSRQ(int\ " "board_desc" ", short\ *" "result" ");"
+.SH "DESCRIPTION"
+.PP
+TestSRQ() checks the state of the SRQ
+bus line
+and writes its state to the location specified by
+\fIresult\fR\&. A \*(Aq1\*(Aq indicates the SRQ line is asserted, and a \*(Aq0\*(Aq indicates the line is not asserted\&.
+.PP
+Some boards lack the capability to report the status of the SRQ line\&. In such a case, an ECAP error is returned in
+iberr\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

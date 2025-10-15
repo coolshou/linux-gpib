@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibloc"
 HREF="reference-function-ibloc.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibloc.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibpad.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBONL"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1883"
+NAME="AEN2227"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1883"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1886"
+NAME="AEN2230"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1887"
+NAME="AEN2231"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibonl</CODE
->(int ud, int online);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibonl</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>online</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,27 +136,39 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1896"
+NAME="AEN2240"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	If the <CODE
+>	If the parameter <TT
 CLASS="PARAMETER"
->online</CODE
+><I
+>online</I
+></TT
 > is zero, then ibonl() frees the
 	resources associated with the board or device descriptor
-	<CODE
+	<TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >.  The descriptor cannot be used again after the
-	ibonl() call.
+	ibonl() call. The parameter <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+> cannot be a board
+	index (aka minor).
 	</P
 ><P
->	If the <CODE
+>	If the parameter <TT
 CLASS="PARAMETER"
->online</CODE
+><I
+>online</I
+></TT
 > is nonzero, then all the settings
 	associated with the descriptor (GPIB address, end-of-string mode, timeout,
 	etc.) are reset to their 'default' values.  The 'default' values are
@@ -147,12 +181,25 @@ HREF="reference-function-ibdev.html"
 HREF="reference-function-ibfind.html"
 >ibfind()</A
 >.
+	The parameter <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+> can be a board index
+	(aka minor). The 'default' values are the standard default
+	values as modified by the
+	corresponding <A
+HREF="configuration-gpib-conf.html"
+>gpib.conf</A
+> 
+	interface definition.
 	</P
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1905"
+NAME="AEN2252"
 ></A
 ><H2
 >	Return value
@@ -182,14 +229,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibloc.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -200,7 +247,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibpad.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -214,7 +261,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

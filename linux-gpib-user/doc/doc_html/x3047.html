@@ -1,0 +1,304 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>	"Multidevice" API Functions</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.3.7
+ Documentation"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="ibwrtf"
+HREF="reference-function-ibwrtf.html"><LINK
+REL="NEXT"
+TITLE="AllSPoll"
+HREF="reference-function-allspoll.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.3.7
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference-function-ibwrtf.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-allspoll.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="AEN3047"
+>"Multidevice" API Functions</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="reference-function-allspoll.html"
+>AllSPoll</A
+>&nbsp;--&nbsp;serial poll multiple devices</DT
+><DT
+><A
+HREF="reference-function-devclear.html"
+>DevClear</A
+>&nbsp;--&nbsp;clear a device</DT
+><DT
+><A
+HREF="reference-function-devclearlist.html"
+>DevClearList</A
+>&nbsp;--&nbsp;clear multiple devices</DT
+><DT
+><A
+HREF="reference-function-enablelocal.html"
+>EnableLocal</A
+>&nbsp;--&nbsp;put devices into local mode.</DT
+><DT
+><A
+HREF="reference-function-enableremote.html"
+>EnableRemote</A
+>&nbsp;--&nbsp;put devices into remote mode.</DT
+><DT
+><A
+HREF="reference-function-findlstn.html"
+>FindLstn</A
+>&nbsp;--&nbsp;find devices</DT
+><DT
+><A
+HREF="reference-function-findrqs.html"
+>FindRQS</A
+>&nbsp;--&nbsp;find device requesting service and read its status byte</DT
+><DT
+><A
+HREF="reference-function-passcontrol.html"
+>PassControl</A
+>&nbsp;--&nbsp;make device controller-in-charge</DT
+><DT
+><A
+HREF="reference-function-ppoll.html"
+>PPoll</A
+>&nbsp;--&nbsp;parallel poll devices</DT
+><DT
+><A
+HREF="reference-function-ppollconfig.html"
+>PPollConfig</A
+>&nbsp;--&nbsp;configure a device's parallel poll response</DT
+><DT
+><A
+HREF="reference-function-ppollunconfig.html"
+>PPollUnconfig</A
+>&nbsp;--&nbsp;disable devices' parallel poll response</DT
+><DT
+><A
+HREF="reference-function-rcvrespmsg.html"
+>RcvRespMsg</A
+>&nbsp;--&nbsp;read data</DT
+><DT
+><A
+HREF="reference-function-readstatusbyte.html"
+>ReadStatusByte</A
+>&nbsp;--&nbsp;serial poll a device</DT
+><DT
+><A
+HREF="reference-function-receive.html"
+>Receive</A
+>&nbsp;--&nbsp;perform receive addressing and read data</DT
+><DT
+><A
+HREF="reference-function-receivesetup.html"
+>ReceiveSetup</A
+>&nbsp;--&nbsp;perform receive addressing</DT
+><DT
+><A
+HREF="reference-function-resetsys.html"
+>ResetSys</A
+>&nbsp;--&nbsp;reset system</DT
+><DT
+><A
+HREF="reference-function-send.html"
+>Send</A
+>&nbsp;--&nbsp;perform send addressing and write data</DT
+><DT
+><A
+HREF="reference-function-sendcmds.html"
+>SendCmds</A
+>&nbsp;--&nbsp;write command bytes onto bus</DT
+><DT
+><A
+HREF="reference-function-senddatabytes.html"
+>SendDataBytes</A
+>&nbsp;--&nbsp;write data</DT
+><DT
+><A
+HREF="reference-function-sendifc.html"
+>SendIFC</A
+>&nbsp;--&nbsp;perform interface clear</DT
+><DT
+><A
+HREF="reference-function-sendlist.html"
+>SendList</A
+>&nbsp;--&nbsp;write data to multiple devices</DT
+><DT
+><A
+HREF="reference-function-sendllo.html"
+>SendLLO</A
+>&nbsp;--&nbsp;put devices into local lockout mode</DT
+><DT
+><A
+HREF="reference-function-sendsetup.html"
+>SendSetup</A
+>&nbsp;--&nbsp;perform send addressing</DT
+><DT
+><A
+HREF="reference-function-setrwls.html"
+>SetRWLS</A
+>&nbsp;--&nbsp;put devices into remote with lockout state</DT
+><DT
+><A
+HREF="reference-function-testsrq.html"
+>TestSRQ</A
+>&nbsp;--&nbsp;query state of SRQ bus line</DT
+><DT
+><A
+HREF="reference-function-testsys.html"
+>TestSys</A
+>&nbsp;--&nbsp;perform self-test queries on devices</DT
+><DT
+><A
+HREF="reference-function-trigger.html"
+>Trigger</A
+>&nbsp;--&nbsp;trigger a device</DT
+><DT
+><A
+HREF="reference-function-triggerlist.html"
+>TriggerList</A
+>&nbsp;--&nbsp;trigger multiple devices</DT
+><DT
+><A
+HREF="reference-function-waitsrq.html"
+>WaitSRQ</A
+>&nbsp;--&nbsp;sleep until the SRQ bus line is asserted</DT
+></DL
+></DIV
+><P
+>The "Multidevice" API functions provide similar functionality to the "Traditional" API functions.
+However, some of the "multidevice" functions can be
+performed on multiple devices simultaneously.  For example,
+<A
+HREF="reference-function-sendlist.html"
+>SendList()</A
+>
+can be used to write a message to multiple devices.  Such functions take an array of Addr4882_t
+as an argument.  The end of the array is specified by setting the last element to the
+constant NOADDR.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference-function-ibwrtf.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-allspoll.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ibwrtf</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>AllSPoll</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

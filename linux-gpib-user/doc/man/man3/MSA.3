@@ -1,0 +1,56 @@
+'\" t
+.\"     Title: MSA
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Utility Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "MSA" "3" "10/04/2025" "linux-gpib 4.3.7" "Utility Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+MSA \- generate \*(Aqmy secondary address\*(Aq command byte
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'uint8_t\ MSA('u
+.BI "uint8_t MSA(unsigned\ int\ " "address" ");"
+.SH "DESCRIPTION"
+.PP
+MSA() returns a \*(Aqmy secondary address\*(Aq
+command byte
+corresponding to the
+\fIaddress\fR
+argument\&. The
+\fIaddress\fR
+may be between 0 and 31\&. This macro is also useful for mangling secondary addresses from the \*(Aqreal\*(Aq values between 0 and 31 to the range 0x60 to 0x7f used by most of the library\*(Aqs functions\&.
+.SH "RETURN VALUE"
+.PP
+The appropriate MSA command byte is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

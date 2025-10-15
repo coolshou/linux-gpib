@@ -1,0 +1,430 @@
+'\" t
+.\"     Title: ibconfig
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBCONFIG" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibconfig \- change configuration (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibconfig('u
+.BI "int ibconfig(int\ " "ud" ", int\ " "option" ", int\ " "setting" ");"
+.SH "DESCRIPTION"
+.PP
+Changes various configuration settings associated with the board or device descriptor
+\fIud\fR\&. The
+\fIoption\fR
+argument specifies the particular setting you wish to modify\&. The
+\fIsetting\fR
+argument specifies the option\*(Aqs new configuration\&. To query the descriptor\*(Aqs configuration, see
+ibask()\&.
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&6.\ \&ibconfig options
+.TS
+allbox expand tab(:);
+lB lB lB lB.
+T{
+option
+T}:T{
+value (hexadecimal)
+T}:T{
+effect
+T}:T{
+used for board/device
+T}
+.T&
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l.
+T{
+IbcPAD
+T}:T{
+0x1
+T}:T{
+Sets GPIB primary address\&.  Same as
+	ibpad()
+T}:T{
+board or device
+T}
+T{
+IbcSAD
+T}:T{
+0x2
+T}:T{
+Sets GPIB secondary address\&.  Same as
+	ibsad()
+T}:T{
+board or device
+T}
+T{
+IbcTMO
+T}:T{
+0x3
+T}:T{
+Sets timeout for io operations\&.  Same as
+	ibmto()\&.
+T}:T{
+board or device
+T}
+T{
+IbcEOT
+T}:T{
+0x4
+T}:T{
+If setting is nonzero, EOI is asserted with last byte on writes\&.
+	Same as ibeot()\&.
+T}:T{
+\ \&
+T}
+T{
+IbcPPC
+T}:T{
+0x5
+T}:T{
+Sets parallel poll configuration\&.  Same as
+	ibppc()\&.
+T}:T{
+board
+T}
+T{
+IbcREADDR
+T}:T{
+0x6
+T}:T{
+Not implemented, included for compatibility only\&. Device ibrd*
+	and ibwrt* calls always re\-address\&. To avoid re\-addressing
+	use an initial device read or write followed by board read or
+	writes to the controlling minor, ensuring no other intervening
+	device access occurs\&.
+T}:T{
+device
+T}
+T{
+IbcAUTOPOLL
+T}:T{
+0x7
+T}:T{
+If setting is nonzero then automatic serial polling is enabled\&.
+T}:T{
+board
+T}
+T{
+IbcCICPROT
+T}:T{
+0x8
+T}:T{
+Useless, included for compatibility only\&.
+T}:T{
+board
+T}
+T{
+IbcSC
+T}:T{
+0xa
+T}:T{
+If setting is nonzero, board becomes system controller\&.
+	Same as ibrsc()\&.
+T}:T{
+board
+T}
+T{
+IbcSRE
+T}:T{
+0xb
+T}:T{
+If setting is nonzero then board asserts REN when
+	  it becomes sytem controller otherwise REN is not asserted\&.
+	  It is nonzero by default\&. See
+	ibrsc()\&.
+T}:T{
+board
+T}
+T{
+IbcEOSrd
+T}:T{
+0xc
+T}:T{
+If setting is nonzero then reads are terminated on reception
+	of the end\-of\-string character\&.
+	See ibeos(),
+	in particular the REOS bit\&.
+T}:T{
+board or device
+T}
+T{
+IbcEOSwrt
+T}:T{
+0xd
+T}:T{
+If setting is nonzero then EOI is asserted whenever
+	the end\-of\-string character is
+	sent\&.  See ibeos(),
+	in particular the XEOS bit\&.
+T}:T{
+board or device
+T}
+T{
+IbcEOScmp
+T}:T{
+0xe
+T}:T{
+If setting is nonzero then all 8 bits are used to match
+	the end\-of\-string
+	character\&.  Otherwise only the least significant 7 bits are used\&.
+	See ibeos(),
+	in particular the BIN bit\&.
+T}:T{
+board or device
+T}
+T{
+IbcEOSchar
+T}:T{
+0xf
+T}:T{
+Sets the end\-of\-string byte\&.
+	See ibeos()\&.
+T}:T{
+board or device
+T}
+T{
+IbcPP2
+T}:T{
+0x10
+T}:T{
+If setting is nonzero then the board is put into
+	local parallel poll configure mode (IEEE 488\&.1 PP2 subset), and will not change
+	its parallel poll configuration in response to receiving
+	\*(Aqparallel poll enable\*(Aq command bytes from the controller\-in\-charge\&.
+	Instead, the parallel poll configuration is set locally by doing a board\-level
+	call of ibppc()\&.
+	A zero value puts the board in remote parallel poll configure mode
+	(IEEE 488\&.1 PP1 subset)\&.  IEEE 488\&.2 requires devices to support
+	the remote PP1 subset and not the local PP2 subset\&.
+	Some older hardware does not support local parallel poll
+	configure mode\&.
+T}:T{
+board
+T}
+T{
+IbcTIMING
+T}:T{
+0x11
+T}:T{
+Sets the T1 delay\&.  Use setting of 1 for 2 microseconds, 2 for 500
+	nanoseconds, or 3 for 350 nanoseconds\&.  These values are declared in
+	the header files as the constants T1_DELAY_2000ns, T1_DELAY_500ns,
+	and T1_DELAY_350ns\&.  A 2 microsecond T1 delay is safest, but
+	will limit maximum transfer speeds to a few hundred kilobytes
+	per second\&.
+T}:T{
+board
+T}
+T{
+IbcReadAdjust
+T}:T{
+0x13
+T}:T{
+If setting is nonzero then byte pairs are automatically swapped
+	during reads\&.  Presently, this feature is unimplemented\&.
+T}:T{
+board or device
+T}
+T{
+IbcWriteAdjust
+T}:T{
+0x14
+T}:T{
+If setting is nonzero then byte pairs are automatically swapped
+	during writes\&.  Presently, this feature is unimplemented\&.
+T}:T{
+board or device
+T}
+T{
+IbcEventQueue
+T}:T{
+0x15
+T}:T{
+If setting is nonzero then the event queue is enabled\&.  The
+	event queue is disabled by default\&.
+T}:T{
+board
+T}
+T{
+IbcSPollBit
+T}:T{
+0x16
+T}:T{
+If the setting is nonzero then the use of the SPOLL bit in ibsta is enabled\&.
+T}:T{
+board
+T}
+T{
+IbcSendLLO
+T}:T{
+0x17
+T}:T{
+If the setting is nonzero then devices connected to this board are automatically
+	put into local lockout
+	mode when brought online with ibfind() or ibdev()\&.
+T}:T{
+board
+T}
+T{
+IbcSPollTime
+T}:T{
+0x18
+T}:T{
+Sets timeout for serial polls\&.  The setting must be
+	between 0 and 17, which correspond to the same time periods as in
+	ibtmo()\&.
+T}:T{
+device
+T}
+T{
+IbcPPollTime
+T}:T{
+0x19
+T}:T{
+Sets timeout for parallel polls\&.  The setting must be
+	between 0 and 17, which correspond to the same time periods as in
+	ibtmo()\&.
+T}:T{
+board
+T}
+T{
+IbcEndBitIsNormal
+T}:T{
+0x1a
+T}:T{
+If setting is nonzero then the END bit of ibsta is set on
+	reception of the end\-of\-string character or EOI (default)\&.  Otherwise
+	END bit is only set on EOI\&.
+T}:T{
+board or device
+T}
+T{
+IbcUnAddr
+T}:T{
+0x1b
+T}:T{
+If setting is nonzero then UNT (untalk) and UNL (unlisten) commands
+	are automatically sent after a completed ibrd* or ibwrt* operation using this descriptor\&.
+T}:T{
+device
+T}
+T{
+IbcHSCableLength
+T}:T{
+0x1f
+T}:T{
+Configures the total cable length in meters for your system, by sending the command
+	bytes CFE and CFGn\&.  This is required to enable high speed noninterlocked
+	handshaking (a\&.k\&.a\&. HS488) and set associated handshake timings\&.
+	Valid \fIsetting\fR values
+	are 0 through 15\&.  A value of zero disables noninterlocked handshaking,
+	otherwise the value is the total number of meters of cable\&.
+T}:T{
+board
+T}
+T{
+IbcIst
+T}:T{
+0x20
+T}:T{
+Sets the individual status bit, a\&.k\&.a\&. \*(Aqist\*(Aq\&.  Same
+	as ibist()\&.
+T}:T{
+board
+T}
+T{
+IbcRsv
+T}:T{
+0x21
+T}:T{
+Sets the current status byte this board will use to respond to
+	serial polls\&.  Same as ibrsv()\&.
+T}:T{
+board
+T}
+T{
+IbcBNA
+T}:T{
+0x200
+T}:T{
+Changes the GPIB interface board used to access a device\&.  The
+	setting specifies the board index of the new access board\&.  This configuration
+	option is similar to ibbna()
+	except the new board is specified by its board index instead of a name\&.
+T}:T{
+device
+T}
+.TE
+.sp 1
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

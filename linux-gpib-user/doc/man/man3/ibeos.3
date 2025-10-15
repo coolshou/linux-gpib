@@ -1,0 +1,98 @@
+'\" t
+.\"     Title: ibeos
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBEOS" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibeos \- set end\-of\-string mode (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibeos('u
+.BI "int ibeos(int\ " "ud" ", int\ " "eosmode" ");"
+.SH "DESCRIPTION"
+.PP
+ibeos() is used to set the end\-of\-string character and mode\&. The least significant 8 bits of
+\fIeosmode\fR
+specify the eos character\&. You may also bitwise\-or one or more of the following bits to set the eos mode:
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&7.\ \&End\-of\-String Mode Bits
+.TS
+allbox expand tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value (hexadecimal)
+T}:T{
+meaning
+T}
+.T&
+l l l
+l l l
+l l l.
+T{
+REOS
+T}:T{
+0x400
+T}:T{
+Enable termination of reads when eos character is received\&.
+T}
+T{
+XEOS
+T}:T{
+0x800
+T}:T{
+Assert the EOI line whenever the eos character is sent during writes\&.
+T}
+T{
+BIN
+T}:T{
+0x1000
+T}:T{
+Match eos character using all 8 bits (instead of only looking at
+	the 7 least significant bits)\&.
+T}
+.TE
+.sp 1
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

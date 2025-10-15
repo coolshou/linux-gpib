@@ -1,0 +1,113 @@
+'\" t
+.\"     Title: ibevent
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBEVENT" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibevent \- get events from event queue (board)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibevent('u
+.BI "int ibevent(int\ " "ud" ", short\ *" "event" ");"
+.SH "DESCRIPTION"
+.PP
+ibevent() is used to obtain the oldest event stored in the event queue of the board specified by the board descriptor
+\fIud\fR\&. The EVENT bit of
+ibsta
+indicates that the event queue contains 1 or more events\&. An event may be a clear command, a trigger command, or reception of an interface clear\&. The type of event is stored in the location specified by
+\fIevent\fR
+and may be set to any of the following values:
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&8.\ \&events
+.TS
+allbox tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value
+T}:T{
+description
+T}
+.T&
+l l l
+l l l
+l l l
+l l l.
+T{
+EventNone
+T}:T{
+0
+T}:T{
+The board\*(Aqs event queue is empty
+T}
+T{
+EventDevTrg
+T}:T{
+1
+T}:T{
+The board has received a trigger command from the controller\-in\-charge\&.
+T}
+T{
+EventDevClr
+T}:T{
+2
+T}:T{
+The board has received a clear command from the controller\-in\-charge\&.
+T}
+T{
+EventIFC
+T}:T{
+3
+T}:T{
+The board has received an interface clear from the system controller\&.
+	Note, some models of GPIB interface board lack the ability to report interface
+	clear events\&.
+T}
+.TE
+.sp 1
+.PP
+The event queue is disabled by default\&. It may be enabled by a call to
+ibconfig()\&. Each interface board has a single event queue which is shared across all processes and threads\&. So, only one process can retrieve any given event from the queue\&. Also, the queue is of finite size so events may be lost (ibevent() will return an error) if it is neglected too long\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

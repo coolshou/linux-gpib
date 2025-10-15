@@ -1,0 +1,69 @@
+'\" t
+.\"     Title: ibrd
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBRD" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibrd \- read data bytes (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibrd('u
+.BI "int ibrd(int\ " "ud" ", void\ *" "buffer" ", long\ " "num_bytes" ");"
+.SH "DESCRIPTION"
+.PP
+ibrd() is used to read data bytes from a device or board\&. The argument
+\fIud\fR
+can be either a device or board descriptor\&. Up to
+\fInum_bytes\fR
+bytes are read into the user\-supplied array
+\fIbuffer\fR\&. The read may be terminated by a timeout occuring(see
+ibtmo()), the talker asserting the EOI line, the board receiving the end\-of\-string character (see
+ibeos()), receiving a device clear command, or receiving an interface clear\&.
+.PP
+If
+\fIud\fR
+is a device descriptor, then the library automatically handles addressing the device as talker and the interface board as listener before performing the read\&.
+.PP
+If
+\fIud\fR
+is a board descriptor, no addressing is performed and the board must be addressed as a listener by the controller\-in\-charge\&.
+.PP
+After the ibrd() call, ibcnt and ibcntl are set to the number of bytes read\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

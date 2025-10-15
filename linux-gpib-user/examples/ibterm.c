@@ -162,7 +162,7 @@ if (var != 0 && var != 1)  abend(#flag " flag must be 1 or 0.\n");
 if (var < 0 || var > 30)  abend(#var " must be between 0 and 30.\n");
 
 #define CHECK_SADDR(var) 	\
-if (var < 0x60 || var > 0x7e)  abend("linux-gpib requires the secondary address to be offset by 96,\n   that is sad must be between 96 and 126.\n");
+if (var < 0x60 || var > 0x7f)  abend("linux-gpib requires the secondary address to be offset by 96,\n   that is sad must be between 96 and 127.\n");
 
 void parse_options(int argc, char ** argv) {
   int eos_char  = 0;   // End of string character
@@ -225,6 +225,8 @@ void parse_options(int argc, char ** argv) {
 static void showError(char * mess) {
   fprintf(stderr,"ibterm error: %s\n", mess);
   fprintf(stderr," - %s\n", gpib_error_string(ThreadIberr()));
+  if (iberr==EDVR)
+	  fprintf(stderr,"\t%s\n",strerror(ibcnt));
 }
 
 #ifndef READLINE
@@ -260,6 +262,7 @@ int main (int argc, char ** argv) {
   printf("Attempting to open /dev/gpib%i\n"
 	 "pad = %d, sad = %d, timeout = %d, send_eoi = %d, eos_mode = 0x%04x\n",
 	 minor,pad,sad,timeout,send_eoi,eos_mode);
+  putenv("IB_NO_ERROR=1"); // we check for our own errors
   devdesc = ibdev(minor, pad, sad, timeout, send_eoi, eos_mode);
   if (devdesc < 0) {
     showError("open failed");
@@ -276,7 +279,7 @@ int main (int argc, char ** argv) {
   read_history(mHist);
 
   /* prompt user - read term - write device - read device - print term loop */
-  while (line = readline(mPrompt)) { /* prompt  and read from user */
+  while ((line = readline(mPrompt))) { /* prompt  and read from user */
 
     /* write to device */
     if (*line) { /* send to device only if we got something */
@@ -301,6 +304,8 @@ int main (int argc, char ** argv) {
 	continue;
       }
       devdatalen = ThreadIbcntl();
+      if (!devdatalen)
+	      continue;
     } else continue;
 
     /* print response */
@@ -317,8 +322,8 @@ int main (int argc, char ** argv) {
       fwrite(devbuf,1,devdatalen,stdout); /* print response as ASCII string */
       /* but don't print an extra newline if it ends with LF or LF CR */
       if ((devdatalen > 2 &&
-	   devbuf[devdatalen-2] != '\n' ||  devbuf[devdatalen-1] != '\r') &&
-	  devbuf[devdatalen-1] != '\n') putchar('\n');
+	   (devbuf[devdatalen-2] != '\n') ||  (devbuf[devdatalen-1] != '\r')) &&  devbuf[devdatalen-1] != '\n')
+	    putchar('\n');
     } else {
       prhex(devbuf,devdatalen); /* print contents with hex and ascii */
     }

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,17 +7,17 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="	Utility Functions"
-HREF="reference.html#AEN3474"><LINK
+HREF="x3822.html"><LINK
 REL="PREVIOUS"
 TITLE="MTA"
 HREF="reference-function-mta.html"><LINK
 REL="NEXT"
-TITLE="ThreadIbcnt and ThreadIbcntl"
+TITLE="ThreadIbcnt"
 HREF="reference-function-thread-ibcnt.html"></HEAD
 ><BODY
 CLASS="REFENTRY"
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-mta.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-thread-ibcnt.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-PPE-BYTE"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3732"
+NAME="AEN4080"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3732"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3735"
+NAME="AEN4083"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3736"
+NAME="AEN4084"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->uint8_t PPE_byte</CODE
->(unsigned int dio_line, int sense);</CODE
+>uint8_t <TT
+CLASS="FUNCTION"
+>PPE_byte</TT
+></CODE
+>(unsigned int <TT
+CLASS="PARAMETER"
+><I
+>dio_line</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>sense</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +136,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3745"
+NAME="AEN4093"
 ></A
 ><H2
 >	Description
@@ -122,33 +144,45 @@ NAME="AEN3745"
 ><P
 >	PPE_byte() returns a 'parallel poll enable'
 	<A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command byte</A
 > corresponding
-	to the <CODE
+	to the <TT
 CLASS="PARAMETER"
->dio_line</CODE
-> and <CODE
+><I
+>dio_line</I
+></TT
+> and <TT
 CLASS="PARAMETER"
->sense</CODE
+><I
+>sense</I
+></TT
 >
-	arguments.  The <CODE
+	arguments.  The <TT
 CLASS="PARAMETER"
->dio_line</CODE
+><I
+>dio_line</I
+></TT
 > (valid values are 1 through 8)
 	specifies which dio line the device being configured should use to send
-	back its parallel poll response.  The <CODE
+	back its parallel poll response.  The <TT
 CLASS="PARAMETER"
->sense</CODE
+><I
+>sense</I
+></TT
 > argument
-	specifies the polarity of the response.  If <CODE
+	specifies the polarity of the response.  If <TT
 CLASS="PARAMETER"
->sense</CODE
+><I
+>sense</I
+></TT
 >
 	is nonzero, then the specified dio line will be asserted to indicate
-	that the 'individual status bit' (or 'ist') is 1.  If <CODE
+	that the 'individual status bit' (or 'ist') is 1.  If <TT
 CLASS="PARAMETER"
->sense</CODE
+><I
+>sense</I
+></TT
 >
 	is zero, then the specified dio line will be asserted when ist is zero.
 	</P
@@ -156,7 +190,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3755"
+NAME="AEN4103"
 ></A
 ><H2
 >	Return value
@@ -183,14 +217,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-mta.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -201,7 +235,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-thread-ibcnt.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -215,7 +249,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN3474"
+HREF="x3822.html"
 ACCESSKEY="U"
 >Up</A
 ></TD
@@ -223,7 +257,7 @@ ACCESSKEY="U"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ThreadIbcnt and ThreadIbcntl</TD
+>ThreadIbcnt</TD
 ></TR
 ></TABLE
 ></DIV

@@ -35,6 +35,7 @@ enum Action
 	GPIB_COMMAND,
 	GPIB_DEVICE_CLEAR,
 	GPIB_EOT,
+        GPIB_EOS,
 	GPIB_GO_TO_LOCAL,
 	GPIB_GO_TO_STANDBY,
 	GPIB_IFC,
@@ -224,7 +225,7 @@ int prompt_for_descriptor(int minor)
 int prompt_for_action(void)
 {
 	char input[100];
-	
+
 	while(1)
 	{
 		printf("You can:\n"
@@ -238,6 +239,7 @@ int prompt_for_action(void)
 			"\tget bus (l)ine status (board only)\n"
 			"\tgo to local (m)ode\n"
 			"\tchange end (o)f transmission configuration\n"
+			"\tend read on recei(p)t of EOS character\n"
  			"\t(q)uit\n"
 			"\t(r)ead string\n"
 			"\tperform (s)erial poll (device only)\n"
@@ -258,7 +260,7 @@ int prompt_for_action(void)
 				return -1;
 			}
 		}while (input[0] == '\n');
-		
+
 		switch( input[0] )
 		{
 			case 'A':
@@ -300,6 +302,10 @@ int prompt_for_action(void)
 			case 'o':
 			case 'O':
 				return GPIB_EOT;
+				break;
+			case 'p':
+			case 'P':
+				return GPIB_EOS;
 				break;
 			case 'q':
 			case 'Q':
@@ -346,8 +352,8 @@ int perform_read(int ud, int max_num_bytes)
 	int is_string;
 	int i;
 	long read_count = 0;
-	
-	if(buffer == NULL) 
+
+	if(buffer == NULL)
 	{
 		fprintf(stderr, "%s: failed to allocate buffer.\n", __FUNCTION__);
 		return -1;
@@ -363,7 +369,7 @@ int perform_read(int ud, int max_num_bytes)
 	is_string = 1;
 	for(i = 0; i < read_count; ++i)
 	{
-		if(isascii(buffer[i]) == 0) 
+		if(isascii(buffer[i]) == 0)
 		{
 			is_string = 0;
 			break;
@@ -401,7 +407,7 @@ int prompt_for_commands(int ud)
 		fprintf(stderr, "Error reading from standard input.\n");
 		return -1;
 	}
-	
+
 	for(i = 0; i < sizeof(buffer); ++i)
 	{
 		buffer[i] = strtol(next, &end, 0);
@@ -423,7 +429,7 @@ int prompt_for_read(int ud)
 	int max_num_bytes;
 	static const int default_num_bytes = 1024;
 	char *endptr;
-	
+
 	buffer = malloc(buffer_size);
 	if(buffer == NULL)
 		return -ENOMEM;
@@ -551,7 +557,6 @@ int prompt_for_timeout( int ud )
 int prompt_for_wait( int ud )
 {
 	int wait_mask;
-	int status;
 
 	printf( "Possible wait bits:\n"
 		"\t0x%x timeout\n"
@@ -564,8 +569,8 @@ int prompt_for_wait( int ud )
 		fprintf(stderr, "Error reading from standard input.\n");
 		return -1;
 	}
-	
-	status = ibwait( ud, wait_mask );
+
+	ibwait( ud, wait_mask );
 
 	return 0;
 }
@@ -737,6 +742,37 @@ int prompt_for_eot(int ud)
 	return 0;
 }
 
+int prompt_for_eos(int ud)
+{
+	int status;
+	int assert_eos;
+	char *buffer;
+	static const int buffer_size = 1024;
+	char *endptr;
+
+	buffer = malloc(buffer_size);
+	if(buffer == NULL)
+		return -ENOMEM;
+	printf("Enter EOS character in hex received or '0' otherwise [0x0A]: ");
+	if(fgets(buffer, buffer_size, stdin) == NULL)
+	{
+		fprintf(stderr, "Error reading from standard input.\n");
+		return -1;
+	}
+	assert_eos = strtol(buffer, &endptr, 16) & 0xFF;
+	if(endptr == buffer)
+		assert_eos = 0x0A;
+	free(buffer);
+	status = ibeos(ud, assert_eos == 0 ? 0 : REOS | assert_eos );
+	if(status & ERR)
+		return -1;
+	printf("Receipt of EOS will ");
+	if(assert_eos == 0)
+		printf("not ");
+	printf("end read.\n");
+	return 0;
+}
+
 int main(int argc, char **argv)
 {
 	int dev;
@@ -762,6 +798,9 @@ int main(int argc, char **argv)
 				break;
 			case GPIB_EOT:
 				prompt_for_eot(dev);
+				break;
+			case GPIB_EOS:
+				prompt_for_eos(dev);
 				break;
 			case GPIB_GO_TO_LOCAL:
 				go_to_local(dev);
@@ -811,7 +850,7 @@ int main(int argc, char **argv)
 	}while( act != GPIB_QUIT );
 
 	ibonl(dev, 0);
-	
+
 	if( act < 0 ) return act;
 	else return 0;
 }
@@ -854,4 +893,3 @@ void fprint_status( FILE* filep, char *msg )
 
 	fprintf( filep, "ibcntl = %ld\n", ThreadIbcntl() );
 }
-

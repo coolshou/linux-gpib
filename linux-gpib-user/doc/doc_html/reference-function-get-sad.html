@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="	Utility Functions"
-HREF="reference.html#AEN3474"><LINK
+HREF="x3822.html"><LINK
 REL="PREVIOUS"
 TITLE="GetPAD"
 HREF="reference-function-get-pad.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-get-pad.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-make-addr.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-GET-SAD"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3607"
+NAME="AEN3955"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3607"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3610"
+NAME="AEN3958"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,34 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3611"
+NAME="AEN3959"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->static __inline__ unsigned int GetSAD</CODE
->(Addr4882_t address);</CODE
+>static __inline__ unsigned int <TT
+CLASS="FUNCTION"
+>GetSAD</TT
+></CODE
+>(Addr4882_t <TT
+CLASS="PARAMETER"
+><I
+>address</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,32 +131,36 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3618"
+NAME="AEN3966"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	GetSAD() extracts the secondary address packed into the Addr4882_t
-	value <CODE
+	value <TT
 CLASS="PARAMETER"
->address</CODE
+><I
+>address</I
+></TT
 >.
 	</P
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3622"
+NAME="AEN3970"
 ></A
 ><H2
 >	Return value
 	</H2
 ><P
->	The secondary GPIB address (from 0x60 through 0x7e, or 0 for none) stored in
-	<CODE
+>	The secondary GPIB address (from 0x60 through 0x7f, or 0 for none) stored in
+	<TT
 CLASS="PARAMETER"
->address</CODE
+><I
+>address</I
+></TT
 >.
 	</P
 ></DIV
@@ -161,14 +182,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-get-pad.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -179,7 +200,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-make-addr.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -193,7 +214,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN3474"
+HREF="x3822.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

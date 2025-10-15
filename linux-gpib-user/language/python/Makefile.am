@@ -15,7 +15,8 @@ build: gpibinter.c
 	-{ $(PYTHON) setup.py build && touch build; } || { $(RM) -r build; exit 1; }
 
 install-data-local:
-	-$(PYTHON) setup.py install --prefix=$(DESTDIR)$(prefix)
+	-$(PYTHON) -m pip install . --prefix=$(DESTDIR)$(prefix) --root-user-action=ignore
+	-$(RM) -r gpib.egg-info/
 
 clean-local:
 	-$(RM) -r build

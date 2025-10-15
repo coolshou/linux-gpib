@@ -1,0 +1,324 @@
+'\" t
+.\"     Title: ibterm
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: Linux-GPIB User Manual
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBTERM" "1" "10/04/2025" "linux-gpib 4.3.7" "Linux\-GPIB User Manual"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibterm \- Interactive GPIB terminal
+.SH "SYNOPSIS"
+.HP \w'\fBibterm\fR\ 'u
+\fBibterm\fR {\-d\ \fIprimary_address\fR} [\-m\ \fIminor\fR] [\-s\ \fIsecondary_address\fR] [\-i\ \fIeoi\fR] [\-e\ \fIeos\fR] [\-r\ \fIreos\fR] [\-b\ \fIbin\fR] [\-x\ \fIxeos\fR] [\-t\ \fItimeout\fR] [\-p\ \fIprompt\fR] [\-f\ \fIhistory_file\fR] [\-N] [\-X] [\-h]
+.SH "DESCRIPTION"
+.PP
+An interactive terminal program for sending commands to a device over an IEEE\-488 general purpose instrument bus and printing the responses\&.
+.SH "OPTIONS"
+.PP
+\fB\-d\fR \fIaddress\fR
+.RS 4
+Sets the device\*(Aqs primary address (pad)\&. The
+\fIaddress\fR
+must be between
+\fB0\fR
+and
+\fB30\fR\&.
+.RE
+.PP
+\fB\-m\fR \fInumber\fR
+.RS 4
+Specify the minor number of the device file this interface board will use\&. A
+\fInumber\fR
+of
+\fB0\fR
+corresponds to
+/dev/gpib0,
+\fB1\fR
+is
+/dev/gpib1, etc\&. Defaults to
+\fB0\fR\&.
+.RE
+.PP
+\fB\-s\fR \fIaddress\fR
+.RS 4
+Sets the device\*(Aqs secondary address (sad)\&. The
+\fIaddress\fR
+must be
+\fB0\fR
+(disabled) or between
+\fB96\fR
+and
+\fB126\fR
+(0x60 and 0x7e hexadecimal)\&. Defaults to
+\fB0\fR\&.
+.RE
+.PP
+\fB\-i\fR \fI0|1\fR
+.RS 4
+Assert EIO with last byte sent\&. Defaults to
+\fB1\fR
+(true)\&.
+.RE
+.PP
+\fB\-e\fR \fIcode\fR
+.RS 4
+ASCII code of end\-of\-string (eos) character\&. The
+\fIcode\fR
+must be between
+\fB0\fR
+and
+\fB255\fR\&. Defaults to
+\fB0\fR
+(no code)\&.
+.RE
+.PP
+\fB\-r\fR \fI0|1\fR
+.RS 4
+Terminate read on eos character (reos) flag\&. Defaults to
+\fB0\fR
+(false)\&.
+.RE
+.PP
+\fB\-b\fR \fI0|1\fR
+.RS 4
+Binary eos character match mode (bin) flag\&. Defaults to
+\fB0\fR
+(false)\&.
+.RE
+.PP
+\fB\-x\fR \fI0|1\fR
+.RS 4
+Assert EOI when transmitting eos (xeos) flag\&. Defaults to
+\fB0\fR
+(false)\&.
+.RE
+.PP
+\fB\-t\fR \fItimeout\fR
+.RS 4
+Sets the IO timeout for the device\&. The
+\fItimeout\fR
+must be a value from the below table\&. The default value is
+\fB10\fR, corresponding to 300 milliseconds\&.
+.TS
+allbox tab(:);
+lB lB.
+T{
+\fItimeout\fR
+T}:T{
+Length
+T}
+.T&
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l
+l l.
+T{
+\fB0\fR
+T}:T{
+Never timeout
+T}
+T{
+\fB1\fR
+T}:T{
+10 microseconds
+T}
+T{
+\fB2\fR
+T}:T{
+30 microseconds
+T}
+T{
+\fB3\fR
+T}:T{
+100 microseconds
+T}
+T{
+\fB4\fR
+T}:T{
+300 microseconds
+T}
+T{
+\fB5\fR
+T}:T{
+1 millisecond
+T}
+T{
+\fB6\fR
+T}:T{
+3 milliseconds
+T}
+T{
+\fB7\fR
+T}:T{
+10 milliseconds
+T}
+T{
+\fB8\fR
+T}:T{
+30 milliseconds
+T}
+T{
+\fB9\fR
+T}:T{
+100 milliseconds
+T}
+T{
+\fB10\fR
+T}:T{
+300 milliseconds
+T}
+T{
+\fB11\fR
+T}:T{
+1 second
+T}
+T{
+\fB12\fR
+T}:T{
+3 seconds
+T}
+T{
+\fB13\fR
+T}:T{
+10 seconds
+T}
+T{
+\fB14\fR
+T}:T{
+30 seconds
+T}
+T{
+\fB15\fR
+T}:T{
+100 seconds
+T}
+T{
+\fB16\fR
+T}:T{
+300 seconds
+T}
+T{
+\fB17\fR
+T}:T{
+1000 seconds
+T}
+.TE
+.sp 1
+.RE
+.PP
+\fB\-p\fR \fIstring\fR
+.RS 4
+Sets the prompt\&. Defaults to
+\(lqibterm>\(rq
+.RE
+.PP
+\fB\-u\fR \fIstring\fR
+.RS 4
+Send Untalk/Unlisten after each read and write
+.RE
+.PP
+\fB\-f\fR \fIfile\fR
+.RS 4
+Command history file\&. Defaults to
+\(lq\&.ibterm_hist_<\fIprimary_address\fR>\(rq
+.RE
+.PP
+\fB\-N\fR
+.RS 4
+No automatic read on device, enter
+return
+at prompt to read\&.
+.RE
+.PP
+\fB\-X\fR
+.RS 4
+Force hexadecimal output\&.
+.RE
+.PP
+\fB\-h\fR
+.RS 4
+Print help and exit\&.
+.RE
+.SH "NOTES"
+.PP
+To quit the program enter the
+EOF
+character (Ctrl+D) at the prompt\&.
+.PP
+For interactivity,
+\fItimeout\fR
+should not be greater than
+\fB13\fR
+i\&.e\&. 10 secs\&.
+.PP
+A device read can always be triggered by hitting
+enter
+at the prompt\&. Interrupting the program while reading from the device may cause hangs\&.
+.SS "Implementation details"
+.PP
+The program is implemented as follows:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+loop:
+	Print \fIprompt\fR to stdout
+	Read a line of text from stdin
+	Write the text (if any) to the device at \fIpad\fR
+	If \fB\-N\fR is not set, or no text was entered:
+        Attempt to read response from the device
+        If no response is received before \fItimeout\fR:
+        go to loop
+        else:
+        print the response on stdout
+	Go back to loop\&.
+.fi
+.if n \{\
+.RE
+.\}
+.SH "SEE ALSO"
+.PP
+See the
+\fBreadline\fR(3)
+man page for editing input and searching history\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

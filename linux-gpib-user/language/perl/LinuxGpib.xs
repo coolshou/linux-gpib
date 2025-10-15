@@ -110,7 +110,6 @@ ibrd(ud, rd, cnt)
 	SV  *rd
 	unsigned long	cnt
 PREINIT:
-	int i;
 	char *buf;
 CODE:
 	buf = malloc( cnt + 1 );

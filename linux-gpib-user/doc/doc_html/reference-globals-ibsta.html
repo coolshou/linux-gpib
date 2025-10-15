@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,18 +7,18 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="Global Variables"
-HREF="reference.html#AEN685"><LINK
+HREF="reference.html#GLOBAL-VARIABLES"><LINK
 REL="PREVIOUS"
 TITLE="iberr"
 HREF="reference-globals-iberr.html"><LINK
 REL="NEXT"
-TITLE="ibask"
-HREF="reference-function-ibask.html"></HEAD
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"></HEAD
 ><BODY
 CLASS="REFENTRY"
 BGCOLOR="#FFFFFF"
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-globals-iberr.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -61,9 +61,9 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="reference-function-ibask.html"
+HREF="traditional-api.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-GLOBALS-IBSTA"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN794"
+NAME="AEN1137"
 ></A
 ><H2
 >Name</H2
@@ -86,20 +86,29 @@ NAME="AEN794"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN797"
+NAME="AEN1140"
 ></A
 ><H2
 >Synopsis</H2
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="PROGRAMLISTING"
 >#include &#60;gpib/ib.h&#62;
 
 volatile int ibsta;</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN799"
+NAME="AEN1142"
 ></A
 ><H2
 >	Description
@@ -113,7 +122,7 @@ NAME="AEN799"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN803"
+NAME="AEN1146"
 ></A
 ><P
 ><B
@@ -121,10 +130,12 @@ NAME="AEN803"
 ></P
 ><TABLE
 BORDER="1"
-RULES="all"
 WIDTH="100%"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
 CLASS="CALSTABLE"
-><COL><COL><COL><COL><THEAD
+><THEAD
 ><TR
 ><TH
 >bit</TH
@@ -146,7 +157,7 @@ CLASS="CALSTABLE"
 >DCAS is set when a board receives the device clear command
 	(that is, the
 	SDC or DCL <A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command byte</A
 >).
 	It is cleared on the next 'traditional' or
@@ -171,7 +182,7 @@ HREF="reference-function-ibconfig.html"
 >DTAS is set when a board has received a device trigger command
 	(that is,
 	the GET <A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command byte</A
 >).
 	It is cleared on the next 'traditional' or
@@ -401,14 +412,14 @@ VALIGN="top"
 ><A
 HREF="reference-globals-iberr.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -417,9 +428,9 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="reference-function-ibask.html"
+HREF="traditional-api.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -433,7 +444,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN685"
+HREF="reference.html#GLOBAL-VARIABLES"
 ACCESSKEY="U"
 >Up</A
 ></TD
@@ -441,7 +452,7 @@ ACCESSKEY="U"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->ibask</TD
+>Traditional API Functions</TD
 ></TR
 ></TABLE
 ></DIV

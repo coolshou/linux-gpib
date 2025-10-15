@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,15 +7,15 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="PREVIOUS"
 TITLE="gpib_config"
 HREF="configuration-gpib-config.html"><LINK
 REL="NEXT"
-TITLE="	Linux-GPIB Reference"
-HREF="reference.html"></HEAD
+TITLE="	GPIB utility programme"
+HREF="util-prog.html"></HEAD
 ><BODY
 CLASS="SECTION"
 BGCOLOR="#FFFFFF"
@@ -35,7 +35,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -46,7 +46,7 @@ VALIGN="bottom"
 ><A
 HREF="configuration-gpib-config.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -58,9 +58,9 @@ WIDTH="10%"
 ALIGN="right"
 VALIGN="bottom"
 ><A
-HREF="reference.html"
+HREF="util-prog.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -73,7 +73,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="SUPPORTED-HARDWARE"
->3. Supported Hardware</A
+>Supported Hardware</A
 ></H1
 ><DIV
 CLASS="SECTION"
@@ -81,13 +81,13 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="HARDWARE-MATRIX"
->3.1. Supported Hardware Matrix</A
+>Supported Hardware Matrix</A
 ></H2
 ><P
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN300"
+NAME="AEN340"
 ></A
 ><P
 ><B
@@ -95,10 +95,12 @@ NAME="AEN300"
 ></P
 ><TABLE
 BORDER="1"
-RULES="all"
 WIDTH="100%"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
 CLASS="CALSTABLE"
-><COL><COL><COL><COL><THEAD
+><THEAD
 ><TR
 ><TH
 >make</TH
@@ -701,15 +703,11 @@ HREF="supported-hardware.html#NI-USB-HS"
 ></TR
 ><TR
 ><TD
->self-made (see <A
-HREF="supported-hardware.html#LPVO-USB-GPIB-NOTES"
->note</A
->)</TD
+>lpvo self-made adapter</TD
 ><TD
 ><A
-HREF="http://lpvo.fe.uni-lj.si/gpib"
-TARGET="_top"
->http://lpvo.fe.uni-lj.si/gpib</A
+HREF="supported-hardware.html#LPVO-USB-GPIB-NOTES"
+>lpvo self-made</A
 ></TD
 ><TD
 >lpvo_usb_gpib.ko</TD
@@ -740,6 +738,19 @@ HREF="supported-hardware.html#GPIO"
 >ines_pci or ines_pci_unaccel (Ines iGPIB 72010 chip),
 	cbi_pci_unaccel (Measurement Computing cb7210 chip)</TD
 ></TR
+><TR
+><TD
+>xyphro</TD
+><TD
+><A
+HREF="supported-hardware.html#XYPHRO"
+>UsbGpib</A
+></TD
+><TD
+>xyphro_ugc.ko</TD
+><TD
+>xyphro_ugc</TD
+></TR
 ></TBODY
 ></TABLE
 ></DIV
@@ -751,7 +762,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="BOARD-SPECIFIC-NOTES"
->3.2. Board-Specific Notes</A
+>Board-Specific Notes</A
 ></H2
 ><DIV
 CLASS="SECTION"
@@ -759,7 +770,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="HP-82341"
->3.2.1. Agilent (HP) 82341</A
+>Agilent (HP) 82341</A
 ></H3
 ><P
 >After power-up, the Agilent 82341 boards require a firmware upload before they
@@ -794,7 +805,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="AGILENT-82350B"
->3.2.2. Agilent 82350A/B and 82351A</A
+>Agilent 82350A/B and 82351A</A
 ></H3
 ><P
 >The Agilent 82350A/B and 82351A boards do not support detection of an
@@ -824,7 +835,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="AGILENT-82357A"
->3.2.3. Agilent 82357A/B</A
+>Agilent 82357A/B</A
 ></H3
 ><P
 >The Agilent 82357A and 82357B require a firmware upload
@@ -866,7 +877,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="BEIMING-F82357"
->3.2.4. Beiming F/S82357</A
+>Beiming F/S82357</A
 ></H3
 ><P
 >Linux-gpib support requires a minimum firmware version of 1.10 for
@@ -896,7 +907,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="FMH-GPIB-CORE"
->3.2.5. fmh_gpib_core</A
+>fmh_gpib_core</A
 ></H3
 ><P
 >fmh_gpib_core is a GPIB chip written in VHDL suitable for programming into a FPGA.  The code
@@ -918,6 +929,12 @@ transfer counter.  The dma channel the chip is wired to is specified with the st
 "dmas" and "dma-names" fields, with a dma-name of "rxtx".  So, the device tree entry for a chip
 connected to channel 2 of dma controller "dmac" might look
 something like:</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="PROGRAMLISTING"
 >fmh_gpib_0: fmh_gpib@0x00049800 {
@@ -930,6 +947,9 @@ CLASS="PROGRAMLISTING"
                 dmas = &#60; &#38;dmac 2 &#62;;
                 dma-names = "rxtx";
             }; //end fmh_gpib@0x00049800 (fmh_gpib_0)</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ><DIV
 CLASS="SECTION"
@@ -937,7 +957,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="LPVO-USB-GPIB-NOTES"
->3.2.6. Self-made usb-gpib adapter</A
+>Self-made usb-gpib adapter</A
 ></H3
 ><P
 >This usb-gpib adapter can be assembled following the project
@@ -966,48 +986,132 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="GPIO"
->3.2.7. GPIO bitbang adapter</A
+>GPIO bitbang adapter</A
 ></H3
 ><P
->WARNING: this driver is incomplete and its behavior does not conform to the
-IEEE 488 standards.</P
-><P
 >This is a simple GPIO bitbang driver that currently only works on
-Raspberry Pi platforms. For information on the GPIO to GPIB pinouts as
-well as limitations see the source code at:</P
-><PRE
-CLASS="PROGRAMLISTING"
->  linux-gpib-kernel/drivers/gpib/gpio/gpib_bitbang.c</PRE
+Raspberry Pi platforms. It has the following limitations:
+<P
+></P
+><UL
+><LI
 ><P
->  Two pin maps between gpio and gpib are currently supported: elektronomikon and gpib4pi-1.1.
-  For schematics, boards and information on driver IC's
-  see <A
-HREF="http://elektronomikon.org"
-TARGET="_top"
->http://elektronomikon.org</A
->
-  and <A
-HREF="https://www.hackster.io/lightside-instruments/the-gpib4pi-gpib-for-raspberry-pi-hat-4b3e9a"
-TARGET="_top"
->lightside-instruments
-    gpib4pi</A
+>It cannot be run as a device, but must be the system controller.</P
+></LI
+><LI
+><P
+>If the SN7516x driver chips are not used the fan out is limited to a
+maximum of 4 devices.</P
+></LI
+><LI
+><P
+>Parallel poll is not supported.</P
+></LI
+><LI
+><P
+>Setting T1 delay (ibconfig(board, IbcTIMING, T1_delay)) is not
+implemented. The high interrupt latency on the RPi platforms with
+Linux does not permit to ensure even a 2 microsecond T1 delay.</P
+></LI
+></UL
 ></P
 ><P
->  The pin_maps are configured via the pin_map module parameter.
-  By default support for the elekronomikon pin_map with SN75160/161 driver IC's is
-  enabled. i.e. the default module parameter settings are
+>  Three pin maps between gpio and gpib are currently supported:
+  "elektronomikon", "gpib4pi-1.1" and "yoga".
+  The pin_maps are configured via the pin_map module parameter.
+  By default support for the elekronomikon pin_map with SN75160/161
+  driver IC's is  enabled. i.e. the default module parameter settings are
   pin_map=elektonomikon and sn7516x_used=1. 
-  To disable support for the IC's
+  To disable support for the SN75160/161 IC's
   when they are not installed the module parameter sn7516x_used must
   be set to zero:
-<PRE
+  <TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
 CLASS="PROGRAMLISTING"
->  modprobe gpib_bitbang sn7516x_used=0</PRE
+>    modprobe gpib_bitbang sn7516x_used=0
+  </PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>  For schematics, boards and information on driver IC's see
+  <P
+></P
+><UL
+><LI
+><P
+>      <A
+HREF="http://elektronomikon.org"
+TARGET="_top"
+>elektronomikon</A
 >
-To set the pin_map for the Lightside instruments gpib4pi-1.1 board
-<PRE
+      </P
+><P
+>	This is the default pinmap. The activity led on the adapter is enabled.
+      </P
+></LI
+><LI
+><P
+>	<A
+HREF="https://www.hackster.io/lightside-instruments/the-gpib4pi-gpib-for-raspberry-pi-hat-4b3e9a"
+TARGET="_top"
+> gpib4pi-1.1</A
+>
+      </P
+><P
+>	To set the pin_map for the Lightside instruments gpib4pi-1.1 board
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
 CLASS="PROGRAMLISTING"
->  modprobe gpib_bitbang pin_map="gpib4pi-1.1"</PRE
+>	  modprobe gpib_bitbang pin_map="gpib4pi-1.1"
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	The activity led on the adapter is enabled.
+      </P
+></LI
+><LI
+><P
+>	<A
+HREF="https://www.schwingen.org/yoga-gpib/"
+TARGET="_top"
+>yoga</A
+>
+      </P
+><P
+>	To set the pin_map for the yoga board
+	<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="90%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>	  modprobe gpib_bitbang pin_map="yoga"
+	</PRE
+></TD
+></TR
+></TABLE
+>
+	For the yoga board the sn7516x_used option is ignored.  The
+	status led on the adapter is enabled as the activity led.
+      </P
+></LI
+></UL
 ></P
 ></DIV
 ><DIV
@@ -1015,8 +1119,96 @@ CLASS="SECTION"
 ><H3
 CLASS="SECTION"
 ><A
+NAME="XYPHRO"
+>xyphro compact usb to GPIB adapter</A
+></H3
+><P
+>This driver is experimental. The standard adapter as shipped uses the
+normal linux usbtmc driver. Special firmware is required for this
+device to work with the linux-gpib driver.
+The <A
+HREF="https://github.com/xyphro/UsbGpib"
+TARGET="_top"
+>project
+page</A
+> has information on the hardware and the link for the
+firmware binary for the linux-gpib firmware. In order to flash the
+linux-gpib firmware, dowload the LinuxGpib.bin file (in the SW/binaries
+directory). With the adapter plugged in to a usb port press the reset
+button for about 5 secs. The device will then enumerate as a usb mass
+storage device. If you don't have an automounter enabled mount the
+device (in this case /dev/sda, see the output of dmesg for the
+appropriate dev):
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+># mkdir -p /mnt/usbgpib
+# mount /dev/sda /mnt/usbgpib</PRE
+></TD
+></TR
+></TABLE
+>
+Then execute the following commmand (possibly replacing usbgpib with
+the automounted directory):
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+># dd if=LinuxGpib.bin of=/mnt/usbgpib/FLASH.BIN bs=512 conv=notrunc \
+  oflag=direct,sync</PRE
+></TD
+></TR
+></TABLE
+>
+You can always reflash the standard usbtmc firmware if required. After
+disconnecting and reconnecting the adapter on the usb side you can
+verify whether the operation of flashing the LinuxGpib firmware was
+successful by checking the output of:
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>$ lsusb -d 03eb: -v</PRE
+></TD
+></TR
+></TABLE
+>
+To see whether
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+> bInterfaceClass =  255 Vendor Specific Class</PRE
+></TD
+></TR
+></TABLE
+>
+In which case you are all set to use the adapter with linux-gpib.</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H3
+CLASS="SECTION"
+><A
 NAME="NI-USB-B"
->3.2.8. National Instruments GPIB-USB-B</A
+>National Instruments GPIB-USB-B</A
 ></H3
 ><P
 >The USB-B requires a firmware upload (before gpib_config is
@@ -1038,7 +1230,7 @@ CLASS="SECTION"
 CLASS="SECTION"
 ><A
 NAME="NI-USB-HS"
->3.2.9. National Instruments GPIB-USB-HS and GPIP-USB-HS+</A
+>National Instruments GPIB-USB-HS and GPIP-USB-HS+</A
 ></H3
 ><P
 >Unlike the USB-B, the USB-HS does not require a firmware
@@ -1062,9 +1254,9 @@ automatically run gpib_config after the device is plugged in.</P
 ><P
 >Beware of inexpensive NI GPIB-USB-HS clones. While they work on
 Windows most will not and cannot be made to work with linux-gpib. See
-the end of the discussion
+this post
 on <A
-HREF="https://sourceforge.net/p/linux-gpib/bugs/82/"
+HREF="https://sourceforge.net/p/linux-gpib/bugs/82/#4c41"
 TARGET="_top"
 > bug
 ticket #82</A
@@ -1090,14 +1282,14 @@ VALIGN="top"
 ><A
 HREF="configuration-gpib-config.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -1106,9 +1298,9 @@ WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
 ><A
-HREF="reference.html"
+HREF="util-prog.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -1126,7 +1318,7 @@ VALIGN="top"
 WIDTH="33%"
 ALIGN="right"
 VALIGN="top"
->Linux-GPIB Reference</TD
+>GPIB utility programme</TD
 ></TR
 ></TABLE
 ></DIV

@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="ResetSys"
 HREF="reference-function-resetsys.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-resetsys.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-sendcmds.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-SEND"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3135"
+NAME="AEN3483"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3135"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3138"
+NAME="AEN3486"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,54 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3139"
+NAME="AEN3487"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void Send</CODE
->(int board_desc, Addr4882_t address, const void *data, long count, int eot_mode);</CODE
+>void <TT
+CLASS="FUNCTION"
+>Send</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>, Addr4882_t <TT
+CLASS="PARAMETER"
+><I
+>address</I
+></TT
+>, const void *<TT
+CLASS="PARAMETER"
+><I
+>data</I
+></TT
+>, long <TT
+CLASS="PARAMETER"
+><I
+>count</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>eot_mode</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,15 +151,17 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3154"
+NAME="AEN3502"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	Send() addresses the device specified by <CODE
+>	Send() addresses the device specified by <TT
 CLASS="PARAMETER"
->address</CODE
+><I
+>address</I
+></TT
 >
 	as listener, then writes data onto the bus.
 	It is equivalent to a
@@ -152,14 +191,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-resetsys.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -170,7 +209,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-sendcmds.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -184,7 +223,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

@@ -7,6 +7,9 @@
 <article>
 
 <articleinfo>
+                <productname>linux-gpib</productname>
+                <productnumber>&version</productnumber>
+
 <title>
 	Linux-GPIB &version Documentation
 </title>
@@ -58,6 +61,162 @@ version.
 </para>
 </section>
 
+<section>
+<title>
+Introduction
+</title>
+<para>
+The linux-gpib package is a set of software that supports programmatic
+access to IEEE-488 General Purpose Interface Bus compliant devices and
+instruments via a number of supported boards. Boards are adapters or
+interface cards that permit a computer to be connected to a GPIB bus.
+Typical instruments are test and measurement instruments such as
+signal generators, volt meters, oscilloscopes and spectrum
+analysers. There are also GPIB capable devices such as printers,
+plotters and digitizing tablets.
+</para>
+<para>
+The linux-gpib package is comprised of 2 parts: user part and kernel
+part. The user part contains
+</para>
+<para>
+<itemizedlist>
+  <listitem>
+    <para>
+      The administration program <link LINKEND="configuration-gpib-config">gpib_config</link>.
+    </para>
+  </listitem>
+  <listitem>
+  <para>
+      A sample configuration file <link LINKEND="configuration-gpib-conf">gpib.conf</link>.
+    </para>
+  </listitem>
+ <listitem>
+  <para>
+      Automatic udev configuration scripts for usb adapter boards.
+    </para>
+ </listitem>
+ <listitem>
+  <para>
+      User library and header files.
+    </para>
+ </listitem>
+ <listitem>
+  <para>
+      Bindings for various languages such as guile, perl, python and tcl.
+    </para>
+ </listitem>
+ <listitem>
+  <para>
+      Example programmes and documentation.
+    </para>
+ </listitem>
+</itemizedlist>
+</para>
+<para>
+The kernel part contains the drivers for the different supported
+boards. See <link LINKEND="supported-hardware">Supported
+    Hardware</link>.
+The kernel part is provided for installations that do not have
+built-in kernel support for the drivers.
+</para>
+<para>
+An IEEE-488 compliant board can drive a GPIB bus with up to 15 devices
+attached. Each device on the bus, as well as the board connected to
+it, must be assigned a unique primary address ranging from 0 to
+30. GPIB addresses of devices or instruments are assigned by setting
+DIP switches or via the front panel. The GPIB address of boards are
+assigned via software configuration (see
+<link LINKEND="configuration-gpib-conf">Configuration</link>). Some
+boards also support secondary addressing. This feature is very rarely
+needed.
+</para>
+<para>
+The software supports the use of multiple boards in one system. Some
+boards can also function as devices. Each board is assigned an
+identifier called a <emphasis>minor</emphasis> by which it is
+referenced in the sotfware functions. Devices are
+referenced programmatically by a device descriptor which is obtained
+with the
+<link LINKEND="reference-function-ibdev">ibdev()</link> function by
+specifying the minor of the board of the bus to which they are
+connected. Board descriptors and device descriptors can also be
+obtained with the
+<link LINKEND="reference-function-ibfind">ibfind()</link> function by
+specifying their name as defined in the configuration file. The
+<emphasis>minor</emphasis> can also be used directly as a board
+descriptor. Board descriptors are only needed in advanced applications
+requiring fine control over the bus such as emulating a device or
+managing the bus state. When using a device descriptor for I/O the
+library automatically handles the low level functions such as
+configuring the device to talk or listen on the bus.
+</para>	
+<para>
+  Here is simple programme to read the identification string of a
+  device. The descriptor is obtained with ibfind() by the name
+  <emphasis>voltmeter</emphasis> defined in the configuration file. Error
+  handling has been omitted for clarity.
+<programlisting>
+
+
+
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;gpib/gpib_user.h&gt;
+#include &lt;gpib/ib.h&gt;
+
+int main() {
+  int ud;                /* descriptor for the device      */
+  char *id = "*IDN?\n";  /* string to request id of device */
+  uint8_t buf[256];      /* buffer for response            */
+
+  ud = ibfind("voltmeter");      /* obtain descriptor by name   */
+  ibwrt(ud, id, strlen(id));     /* send request-id string      */
+  ibrd(ud, buf, 256);            /* read response               */
+  buf[ibcnt] = 0;                /* null terminate the response */
+  printf("Device id: %s\n", buf);
+  return 0;
+}
+</programlisting>
+</para>
+<para>
+Here is the same programme using ibdev() to access a device with a
+primary GPIB address of 7 attached to the bus connected to a board
+configured with minor 0. This provides more control over the
+parameters or defaults in the configuration file if present.
+<programlisting>
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;gpib/gpib_user.h&gt;
+#include &lt;gpib/ib.h&gt;
+
+int main() {
+  int minor = 0;         /* minor of board                 */
+  int pad = 7;           /* primary GPIB address of device */
+  int sad = 0;           /* no secondary address           */
+  int timeout = T300ms;  /* set timeout to 300 millseconds */
+  int eoi = 1;           /* send EOI with last byte        */
+  int eos = 0;           /* no end of string character     */
+  int ud;                /* descriptor for the device      */
+  char *id = "*IDN?\n";  /* string to request id of device */
+  uint8_t buf[256];      /* buffer for response            */
+
+  ud = ibdev(minor, pad, sad,    /* obtain device descriptor    */
+	     timeout, eoi, eos); 
+  ibwrt(ud, id, strlen(id));     /* send request-id string      */
+  ibrd(ud, buf, 256);            /* read response               */
+  buf[ibcnt] = 0;                /* null terminate the response */
+  printf("Device id: %s\n", buf);
+  return 0;
+}
+</programlisting>    
+</para>
+</section>
+
 <section ID="configuration">
 <title>
 	Configuration
@@ -69,6 +228,7 @@ configuration file
 and the administration program
 <link LINKEND="configuration-gpib-config">gpib_config</link>.
 </para>
+
 <refentry ID="configuration-gpib-conf">
 <refmeta>
 	<refentrytitle>gpib.conf</refentrytitle>
@@ -82,31 +242,52 @@ and the administration program
 <title>Description</title>
 <para>
 The library, and the administration tool
-<link LINKEND="configuration-gpib-config">gpib_config</link>
-read their configuration information from the
-file gpib.conf.  By default, file is located in the sysconfdir directory configured
-when linux-gpib was compiled.  The sysconfdir is typically set to /etc or
-/usr/local/etc.  A template gpib.conf
-file can be found in the util/templates/ subdirectory of the linux-gpib
-package.
+<link LINKEND="configuration-gpib-config">gpib_config</link> read
+their configuration information from the file gpib.conf.  By default,
+the file is located in the sysconfdir directory configured when linux-gpib
+was compiled.  The sysconfdir is typically set to /etc or
+/usr/local/etc. A template gpib.conf file can be found in the
+util/templates/ subdirectory of the linux-gpib package.
 </para>
 <para>
-The default config file may be overriden by setting the
+The default config file may be overridden by setting the
 IB_CONFIG environment variable to a custom file path.
 </para>
 <para>
 The configuration file must contain one 'interface' entry for each of
-the board minors that are going to be used, and
-can contain zero or more 'device' entries.  'device' entries are only
-required if you wish to open device descriptors with
+the board minors that are going to be used unless all the 'required' options
+are specified in the command-line invocation of the administration
+tool gpib_config to configure that minor. The file must contain an
+'interface' entry with the 'name' option set if you wish to open the
+board desciptor
+with <link LINKEND="reference-function-ibfind">ibfind()</link> instead
+of directly using the minor as the board descriptor. If there is no
+entry for the minor in the configuration file, the required
+command-line options are 'board_type' and 'pad'.  Additionally the
+'--system-controller' option must be scpecified if the board is to be
+system-controller, which is the normal case. For example:
+<programlisting>
+  gpib_config --minor 8 --board-type ni_usb_b --pad 0 --system-controller
+</programlisting>
+The configuration file can contain zero or more 'device' entries.
+'device' entries are only required if you wish to open device
+descriptors with
 <link LINKEND="reference-function-ibfind">ibfind()</link> instead
 of using <link LINKEND="reference-function-ibdev">ibdev()</link>.
+Each 'device' entry must have at least the 'minor', 'pad' and 'name'
+options specified. The 'minor' of a 'device' entry must have a
+corresponding 'interface' entry.
+</para>
+<para>
 Several example entries, and a table summarizing the possible
 options follow.
 </para>
 <para>
 <programlisting>
+  /*  This comment style is permitted */
 
+  // This is an alternate comment style
+  
 interface {
 	minor = 0
 	board_type = "ni_pci"
@@ -144,7 +325,7 @@ interface {
 
 device {
 	minor = 0
-	name = "counter"
+	name = "counter"  // name that can be used with ibfind
 	pad = 24
 }
 
@@ -185,9 +366,10 @@ device {
 	</row>
 	<row>
 	<entry>board_type</entry>
-	<entry>Specifies the type of interface board.  See the drivers.txt
-	file for a list of possible board types, and the kernel driver
-	module that supports them.</entry>
+	<entry>Specifies the type of interface board.  See the last
+        two columns of <link LINKEND="hardware-matrix">Table
+        2</link>. for a list of possible board types, and the kernel
+        driver module that supports them. There is no default.</entry>
 	<entry>interface</entry>
 	<entry>required</entry>
 	</row>
@@ -200,9 +382,9 @@ device {
 	</row>
 	<row>
 	<entry>eos</entry>
-	<entry>Sets the end-of-string byte for board or device descriptors
-	obtained with ibfind().  See also the set-reos, set-bin, and set-xeos
-	options.</entry>
+	<entry>Sets the end-of-string byte for board or device
+	descriptors obtained with ibfind(). By default eos = 0.
+	See also the set-reos, set-bin, and set-xeos options.</entry>
 	<entry>interface or device</entry>
 	<entry>optional</entry>
 	</row>
@@ -215,37 +397,43 @@ device {
 	</row>
 	<row>
 	<entry>master</entry>
-	<entry>Set to 'yes' if you want the interface board to
-	be the system controller of the bus.  There can only
-	be one system controller on a bus.</entry>
+	<entry>Set to 'yes' if you want the interface board to be the
+	system controller of the bus.  There can only be one system
+	controller on a bus. By default master = no.
+	</entry>
 	<entry>interface</entry>
 	<entry>required</entry>
 	</row>
 	<row>
 	<entry>minor</entry>
-	<entry>'minor' specifies the minor number of the device file this
-	interface board will use.  A 'minor' of 0 corresponds
-	to /dev/gpib0, 1 is /dev/gpib1, etc.  The minor number is also
-	equal to the 'board index' which can be used as a board descriptor,
-	and is passed as one of the arguments of <link LINKEND="reference-function-ibdev">
-	ibdev()</link>
+	<entry>'minor' specifies the minor number of the device file
+	this interface board will use.  A 'minor' of 0 corresponds to
+	/dev/gpib0, 1 is /dev/gpib1, etc.  The minor number is also
+	equal to the 'board index' which can be used as a board
+	descriptor, and is passed as the first argument
+	of <link LINKEND="reference-function-ibdev"> ibdev()</link>
 	</entry>
 	<entry>interface</entry>
 	<entry>required</entry>
 	</row>
 	<row>
 	<entry>name</entry>
-	<entry>The 'name' specifies the name which can be used with ibfind()
-	to get a descriptor for the board or device associated with this entry.</entry>
+	<entry>The 'name' specifies the name which can be used with
+	 ibfind() to get a descriptor for the board or device
+	 associated with this entry.
+	</entry>
 	<entry>interface or device</entry>
-	<entry>optional</entry>
+	<entry>interface optional
+	  device required</entry>
 	</row>
 	<row>
 	<entry>pad</entry>
-	<entry>Specifies the primary GPIB address (valid addresses are 0 to 30).
-	For interfaces, this is the primary address that the board will be
-	assigned when it is first brought online.  For devices, this is address
-	that will be used by device descriptors obtained with ibfind().</entry>
+	<entry>Specifies the primary GPIB address (valid addresses are
+	0 to 30).  For interfaces, this is the primary address that
+	the board will be assigned when it is first brought online.
+	For devices, this is address that will be used by device
+	descriptors obtained with ibfind(). No default.
+	</entry>
 	<entry>interface or device</entry>
 	<entry>required</entry>
 	</row>
@@ -267,11 +455,11 @@ device {
 	</row>
 	<row>
 	<entry>sad</entry>
-	<entry>Specifies the secondary GPIB address.  Valid values are 0, or
-	0x60 to 0x7e hexadecimal (96 to 126 decimal).  A value of 0 means
-	secondary addressing is disabled (the default).  Secondary addresses
-	from 0 to 30
-	are specified by the library's convention of adding an offset of 0x60.
+	<entry>Specifies the secondary GPIB address.  Valid values are
+	0, or 0x60 to 0x7f hexadecimal (96 to 127 decimal).  A value
+	of 0 means secondary addressing is disabled (the default).
+	Secondary addresses from 0 to 31 are specified by the
+	library's convention of adding an offset of 0x60.
 	</entry>
 	<entry>interface or device</entry>
 	<entry>optional</entry>
@@ -284,17 +472,19 @@ device {
 	returned by ibfind(), and has same effect as setting
 	the BIN bit in a
 	<link LINKEND="reference-function-ibeos">ibeos()</link>
-	call.</entry>
+	call. Default is set-bin = 0.
+	</entry>
 	<entry>interface or device</entry>
 	<entry>optional</entry>
 	</row>
 	<row>
 	<entry>set-eot</entry>
-	<entry>Enables assertion of the EOI line at the
-	end of writes, for descriptors
-	returned by ibfind().  See
-	<link LINKEND="reference-function-ibeot">ibeot()</link>.</entry>
-	<entry>interface or device</entry>
+	<entry>Enables assertion of the EOI line at the end of writes,
+	for descriptors returned by ibfind().  See
+	<link LINKEND="reference-function-ibeot">ibeot()</link>.
+	Default set-eoi = yes.
+	</entry>
+	<entry>interface or device</entry> 
 	<entry>optional</entry>
 	</row>
 	<row>
@@ -303,7 +493,8 @@ device {
 	end-of-string byte for descriptors returned by ibfind().
 	Same as setting the REOS bit in a
 	<link LINKEND="reference-function-ibeos">ibeos()</link>
-	call.</entry>
+	call. Default is set-reos = no.
+	</entry>
 	<entry>interface or device</entry>
 	<entry>optional</entry>
 	</row>
@@ -313,7 +504,8 @@ device {
 	end-of-string byte for descriptors returned by ibfind().
 	Same as setting the XEOS bit in a
 	<link LINKEND="reference-function-ibeos">ibeos()</link>
-	call.</entry>
+	call. Default is set-xeos = no.
+	</entry>
 	<entry>interface or device</entry>
 	<entry>optional</entry>
 	</row>
@@ -325,9 +517,12 @@ device {
 	</row>
 	<row>
 	<entry>timeout</entry>
-	<entry>Sets the io timeout for a board or device descriptor opened through
-	ibfind().  The possible settings are the same as the constants
-	used by <link LINKEND="reference-function-ibtmo">ibtmo()</link>.</entry>
+	<entry>Sets the io timeout for a board or device descriptor
+	opened through ibfind().  The possible settings are the same
+	as the constants used
+	by <link LINKEND="reference-function-ibtmo">ibtmo()</link>.
+	Default is timeout = T3s , which is 3 seconds.
+	</entry>
 	<entry>interface or device</entry>
 	<entry>optional</entry>
 	</row>
@@ -381,14 +576,15 @@ device {
 </refsynopsisdiv>
 <refsect1>
 <title>Description</title>
-<para>gpib_config must be run after the kernel driver module for
-a GPIB interface board is loaded.  It performs configuration of
-driver settings
-that cannot be performed by libgpib at runtime.  This includes
-configuration which requires root privilege (for example, setting the
-base address or irq of a board), and configuration which should only
-be performed once and not automatically redone every time a program
-using libgpib is run (for example, setting the board's GPIB address).
+<para>
+gpib_config must be run after the kernel driver module for a GPIB
+interface board is loaded.  It performs configuration of driver
+settings that cannot be performed by libgpib at runtime.  This
+includes configuration which requires root privilege (for example,
+setting the base address or irq of a board), and configuration which
+should only be performed once and not automatically redone every time
+a program using libgpib is run (for example, setting the board's GPIB
+address).
 </para>
 <para>
 The board to be configured by gpib_config is selected by the
@@ -415,12 +611,19 @@ This can be used as an alternative to the --minor option.
 without plug-and-play cabability.</para>
 
 <para><option>-f, --file <replaceable>file_path</replaceable></option></para>
-<para>Specify file path for configuration file.  The values in the configuration
-file will be used as defaults for unspecified options.  If this option
-is not specified, then the value of the IB_CONFIG environment variable will
-be used if it is set.  Otherwise, the default configuration
-file is "sysconfdir/gpib.conf" where sysconfdir is specified when the library
-is configured before compilation (it is usually /etc or /usr/local/etc).</para>
+<para>Specify file path for configuration file.  The values in the
+configuration file will be used as defaults for unspecified options
+for the minor being configured.  If this option is not specified, then
+the value of the IB_CONFIG environment variable will be used if it is
+set.  Otherwise, the default configuration file is
+"sysconfdir/gpib.conf" where sysconfdir is specified when the library
+is configured before compilation (it is usually /etc or
+/usr/local/etc). Note: The configuration file read by the library is
+not affected by this option. It will either use the value of the
+IB_CONFIG environment variable, if it is set, or the default
+configuration file. The configuration file read by the library is used
+to resolve the 'name' in ibfind() calls.
+</para>
 
 <para><option>-h, --help</option></para>
 <para>Print help on options and exit.</para>
@@ -470,7 +673,7 @@ pci board. If used, you must also specify the pci bus with <option>--pci-bus</op
 <para><option>-s, --sad <replaceable>number</replaceable></option></para>
 <para>
 Specify secondary gpib address.  <replaceable>number</replaceable>
-should be 0 (disabled) or in the range 96 through 126 (0x60 through 0x7e hexadecimal).
+should be 0 (disabled) or in the range 96 through 127 (0x60 through 0x7f hexadecimal).
 </para>
 
 <para><option>--[no-]sre</option></para>
@@ -537,6 +740,7 @@ path is the absolute path to the device's directory under /sys/devices, with the
 	<entry><link LINKEND="agilent-82350b">82350B</link></entry>
 	<entry>agilent_82350b.ko</entry>
 	<entry>agilent_82350b</entry>
+	</row>
 	<row>
 	<entry>Agilent</entry>
 	<entry><link LINKEND="agilent-82350b">82351A</link></entry>
@@ -686,6 +890,7 @@ path is the absolute path to the device's directory under /sys/devices, with the
 	<entry><link LINKEND="agilent-82350b">82350B PCI</link></entry>
 	<entry>agilent_82350b.ko</entry>
 	<entry>agilent_82350b</entry>
+	</row>
 	<row>
 	<entry>Keysight (Agilent)</entry>
 	<entry><link LINKEND="agilent-82350b">82351A PCIe</link></entry>
@@ -837,8 +1042,8 @@ path is the absolute path to the device's directory under /sys/devices, with the
 	<entry>ni_pcmcia, ni_pcmcia_accel</entry>
 	</row>
 	<row>
-	<entry>self-made (see <link LINKEND="lpvo-usb-gpib-notes">note</link>)</entry>
-	<entry><ulink URL="http://lpvo.fe.uni-lj.si/gpib">http://lpvo.fe.uni-lj.si/gpib</ulink></entry>
+	<entry>lpvo self-made adapter</entry>
+	<entry><link LINKEND="lpvo-usb-gpib-notes">lpvo self-made</link></entry>
 	<entry>lpvo_usb_gpib.ko</entry>
 	<entry>lpvo_usb_gpib</entry>
 	</row>
@@ -854,6 +1059,12 @@ path is the absolute path to the device's directory under /sys/devices, with the
 	<entry>ines_gpib.ko (Ines iGPIB 72010 chip) or cb7210.ko (Measurement Computing cb7210 chip)</entry>
 	<entry>ines_pci or ines_pci_unaccel (Ines iGPIB 72010 chip),
 	cbi_pci_unaccel (Measurement Computing cb7210 chip)</entry>
+	</row>
+	<row>
+	<entry>xyphro</entry>
+	<entry><link LINKEND="xyphro">UsbGpib</link></entry>
+	<entry>xyphro_ugc.ko</entry>
+	<entry>xyphro_ugc</entry>
 	</row>
 	</tbody>
 	</tgroup>
@@ -937,7 +1148,7 @@ They cannot do 7 bit compares when looking for an end-of-string character (they 
 compare all 8 bits).
 </para>
 </listitem>
-</itemizedList>
+</itemizedlist>
 </para>
 </section>
 <section ID="beiming-F82357">
@@ -961,7 +1172,7 @@ Limitations:
 They can only do 8-bit end-of-string (EOS) compares.
 </para>
 </listitem>
-</itemizedList>
+</itemizedlist>
 </para>
 </section>
 <section ID="fmh-gpib-core">
@@ -987,8 +1198,8 @@ something like:
 <programlisting>
 fmh_gpib_0: fmh_gpib@0x00049800 {
                 compatible = "fmhess,fmh_gpib_core";
-                reg = < 0x00049600 0x00000080
-                        0x00049800 0x00000008 >;
+                reg = &lt; 0x00049600 0x00000080
+                        0x00049800 0x00000008 &gt;;
                 reg-names = "gpib_control_status", "dma_fifos";
                 interrupt-parent = &lt; &amp;intc &gt;;
                 interrupts = &lt; 0 57 4 &gt;;
@@ -1020,39 +1231,124 @@ features are flagged by a diagnostic message to syslog.
 <section ID="GPIO">
 <title>GPIO bitbang adapter</title>
 <para>
-WARNING: this driver is incomplete and its behavior does not conform to the
-IEEE 488 standards.
-</para>
-<para>
 This is a simple GPIO bitbang driver that currently only works on
-Raspberry Pi platforms. For information on the GPIO to GPIB pinouts as
-well as limitations see the source code at:
-</para>
-<programlisting>
-  linux-gpib-kernel/drivers/gpib/gpio/gpib_bitbang.c
-</programlisting>
+Raspberry Pi platforms. It has the following limitations:
+<itemizedlist>
+<listitem>
 <para>
-  Two pin maps between gpio and gpib are currently supported: elektronomikon and gpib4pi-1.1.
-  For schematics, boards and information on driver IC's
-  see <ulink URL="http://elektronomikon.org">http://elektronomikon.org</ulink>
-  and <ulink URL="https://www.hackster.io/lightside-instruments/the-gpib4pi-gpib-for-raspberry-pi-hat-4b3e9a">lightside-instruments
-    gpib4pi</ulink>
+It cannot be run as a device, but must be the system controller.
+</para>
+</listitem>
+<listitem>
+<para>
+If the SN7516x driver chips are not used the fan out is limited to a
+maximum of 4 devices.
+</para>
+</listitem>
+<listitem>
+<para>
+Parallel poll is not supported.
+</para>
+</listitem>
+<listitem>
+<para>
+Setting T1 delay (ibconfig(board, IbcTIMING, T1_delay)) is not
+implemented. The high interrupt latency on the RPi platforms with
+Linux does not permit to ensure even a 2 microsecond T1 delay.
+</para>
+</listitem>
+</itemizedlist>
 </para>
 <para>
+  Three pin maps between gpio and gpib are currently supported:
+  "elektronomikon", "gpib4pi-1.1" and "yoga".
   The pin_maps are configured via the pin_map module parameter.
-  By default support for the elekronomikon pin_map with SN75160/161 driver IC's is
-  enabled. i.e. the default module parameter settings are
+  By default support for the elekronomikon pin_map with SN75160/161
+  driver IC's is  enabled. i.e. the default module parameter settings are
   pin_map=elektonomikon and sn7516x_used=1. 
-  To disable support for the IC's
+  To disable support for the SN75160/161 IC's
   when they are not installed the module parameter sn7516x_used must
   be set to zero:
+  <programlisting>
+    modprobe gpib_bitbang sn7516x_used=0
+  </programlisting>
+</para>
+<para>
+  For schematics, boards and information on driver IC's see
+  <itemizedlist>
+    <listitem>
+      <para>
+      <ulink URL="http://elektronomikon.org">elektronomikon</ulink>
+      </para>
+      <para>
+	This is the default pinmap. The activity led on the adapter is enabled.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+	<ulink URL="https://www.hackster.io/lightside-instruments/the-gpib4pi-gpib-for-raspberry-pi-hat-4b3e9a"> gpib4pi-1.1</ulink>
+      </para>
+      <para>
+	To set the pin_map for the Lightside instruments gpib4pi-1.1 board
+	<programlisting>
+	  modprobe gpib_bitbang pin_map="gpib4pi-1.1"
+	</programlisting>
+	The activity led on the adapter is enabled.
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+	<ulink URL="https://www.schwingen.org/yoga-gpib/">yoga</ulink>
+      </para>
+      <para>
+	To set the pin_map for the yoga board
+	<programlisting>
+	  modprobe gpib_bitbang pin_map="yoga"
+	</programlisting>
+	For the yoga board the sn7516x_used option is ignored.  The
+	status led on the adapter is enabled as the activity led.
+      </para>
+    </listitem>
+  </itemizedlist>
+</para>
+</section>
+<section ID="xyphro">
+<title>xyphro compact usb to GPIB adapter</title>
+<para>
+This driver is experimental. The standard adapter as shipped uses the
+normal linux usbtmc driver. Special firmware is required for this
+device to work with the linux-gpib driver.
+The <ulink URL="https://github.com/xyphro/UsbGpib">project
+page</ulink> has information on the hardware and the link for the
+firmware binary for the linux-gpib firmware. In order to flash the
+linux-gpib firmware, dowload the LinuxGpib.bin file (in the SW/binaries
+directory). With the adapter plugged in to a usb port press the reset
+button for about 5 secs. The device will then enumerate as a usb mass
+storage device. If you don't have an automounter enabled mount the
+device (in this case /dev/sda, see the output of dmesg for the
+appropriate dev):
 <programlisting>
-  modprobe gpib_bitbang sn7516x_used=0
+# mkdir -p /mnt/usbgpib
+# mount /dev/sda /mnt/usbgpib
 </programlisting>
-To set the pin_map for the Lightside instruments gpib4pi-1.1 board
+Then execute the following commmand (possibly replacing usbgpib with
+the automounted directory):
 <programlisting>
-  modprobe gpib_bitbang pin_map="gpib4pi-1.1"
+# dd if=LinuxGpib.bin of=/mnt/usbgpib/FLASH.BIN bs=512 conv=notrunc \
+  oflag=direct,sync
 </programlisting>
+You can always reflash the standard usbtmc firmware if required. After
+disconnecting and reconnecting the adapter on the usb side you can
+verify whether the operation of flashing the LinuxGpib firmware was
+successful by checking the output of:
+<programlisting>
+$ lsusb -d 03eb: -v
+</programlisting>
+To see whether
+<programlisting>
+ bInterfaceClass =  255 Vendor Specific Class
+</programlisting>
+In which case you are all set to use the adapter with linux-gpib.
 </para>
 </section>
 <section ID="ni-usb-b">
@@ -1091,14 +1387,273 @@ automatically run gpib_config after the device is plugged in.
 <para>
 Beware of inexpensive NI GPIB-USB-HS clones. While they work on
 Windows most will not and cannot be made to work with linux-gpib. See
-the end of the discussion
-on <ulink URL="https://sourceforge.net/p/linux-gpib/bugs/82/"> bug
+this post
+on <ulink URL="https://sourceforge.net/p/linux-gpib/bugs/82/#4c41"> bug
 ticket #82</ulink>.
 </para>
 </section>
 </section>
 </section>
 
+<section ID="util-prog">
+<title>
+	GPIB utility programme
+</title>
+<refentry id="ibterm">
+  <refmeta>
+    <refentrytitle>ibterm</refentrytitle>
+    <manvolnum>1</manvolnum>
+    <refmiscinfo class="manual">Linux-GPIB User Manual</refmiscinfo>
+  </refmeta>
+  <refnamediv>
+    <refname>ibterm</refname>
+    <refpurpose>Interactive GPIB terminal</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>ibterm</command>
+      <arg choice="req">-d <replaceable>primary_address</replaceable></arg>
+      <arg>-m <replaceable>minor</replaceable></arg>
+      <arg>-s <replaceable>secondary_address</replaceable></arg>
+      <arg>-i <replaceable>eoi</replaceable></arg>
+      <arg>-e <replaceable>eos</replaceable></arg>
+      <arg>-r <replaceable>reos</replaceable></arg>
+      <arg>-b <replaceable>bin</replaceable></arg>
+      <arg>-x <replaceable>xeos</replaceable></arg>
+      <arg>-t <replaceable>timeout</replaceable></arg>
+      <arg>-p <replaceable>prompt</replaceable></arg>
+      <arg>-f <replaceable>history_file</replaceable></arg>
+      <arg>-N</arg>
+      <arg>-X</arg>
+      <arg>-h</arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>Description</title>
+    <para>
+      An interactive terminal program for sending commands to a device over an
+      IEEE-488 general purpose instrument bus and printing the responses.
+    </para>
+  </refsect1>
+  <refsect1>
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>-d</option> <replaceable>address</replaceable></term>
+	<listitem>
+	  <para>
+	    Sets the device's primary address (pad). The
+	    <replaceable>address</replaceable> must be between
+	    <option>0</option> and <option>30</option>.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-m</option> <replaceable>number</replaceable></term>
+	<listitem>
+	  <para>
+	    Specify the minor number of the device file this interface board
+	    will use. A <replaceable>number</replaceable> of <option>0</option>
+	    corresponds to <filename class="devicefile">/dev/gpib0</filename>,
+	    <option>1</option> is <filename class="devicefile">/dev/gpib1</filename>,
+	    etc. Defaults to <option>0</option>.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-s</option> <replaceable>address</replaceable></term>
+	<listitem>
+	  <para>
+	    Sets the device's secondary address (sad).
+	    The <replaceable>address</replaceable> must be <option>0</option>
+	    (disabled) or between <option>96</option> and <option>126</option>
+	    (0x60 and 0x7e hexadecimal). Defaults to <option>0</option>.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-i</option> <replaceable>0|1</replaceable></term>
+	<listitem>
+	  <para>
+	    Assert EIO with last byte sent.
+	    Defaults to <option>1</option> (true).
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-e</option> <replaceable>code</replaceable></term>
+	<listitem>
+	  <para>
+	    ASCII code of end-of-string (eos) character.
+	    The <replaceable>code</replaceable> must be between
+	    <option>0</option> and <option>255</option>.
+	    Defaults to <option>0</option> (no code).
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-r</option> <replaceable>0|1</replaceable></term>
+	<listitem>
+	  <para>
+	    Terminate read on eos character (reos) flag. Defaults to
+	    <option>0</option> (false).
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-b</option> <replaceable>0|1</replaceable></term>
+	<listitem>
+	  <para>
+	    Binary eos character match mode (bin) flag. Defaults to
+	    <option>0</option> (false).
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-x</option> <replaceable>0|1</replaceable></term>
+	<listitem>
+	  <para>
+	    Assert EOI when transmitting eos (xeos) flag. Defaults to
+	    <option>0</option> (false).
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-t</option> <replaceable>timeout</replaceable></term>
+	<listitem>
+	  <para>
+	    Sets the IO timeout for the device.
+	    The <replaceable>timeout</replaceable> must be a value from
+	    the below table. The default value is <option>10</option>,
+	    corresponding to 300 milliseconds.
+	  </para>
+	  <informaltable id="timeout-constants">
+	    <tgroup cols="2" align="left">
+	      <thead>
+		<row>
+		  <entry><replaceable>timeout</replaceable></entry>
+		  <entry>Length</entry>
+		</row>
+	      </thead>
+	      <tbody>
+		<row><entry><option>0</option></entry> <entry>Never timeout</entry></row>
+		<row><entry><option>1</option></entry> <entry>10 microseconds</entry></row>
+		<row><entry><option>2</option></entry> <entry>30 microseconds</entry></row>
+		<row><entry><option>3</option></entry> <entry>100 microseconds</entry></row>
+		<row><entry><option>4</option></entry> <entry>300 microseconds</entry></row>
+		<row><entry><option>5</option></entry> <entry>1 millisecond</entry></row>
+		<row><entry><option>6</option></entry> <entry>3 milliseconds</entry></row>
+		<row><entry><option>7</option></entry> <entry>10 milliseconds</entry></row>
+		<row><entry><option>8</option></entry> <entry>30 milliseconds</entry></row>
+		<row><entry><option>9</option></entry> <entry>100 milliseconds</entry></row>
+		<row><entry><option>10</option></entry><entry>300 milliseconds</entry></row>
+		<row><entry><option>11</option></entry><entry>1 second</entry></row>
+		<row><entry><option>12</option></entry><entry>3 seconds</entry></row>
+		<row><entry><option>13</option></entry><entry>10 seconds</entry></row>
+		<row><entry><option>14</option></entry><entry>30 seconds</entry></row>
+		<row><entry><option>15</option></entry><entry>100 seconds</entry></row>
+		<row><entry><option>16</option></entry><entry>300 seconds</entry></row>
+		<row><entry><option>17</option></entry><entry>1000 seconds</entry></row>
+	      </tbody>
+	    </tgroup>
+	  </informaltable>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-p</option> <replaceable>string</replaceable></term>
+	<listitem>
+	  <para>
+	    Sets the prompt. Defaults to <quote><prompt>ibterm&gt;</prompt></quote>
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-u</option> <replaceable>string</replaceable></term>
+	<listitem>
+	  <para>
+            Send Untalk/Unlisten after each read and write
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-f</option> <replaceable>file</replaceable></term>
+	<listitem>
+	  <para>
+	    Command history file. Defaults to
+	    <quote><filename>.ibterm_hist_&lt;<replaceable>primary_address</replaceable>&gt;</filename></quote>
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-N</option></term>
+	<listitem>
+	  <para>
+	    No automatic read on device, enter <keycap function="enter">return</keycap> at prompt to read.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-X</option></term>
+	<listitem>
+	  <para>
+	    Force hexadecimal output.
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>-h</option></term>
+	<listitem>
+	  <para>
+	    Print help and exit.
+	  </para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1>
+    <title>Notes</title>
+    <para>
+      To quit the program enter the <keysym>EOF</keysym> character (<keycombo>
+	<keycap function="control">Ctrl</keycap>
+	<keycap>D</keycap>
+      </keycombo>) at the prompt.
+    </para>
+    <para>
+      For interactivity, <replaceable>timeout</replaceable> should not be
+      greater than <option>13</option> i.e. 10 secs.
+    </para>
+    <para>
+      A device read can always be triggered by hitting
+      <keycap function="enter">enter</keycap> at the prompt. Interrupting the
+      program while reading from the device may cause hangs.
+    </para>
+    <refsect2>
+      <title>Implementation details</title>
+      <para>The program is implemented as follows:</para>
+      <programlisting>loop:
+	Print <replaceable>prompt</replaceable> to stdout
+	Read a line of text from stdin
+	Write the text (if any) to the device at <replaceable>pad</replaceable>
+	If <option>-N</option> is not set, or no text was entered:
+        Attempt to read response from the device
+        If no response is received before <replaceable>timeout</replaceable>:
+        go to loop
+        else:
+        print the response on stdout
+	Go back to loop.</programlisting>
+    </refsect2>
+  </refsect1>
+  <refsect1>
+    <title>See also</title>
+    <para>
+      See the <citerefentry>
+	<refentrytitle>readline</refentrytitle><manvolnum>3</manvolnum>
+      </citerefentry> man page for editing input and searching history.
+    </para>
+  </refsect1>
+</refentry>
+
+</section>
 <section ID="reference">
 <title>
 	Linux-GPIB Reference
@@ -1106,16 +1661,16 @@ ticket #82</ulink>.
 <para>
 	Reference for libgpib functions, macros, and constants.
 </para>
-<section>
+<section ID="global-variables">
 <title>Global Variables</title>
 
 <refentry ID="reference-globals-ibcnt">
 <refmeta>
-	<refentrytitle>ibcnt and ibcntl</refentrytitle>
+	<refentrytitle>ibcnt</refentrytitle>
 	<manvolnum>3</manvolnum>
 </refmeta>
 <refnamediv>
-	<refname>ibcnt and ibcntl</refname>
+	<refname>ibcnt</refname>
 	<refpurpose>hold number of bytes transferred, or errno</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
@@ -1276,6 +1831,12 @@ volatile int iberr;
 	polling routines are unaware of the device's existence and will never
 	serial poll it.
 	</entry>
+	</row>
+	<row>
+	<entry>ECNF</entry>
+	<entry>17</entry>
+	<entry>There is a syntax or value error in the configuration file. This error
+	  can be returned by ibfind() and ibdev().</entry>
 	</row>
 	<row>
 	<entry>ETAB</entry>
@@ -1486,13 +2047,13 @@ volatile int ibsta;
 	</para>
 </refsect1>
 </refentry>
-
 </section>
-
-<section>
-<title>
-	'Traditional' API Functions
-</title>
+</section>
+<section ID="traditional-api">
+<title>	Traditional API Functions </title>
+<para>
+  Reference section for traditional API functions.
+</para>
 
 <refentry ID="reference-function-ibask">
 <refmeta>
@@ -1549,8 +2110,8 @@ volatile int ibsta;
 	<row>
 	<entry>IbaSAD</entry>
 	<entry>0x2</entry>
-	<entry>GPIB secondary address (0 for none, 0x60 to 0x7e for secondary
-	addresses 0 to 30)</entry>
+	<entry>GPIB secondary address (0 for none, 0x60 to 0x7f for secondary
+	addresses 0 to 31)</entry>
 	<entry>board or device</entry>
 	</row>
 	<row>
@@ -1606,9 +2167,9 @@ volatile int ibsta;
 	<row>
 	<entry>IbaSRE</entry>
 	<entry>0xb</entry>
-	<entry>Nonzero if board autmatically asserts REN line when
+	<entry>Nonzero if board automatically asserts the REN line when
 	it becomes the system controller.  See
-	<link LINKEND="reference-function-ibsre">ibsre()</link>.
+	<link LINKEND="reference-function-ibrsc">ibrsc()</link>.
 	</entry>
 	<entry>board</entry>
 	</row>
@@ -1724,7 +2285,7 @@ volatile int ibsta;
 	<entry>IbaUnAddr</entry>
 	<entry>0x1b</entry>
 	<entry>Nonzero if UNT (untalk) and UNL (unlisten) commands are automatically
-	sent after a completed io operation using this descriptor.</entry>
+	sent after a completed ibrd* or ibwrt* operation using this descriptor.</entry>
 	<entry>device</entry>
 	</row>
 	<row>
@@ -2000,7 +2561,7 @@ volatile int ibsta;
 	<para>
 	While an asynchronous
 	operation is in progress, most library functions will
-	fail with an EOIP error.  In order to sucessfully
+	fail with an EOIP error.  In order to successfully
 	complete an
 	asynchronous operation, you must call
 	<link LINKEND="reference-function-ibwait">ibwait()</link>
@@ -2016,7 +2577,7 @@ volatile int ibsta;
 	with the current thread, the Linux-GPIB extensions
 	<link LINKEND="reference-function-async-ibsta">AsyncIbsta</link>,
 	<link LINKEND="reference-function-async-iberr">AsyncIberr</link>,
-	<link LINKEND="reference-function-async-ibcnt">AsyncIbcnt and AsyncIbcntl</link>
+	<link LINKEND="reference-function-async-ibcnt">AsyncIbcnt, AsyncIbcntl</link>
 	may be useful to more cleanly separate the results of the asynchronous I/O from
 	the results of the ibwait or similar call used to resynchronize.
 	</para>
@@ -2120,7 +2681,11 @@ volatile int ibsta;
 	<row>
 	<entry>IbcREADDR</entry>
 	<entry>0x6</entry>
-	<entry>Useless, included for compatibility only.</entry>
+	<entry>Not implemented, included for compatibility only. Device ibrd*
+	and ibwrt* calls always re-address. To avoid re-addressing
+	use an initial device read or write followed by board read or
+	writes to the controlling minor, ensuring no other intervening
+	device access occurs. </entry>
 	<entry>device</entry>
 	</row>
 	<row>
@@ -2146,9 +2711,10 @@ volatile int ibsta;
 	<row>
 	<entry>IbcSRE</entry>
 	<entry>0xb</entry>
-	<entry>If setting is nonzero then board asserts REN line.  Otherwise
-	REN is unasserted.  Same as
-	<link LINKEND="reference-function-ibsre">ibsre()</link>.
+	<entry>If setting is nonzero then board asserts REN when
+	  it becomes sytem controller otherwise REN is not asserted.
+	  It is nonzero by default. See
+	<link LINKEND="reference-function-ibrsc">ibrsc()</link>.
 	</entry>
 	<entry>board</entry>
 	</row>
@@ -2286,8 +2852,7 @@ volatile int ibsta;
 	<entry>IbcUnAddr</entry>
 	<entry>0x1b</entry>
 	<entry>If setting is nonzero then UNT (untalk) and UNL (unlisten) commands
-	are automatically sent after a completed io operation using this descriptor.
-	 Enabling this option is currently unsupported.</entry>
+	are automatically sent after a completed ibrd* or ibwrt* operation using this descriptor.</entry>
 	<entry>device</entry>
 	</row>
 	<row>
@@ -2384,7 +2949,9 @@ volatile int ibsta;
 	Finally, the <parameter>eos</parameter>
 	argument specifies the end-of-string character and whether or not its
 	reception should terminate reads (see <link LINKEND="reference-function-ibeos">
-	ibeos()</link>).
+	ibeos()</link>).  To suppress error messages printed to stderr
+	by ibdev() set the environment variable IB_NO_ERROR before
+	calling	the routine.
 	</para>
 </refsect1>
 <refsect1>
@@ -2923,7 +3490,7 @@ volatile int ibsta;
 	<parameter>pad</parameter> and <parameter>sad</parameter> arguments.
 	<parameter>pad</parameter> specifies the primary address, 0 through 30
 	are valid values.  <parameter>sad</parameter> gives the secondary
-	address, and may be a value from 0x60 through 0x7e (96 through 126), or
+	address, and may be a value from 0x60 through 0x7f (96 through 127), or
 	one of the constants NO_SAD or ALL_SAD.  NO_SAD indicates that no
 	secondary addressing is to be used, and ALL_SAD indicates that
 	all secondary addresses should be checked.
@@ -3028,18 +3595,24 @@ volatile int ibsta;
 	Description
 	</title>
 	<para>
-	If the <parameter>online</parameter> is zero, then ibonl() frees the
+	If the parameter <parameter>online</parameter> is zero, then ibonl() frees the
 	resources associated with the board or device descriptor
 	<parameter>ud</parameter>.  The descriptor cannot be used again after the
-	ibonl() call.
+	ibonl() call. The parameter <parameter>ud</parameter> cannot be a board
+	index (aka minor).
 	</para>
 	<para>
-	If the <parameter>online</parameter> is nonzero, then all the settings
+	If the parameter <parameter>online</parameter> is nonzero, then all the settings
 	associated with the descriptor (GPIB address, end-of-string mode, timeout,
 	etc.) are reset to their 'default' values.  The 'default' values are
 	the settings the descriptor had when it was first obtained with
 	<link LINKEND="reference-function-ibdev">ibdev()</link> or
 	<link LINKEND="reference-function-ibfind">ibfind()</link>.
+	The parameter <parameter>ud</parameter> can be a board index
+	(aka minor). The 'default' values are the standard default
+	values as modified by the
+	corresponding <link LINKEND="configuration-gpib-conf">gpib.conf</link> 
+	interface definition.
 	</para>
 </refsect1>
 <refsect1>
@@ -3291,7 +3864,7 @@ volatile int ibsta;
 	<para>
 	While an asynchronous
 	operation is in progress, most library functions will
-	fail with an EOIP error.  In order to sucessfully
+	fail with an EOIP error.  In order to successfully
 	complete an
 	asynchronous operation and resynchronize its results
 	with the current thread, you must call
@@ -3309,7 +3882,7 @@ volatile int ibsta;
 	with the current thread, the Linux-GPIB extensions
 	<link LINKEND="reference-function-async-ibsta">AsyncIbsta</link>,
 	<link LINKEND="reference-function-async-iberr">AsyncIberr</link>,
-	<link LINKEND="reference-function-async-ibcnt">AsyncIbcnt and AsyncIbcntl</link>
+	<link LINKEND="reference-function-async-ibcnt">AsyncIbcnt, AsyncIbcntl</link>
 	may be useful to more cleanly separate the results of the asynchronous I/O from
 	the results of the ibwait or similar call used to resynchronize.
 	</para>
@@ -3445,8 +4018,13 @@ volatile int ibsta;
 	<para>
 	The system controller has the ability
 	to assert the REN and IFC lines, and is typically also the
-	controller-in-charge.  A GPIB bus may not have more than one
-	system controller.
+	controller-in-charge. Automatic assertion of REN is controlled with
+	<link LINKEND="reference-function-ibconfig">ibconfig()</link>.
+	If the IbcSRE configuration option has been set for the
+	board descriptor <parameter>ud</parameter>
+	then REN will automatically be asserted when the board becomes
+	system controller. The configuration option IbcSRE is set by default.
+	A GPIB bus may not have more than one system controller.
 	</para>
 </refsect1>
 <refsect1>
@@ -3653,7 +4231,7 @@ volatile int ibsta;
 	the board to stop requesting service.  Finally, if MSS is 1 and
 	<parameter>new_reason_for_request</parameter> is 0, then ibrsv2 will have no effect on
 	the service request state (it will only update the status byte).
-	The fourth possibilty of MSS is 0 (which implies no service request) and
+	The fourth possibility of MSS is 0 (which implies no service request) and
 	<parameter>new_reason_for_request</parameter> is nonzero (which implies there is a service request)
 	is contradictory and will be rejected with an EARG error.
 	</para>
@@ -3675,8 +4253,8 @@ volatile int ibsta;
 	The value for <parameter>new_reason_for_request</parameter> may be calculated
 	from:
 	<programlisting>
-	new_reason_for_request = (status_byte &	service_request_enable) &
-                         	~(old_status_byte & old_service_request_enable);
+	new_reason_for_request = (status_byte &amp;	service_request_enable) &amp;
+	~(old_status_byte &amp; old_service_request_enable);
 	</programlisting>
 	</para>
 </refsect1>
@@ -3729,8 +4307,8 @@ volatile int ibsta;
 	secondary addresses.  That is, if you wish to set the secondary address
 	to 3, you should set <parameter>sad</parameter> to 0x63.  Setting
 	<parameter>sad</parameter> to 0 disables the use of secondary addressing.
-	Valid GPIB secondary addresses are in the range from 0 to 30 (which correspond
-	to <parameter>sad</parameter> values of 0x60 to 0x7e).
+	Valid GPIB secondary addresses are in the range from 0 to 31 (which correspond
+	to <parameter>sad</parameter> values of 0x60 to 0x7f).
 	</para>
 </refsect1>
 <refsect1>
@@ -4309,7 +4887,7 @@ volatile int ibsta;
 	<para>
 	While an asynchronous
 	operation is in progress, most library functions will
-	fail with an EOIP error.  In order to sucessfully
+	fail with an EOIP error.  In order to successfully
 	complete an
 	asynchronous operation, you must call
 	<link LINKEND="reference-function-ibwait">ibwait()</link>
@@ -4325,7 +4903,7 @@ volatile int ibsta;
 	with the current thread, the Linux-GPIB extensions
 	<link LINKEND="reference-function-async-ibsta">AsyncIbsta</link>,
 	<link LINKEND="reference-function-async-iberr">AsyncIberr</link>,
-	<link LINKEND="reference-function-async-ibcnt">AsyncIbcnt and AsyncIbcntl</link>
+	<link LINKEND="reference-function-async-ibcnt">AsyncIbcnt, AsyncIbcntl</link>
 	may be useful to more cleanly separate the results of the asynchronous I/O from
 	the results of the ibwait or similar call used to resynchronize.
 	</para>
@@ -4466,7 +5044,7 @@ constant NOADDR.
 	</title>
 	<para>
 	DevClear() causes the interface board specified by <parameter>board_desc</parameter>
-	to send the clear command to the GPIB addresses specified by <parameter>address</parameter>.  The results of the serial polls are stored into <parameter>resultList</parameter>.
+	to send the clear command to the GPIB address specified by <parameter>address</parameter>.
 	If you wish to clear multiple devices simultaneously, use
 	<link LINKEND="reference-function-devclearlist">DevClearList()</link>
 	</para>
@@ -5295,7 +5873,7 @@ constant NOADDR.
 	The
 	<link LINKEND="reference-function-setrwls">SetRWLS()</link>
 	performs a similar function, except it lets you
-	specifiy which devices you wish to address as listener before
+	specify which devices you wish to address as listener before
 	sending the LLO command.
 	</para>
 </refsect1>
@@ -5453,7 +6031,7 @@ constant NOADDR.
 	<para>
 	The number of devices which responded with nonzero values from
 	their self-tests is returned in
-	<link LINKEND="reference-globals-ibcnt">ibcnt and ibcntl</link>.
+	<link LINKEND="reference-globals-ibcnt">ibcnt, ibcntl</link>.
 	If a device fails to respond to the *TST? query, an error
 	will be flagged in
 	<link LINKEND="reference-globals-ibsta">ibsta</link> (this
@@ -5570,12 +6148,12 @@ constant NOADDR.
 
 <refentry ID="reference-function-async-ibcnt">
 <refmeta>
-	<refentrytitle>AsyncIbcnt and AsyncIbcntl</refentrytitle>
+	<refentrytitle>AsyncIbcnt</refentrytitle>
 	<manvolnum>3</manvolnum>
 </refmeta>
 <refnamediv>
-	<refname>AsyncIbcnt and AsyncIbcntl</refname>
-	<refpurpose>ibcnt and ibcntl values for last asynchronous I/O operation</refpurpose>
+	<refname>AsyncIbcnt</refname>
+	<refpurpose>ibcnt, ibcntl values for last asynchronous I/O operation</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
 	<funcsynopsis>
@@ -5597,7 +6175,7 @@ constant NOADDR.
 	<para>
 	AsyncIbcnt() and AsyncIbcntl() return thread-local counts related to
 	the global
-	variables <link LINKEND="reference-globals-ibcnt">ibcnt and ibcntl</link>.
+	variables <link LINKEND="reference-globals-ibcnt">ibcnt, ibcntl</link>.
 	Their values correspond to the result of the last asynchronous I/O operation
 	resynchronized to the current thread by an <link LINKEND="reference-function-ibwait">ibwait</link>
 	or <link LINKEND="reference-function-ibstop">ibstop</link> call.  These
@@ -5838,7 +6416,7 @@ constant NOADDR.
 	Return value
 	</title>
 	<para>
-	The secondary GPIB address (from 0x60 through 0x7e, or 0 for none) stored in
+	The secondary GPIB address (from 0x60 through 0x7f, or 0 for none) stored in
 	<parameter>address</parameter>.
 	</para>
 </refsect1>
@@ -5965,9 +6543,9 @@ addressList[ 4 ] = NOADDR;
 	MSA() returns a 'my secondary address'
 	<link LINKEND="reference-command-bytes">command byte</link> corresponding
 	to the <parameter>address</parameter> argument.  The <parameter>address</parameter>
-	may be between 0 and 30.  This macro is also useful for mangling
-	secondary addresses from the 'real' values between 0 and 30 to the
-	range 0x60 to 0x7e used by most of the library's functions.
+	may be between 0 and 31.  This macro is also useful for mangling
+	secondary addresses from the 'real' values between 0 and 31 to the
+	range 0x60 to 0x7f used by most of the library's functions.
 	</para>
 </refsect1>
 <refsect1>
@@ -6067,12 +6645,12 @@ addressList[ 4 ] = NOADDR;
 
 <refentry ID="reference-function-thread-ibcnt">
 <refmeta>
-	<refentrytitle>ThreadIbcnt and ThreadIbcntl</refentrytitle>
+	<refentrytitle>ThreadIbcnt</refentrytitle>
 	<manvolnum>3</manvolnum>
 </refmeta>
 <refnamediv>
-	<refname>ThreadIbcnt and ThreadIbcntl</refname>
-	<refpurpose>thread-specific ibcnt and ibcntl values</refpurpose>
+	<refname>ThreadIbcnt</refname>
+	<refpurpose>thread-specific ibcnt, ibcntl values</refpurpose>
 </refnamediv>
 <refsynopsisdiv>
 	<funcsynopsis>
@@ -6094,7 +6672,7 @@ addressList[ 4 ] = NOADDR;
 	<para>
 	ThreadIbcnt() and ThreadIbcntl() return thread-local versions
 	 of the global
-	variables <link LINKEND="reference-globals-ibcnt">ibcnt and ibcntl</link>.
+	variables <link LINKEND="reference-globals-ibcnt">ibcnt, ibcntl</link>.
 	</para>
 </refsect1>
 <refsect1>
@@ -6186,13 +6764,10 @@ addressList[ 4 ] = NOADDR;
 	</para>
 </refsect1>
 </refentry>
-
 </section>
-
-</section>
-
-<section ID="gpib-protocol">
-<title>GPIB protocol</title>
+<section>
+  <title>GPIB protocol</title>
+  <para>Outline of the GPIB protocol elements</para>
 
 <section ID="reference-command-bytes">
 	<title>GPIB command bytes</title>
@@ -6308,16 +6883,11 @@ addressList[ 4 ] = NOADDR;
 	</entry>
 	</row>
 	<row>
-	<entry>0x70 to 0x7e</entry>
-	<entry>MSA16 to MSA30, also PPD</entry>
+	<entry>0x70 to 0x7f</entry>
+	<entry>MSA16 to MSA31, also PPD</entry>
 	<entry>When following a talk or listen address, this is
-	'my secondary address' 16 to 30.  When following a parallel
+	'my secondary address' 16 to 31.  When following a parallel
 	poll configure, this is 'parallel poll disable'.</entry>
-	</row>
-	<row>
-	<entry>0x7f</entry>
-	<entry>PPD</entry>
-	<entry>Parallel poll disable</entry>
 	</row>
 	</tbody>
 	</tgroup>
@@ -6418,7 +6988,6 @@ of how they are used follow:
 	</table>
 </para>
 </section>
-
 </section>
 
 &license

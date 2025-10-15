@@ -1,0 +1,71 @@
+'\" t
+.\"     Title: ibwrt
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBWRT" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibwrt \- write data bytes (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibwrt('u
+.BI "int ibwrt(int\ " "ud" ", const\ void\ *" "data" ", long\ " "num_bytes" ");"
+.SH "DESCRIPTION"
+.PP
+ibwrt() is used to write data bytes to a device or board\&. The argument
+\fIud\fR
+can be either a device or board descriptor\&.
+\fInum_bytes\fR
+specifies how many bytes are written from the user\-supplied array
+\fIdata\fR\&. EOI may be asserted with the last byte sent or when the end\-of\-string character is sent (see
+ibeos()
+and
+ibeot())\&. The write operation may be interrupted by a timeout (see
+ibtmo()), the board receiving a device clear command, or receiving an interface clear\&.
+.PP
+If
+\fIud\fR
+is a device descriptor, then the library automatically handles addressing the device as listener and the interface board as talker, before sending the data bytes onto the bus\&.
+.PP
+If
+\fIud\fR
+is a board descriptor, the board simply writes the data onto the bus\&. The controller\-in\-charge must address the board as talker\&.
+.PP
+After the ibwrt() call, ibcnt and ibcntl are set to the number of bytes written\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

@@ -1,0 +1,54 @@
+'\" t
+.\"     Title: FindRQS
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "FINDRQS" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+FindRQS \- find device requesting service and read its status byte
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ FindRQS('u
+.BI "void FindRQS(int\ " "board_desc" ", const\ Addr4882_t\ " "addressList[]" ", short\ *" "status" ");"
+.SH "DESCRIPTION"
+.PP
+FindRQS will serial poll the GPIB addresses specified in the
+\fIaddressList\fR
+array until it finds a device requesting service\&. The status byte of the device requesting service is stored in the location specified by
+\fIstatus\fR\&. The
+\fIaddressList\fR
+array index of the device requesting service is returned in
+ibcnt\&. If no device requesting service is found, an ETAB error is returned in
+iberr\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

@@ -1,0 +1,59 @@
+'\" t
+.\"     Title: AsyncIberr
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Utility Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "ASYNCIBERR" "3" "10/04/2025" "linux-gpib 4.3.7" "Utility Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+AsyncIberr \- iberr value for last asynchronous I/O operation
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ AsyncIberr('u
+.BI "int AsyncIberr(void);"
+.SH "DESCRIPTION"
+.PP
+AsyncIberr() returns a thread\-local error number related to the global variable
+iberr\&. Its value corresponds to the result of the last asynchronous I/O operation resynchronized to the current thread by an
+ibwait
+or
+ibstop
+call\&. This function only reflects the result of the asynchronous I/O operation itself and not, for example, the ibwait which resynchronized the asynchronous result to the current thread\&. Thus the result from AsyncIberr() is easier to interpret than ThreadIberr(), since it is unambiguous whether the value is associated with the asynchronous I/O result, or with the function call used to resynchronize (ibwait or ibstop)\&.
+.PP
+This function is a Linux\-GPIB extension\&.
+.SH "RETURN VALUE"
+.PP
+A value related to
+iberr
+corresponding to the last asynchronous I/O operation resynchronized to the current thread is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

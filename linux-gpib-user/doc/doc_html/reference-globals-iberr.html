@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,14 +7,14 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="Global Variables"
-HREF="reference.html#AEN685"><LINK
+HREF="reference.html#GLOBAL-VARIABLES"><LINK
 REL="PREVIOUS"
-TITLE="ibcnt and ibcntl"
+TITLE="ibcnt"
 HREF="reference-globals-ibcnt.html"><LINK
 REL="NEXT"
 TITLE="ibsta"
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-globals-ibcnt.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-globals-ibsta.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-GLOBALS-IBERR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN705"
+NAME="AEN1044"
 ></A
 ><H2
 >Name</H2
@@ -86,20 +86,29 @@ NAME="AEN705"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN708"
+NAME="AEN1047"
 ></A
 ><H2
 >Synopsis</H2
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="PROGRAMLISTING"
 >#include &#60;gpib/ib.h&#62;
 
 volatile int iberr;</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN710"
+NAME="AEN1049"
 ></A
 ><H2
 >	Description
@@ -114,7 +123,7 @@ NAME="AEN710"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN714"
+NAME="AEN1053"
 ></A
 ><P
 ><B
@@ -122,10 +131,12 @@ NAME="AEN714"
 ></P
 ><TABLE
 BORDER="1"
-RULES="all"
 WIDTH="100%"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
 CLASS="CALSTABLE"
-><COL><COL><COL><THEAD
+><THEAD
 ><TR
 ><TH
 >constant</TH
@@ -277,6 +288,15 @@ CLASS="CALSTABLE"
 ></TR
 ><TR
 ><TD
+>ECNF</TD
+><TD
+>17</TD
+><TD
+>There is a syntax or value error in the configuration file. This error
+	  can be returned by ibfind() and ibdev().</TD
+></TR
+><TR
+><TD
 >ETAB</TD
 ><TD
 >20</TD
@@ -320,14 +340,14 @@ VALIGN="top"
 ><A
 HREF="reference-globals-ibcnt.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -338,7 +358,7 @@ VALIGN="top"
 ><A
 HREF="reference-globals-ibsta.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -346,13 +366,13 @@ ACCESSKEY="N"
 WIDTH="33%"
 ALIGN="left"
 VALIGN="top"
->ibcnt and ibcntl</TD
+>ibcnt</TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN685"
+HREF="reference.html#GLOBAL-VARIABLES"
 ACCESSKEY="U"
 >Up</A
 ></TD

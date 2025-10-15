@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="Send"
 HREF="reference-function-send.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-send.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-senddatabytes.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-SENDCMDS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3163"
+NAME="AEN3511"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3163"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3166"
+NAME="AEN3514"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,44 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3167"
+NAME="AEN3515"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void SendCmds</CODE
->(int board_desc, const void *cmds, long count);</CODE
+>void <TT
+CLASS="FUNCTION"
+>SendCmds</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>, const void *<TT
+CLASS="PARAMETER"
+><I
+>cmds</I
+></TT
+>, long <TT
+CLASS="PARAMETER"
+><I
+>count</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,24 +141,28 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3178"
+NAME="AEN3526"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	SendCmds() writes <CODE
+>	SendCmds() writes <TT
 CLASS="PARAMETER"
->count</CODE
+><I
+>count</I
+></TT
 >
 	<A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command byte</A
 >
 	onto the
-	the GPIB bus from the array <CODE
+	the GPIB bus from the array <TT
 CLASS="PARAMETER"
->cmds</CODE
+><I
+>cmds</I
+></TT
 >.
 	</P
 ><P
@@ -157,14 +188,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-send.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -175,7 +206,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-senddatabytes.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -189,7 +220,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

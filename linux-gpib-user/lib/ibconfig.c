@@ -17,39 +17,36 @@
 
 #include "ib_internal.h"
 
-static int set_spoll_timeout( ibConf_t *conf, int timeout )
+static int set_spoll_timeout(ibConf_t *conf, int timeout)
 {
-	if( timeout < TNONE || timeout > T1000s )
-	{
-		setIberr( EARG );
+	if (timeout < TNONE || timeout > T1000s) {
+		setIberr(EARG);
 		return -1;
 	}
 
-	conf->settings.spoll_usec_timeout = timeout_to_usec( timeout );
+	conf->settings.spoll_usec_timeout = timeout_to_usec(timeout);
 
 	return 0;
 }
 
-static int set_ppoll_timeout( ibConf_t *conf, int timeout )
+static int set_ppoll_timeout(ibConf_t *conf, int timeout)
 {
-	if( timeout < TNONE || timeout > T1000s )
-	{
-		setIberr( EARG );
+	if (timeout < TNONE || timeout > T1000s) {
+		setIberr(EARG);
 		return -1;
 	}
 
-	conf->settings.ppoll_usec_timeout = ppoll_timeout_to_usec( timeout );
+	conf->settings.ppoll_usec_timeout = ppoll_timeout_to_usec(timeout);
 
 	return 0;
 }
 
-static int set_t1_delay( ibBoard_t *board, int delay )
+static int set_t1_delay(ibBoard_t *board, int delay)
 {
-	t1_delay_ioctl_t nano_sec;
+	unsigned int nano_sec;
 	int retval;
 
-	switch( delay )
-	{
+	switch (delay) {
 		case T1_DELAY_2000ns:
 			nano_sec = 2000;
 			break;
@@ -60,35 +57,33 @@ static int set_t1_delay( ibBoard_t *board, int delay )
 			nano_sec = 350;
 			break;
 		default:
-			fprintf( stderr, "libgpib: invalid T1 delay selection\n" );
-			setIberr( EARG );
+			fprintf(stderr, "libgpib: invalid T1 delay selection\n");
+			setIberr(EARG);
 			return -1;
 			break;
 	}
 
-	retval = ioctl( board->fileno, IB_T1_DELAY, &nano_sec );
-	if( retval < 0 )
-	{
-		setIberr( EDVR );
-		setIbcnt( errno );
+	retval = ioctl(board->fileno, IB_T1_DELAY, &nano_sec);
+	if (retval < 0)	{
+		setIberr(EDVR);
+		setIbcnt(errno);
 		return -1;
 	}
 
 	return 0;
 }
 
-static int set_local_parallel_poll_mode( ibBoard_t *board, int local )
+static int set_local_parallel_poll_mode(ibBoard_t *board, int local)
 {
 	int retval;
-	local_ppoll_mode_ioctl_t local_mode;
-	
+	short local_mode;
+
 	local_mode = local != 0;
-	
-	retval = ioctl( board->fileno, IBPP2_SET, &local_mode );
-	if( retval < 0 )
-	{
-		setIberr( EDVR );
-		setIbcnt( errno );
+
+	retval = ioctl(board->fileno, IBPP2_SET, &local_mode);
+	if (retval < 0)	{
+		setIberr(EDVR);
+		setIbcnt(errno);
 		return -1;
 	}
 
@@ -100,202 +95,196 @@ static int set_cable_length (ibConf_t *conf, int num_meters)
 {
 	int retval;
 	uint8_t cmd[2];
-	size_t length;
-	
-	if (num_meters < 0 || num_meters > 15)
-	{
-			setIberr (EARG);
-			return -1;
+	size_t length=0;
+
+	if (num_meters < 0 || num_meters > 15) {
+		setIberr (EARG);
+		return -1;
 	}
 
 	cmd [length++] = CFE;
 	if (num_meters)
-	{
 		cmd [length++] = CFGn(num_meters);
-	}
 	retval = my_ibcmd (conf, conf->settings.usec_timeout, cmd, length);
 	if (retval != length)
-	{
-			return -1;
-	}
+		return -1;
 
 	return 0;
 }
 
-int ibconfig( int ud, int option, int value )
+int ibconfig(int ud, int option, int value)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
-		return exit_library( ud, 1 );
+	conf = enter_library(ud);
+	if (!conf)
+		return exit_library(ud, 1);
 
-	switch( option )
-	{
+	switch (option) {
 		case IbcPAD:
-			retval = internal_ibpad( conf, value );
-			if( retval < 0 ) return exit_library( ud, 1 );
-			return exit_library( ud, 0 );
+			retval = internal_ibpad(conf, value);
+			if (retval < 0)
+				return exit_library(ud, 1);
+			return exit_library(ud, 0);
 			break;
 		case IbcSAD:
-			retval = internal_ibsad( conf, value );
-			if( retval < 0 ) return exit_library( ud, 1 );
-			return exit_library( ud, 0 );
+			retval = internal_ibsad(conf, value);
+			if (retval < 0)
+				return exit_library(ud, 1);
+			return exit_library(ud, 0);
 			break;
 		case IbcTMO:
-			retval = internal_ibtmo( conf, value );
-			if( retval < 0 ) return exit_library( ud, 1 );
-			return exit_library( ud, 0 );
+			retval = internal_ibtmo(conf, value);
+			if (retval < 0)
+				return exit_library(ud, 1);
+			return exit_library(ud, 0);
 			break;
 		case IbcEOT:
-			internal_ibeot( conf, value );
-			return exit_library( ud, 0 );
+			internal_ibeot(conf, value);
+			return exit_library(ud, 0);
 			break;
 		case IbcEOSrd:
-			if( value )
+			if (value)
 				conf->settings.eos_flags |= REOS;
 			else
 				conf->settings.eos_flags &= ~REOS;
-			return exit_library( ud, 0 );
+			return exit_library(ud, 0);
 			break;
 		case IbcEOSwrt:
-			if( value )
+			if (value)
 				conf->settings.eos_flags |= XEOS;
 			else
 				conf->settings.eos_flags &= ~XEOS;
-			return exit_library( ud, 0 );
+			return exit_library(ud, 0);
 			break;
 		case IbcEOScmp:
-			if( value )
+			if (value)
 				conf->settings.eos_flags |= BIN;
 			else
 				conf->settings.eos_flags &= ~BIN;
-			return exit_library( ud, 0 );
+			return exit_library(ud, 0);
 			break;
 		case IbcEOSchar:
-			if( ( value & 0xff ) != value )
-			{
-				setIberr( EARG );
-				return exit_library( ud, 1 );
+			if ((value & 0xff) != value) {
+				setIberr(EARG);
+				return exit_library(ud, 1);
 			}
 			conf->settings.eos = value;
-			return exit_library( ud, 0 );
+			return exit_library(ud, 0);
 			break;
 		case IbcReadAdjust:
 			// XXX
-			if( value )
-			{
-				fprintf( stderr, "libgpib: byte swapping on reads not implemented\n");
-				setIberr( ECAP );
-				return exit_library( ud, 1 );
-			}else
-				return exit_library( ud, 0 );
+			if (value) {
+				fprintf(stderr, "libgpib: byte swapping on reads not implemented\n");
+				setIberr(ECAP);
+				return exit_library(ud, 1);
+			} else {
+				return exit_library(ud, 0);
+			}
 			break;
 		case IbcWriteAdjust:
 			// XXX
-			if( value )
-			{
-				fprintf( stderr, "libgpib: byte swapping on writes not implemented\n");
-				setIberr( ECAP );
-				return exit_library( ud, 1 );
-			}else
-				return exit_library( ud, 0 );
+			if (value) {
+				fprintf(stderr, "libgpib: byte swapping on writes not implemented\n");
+				setIberr(ECAP);
+				return exit_library(ud, 1);
+			} else {
+				return exit_library(ud, 0);
+			}
 			break;
 		case IbcEndBitIsNormal:
-			if( value )
-			{
-				return exit_library( ud, 0 );
-			}else
-			{
-				fprintf( stderr, "libgpib: no support for END on EOI only yet \n");
-				setIberr( ECAP );
-				return exit_library( ud, 1 );
+			if (value) {
+				return exit_library(ud, 0);
+			} else {
+				fprintf(stderr, "libgpib: no support for END on EOI only yet \n");
+				setIberr(ECAP);
+				return exit_library(ud, 1);
 			}
 			break;
 		default:
 			break;
 	}
 
-	if( conf->is_interface )
-	{
-		switch( option )
-		{
+	if (conf->is_interface)	{
+		switch (option) {
 			case IbcPPC:
-				retval = internal_ibppc( conf, value );
-				if( retval < 0 ) return exit_library( ud, 1 );
-				return exit_library( ud, 0 );
+				retval = internal_ibppc(conf, value);
+				if (retval < 0)
+					return exit_library(ud, 1);
+				return exit_library(ud, 0);
 				break;
 			case IbcAUTOPOLL:
-				retval = configure_autospoll( conf, value );
-				if( retval < 0 ) return exit_library( ud, 1 );
-				return exit_library( ud, 0 );
+				retval = configure_autospoll(conf, value);
+				if (retval < 0)
+					return exit_library(ud, 1);
+				return exit_library(ud, 0);
 				break;
 			case IbcCICPROT:
 				// XXX
-				if( value )
-				{
-					fprintf( stderr, "libgpib: pass control protocol not supported\n");
-					setIberr( ECAP );
-					return exit_library( ud, 1 );
+				if (value) {
+					fprintf(stderr, "libgpib: pass control protocol not supported\n");
+					setIberr(ECAP);
+					return exit_library(ud, 1);
 				}else
-					return exit_library( ud, 0 );
+					return exit_library(ud, 0);
 				break;
 			case IbcIRQ:
 				// XXX
-				if( value == 0 )
-				{
-					fprintf( stderr, "libgpib: disabling interrupts not supported\n");
-					setIberr( ECAP );
-					return exit_library( ud, 1 );
-				}else
-					return exit_library( ud, 0 );
+				if (value == 0)	{
+					fprintf(stderr, "libgpib: disabling interrupts not supported\n");
+					setIberr(ECAP);
+					return exit_library(ud, 1);
+				} else {
+					return exit_library(ud, 0);
+				}
 				break;
 			case IbcSC:
-				retval = internal_ibrsc( conf, value );
-				if( retval < 0 )
-					return exit_library( ud, 1 );
+				retval = internal_ibrsc(conf, value);
+				if (retval < 0)
+					return exit_library(ud, 1);
 				else
-					return exit_library( ud, 0 );
+					return exit_library(ud, 0);
 				break;
 			case IbcSRE:
-				retval = internal_ibsre( conf, value );
-				if( retval < 0 ) return exit_library( ud, 1 );
-				return exit_library( ud, 0 );
+				if (value)
+					interfaceBoard(conf)->set_ren_on_sc = 1;
+				else
+					interfaceBoard(conf)->set_ren_on_sc = 0;
+				return exit_library(ud, 0);
 				break;
 			case IbcPP2:
-				retval = set_local_parallel_poll_mode( interfaceBoard(conf), value );
-				if( retval < 0 ) return exit_library( ud, 1 );
-				return exit_library( ud, 0 );
+				retval = set_local_parallel_poll_mode(interfaceBoard(conf), value);
+				if (retval < 0)
+					return exit_library(ud, 1);
+				return exit_library(ud, 0);
 				break;
 			case IbcTIMING:
-				if( set_t1_delay( interfaceBoard( conf ), value ) < 0 )
-					return exit_library( ud, 1 );
-				return exit_library( ud, 0 );
+				if (set_t1_delay(interfaceBoard(conf), value) < 0)
+					return exit_library(ud, 1);
+				return exit_library(ud, 0);
 				break;
 			case IbcDMA:
 				// XXX
-				if( value )
-				{
-					return exit_library( ud, 0 );
-				}else
-				{
-					fprintf( stderr, "libgpib: disabling DMA not supported\n");
-					setIberr( ECAP );
-					return exit_library( ud, 1 );
+				if (value) {
+					return exit_library(ud, 0);
+				} else {
+					fprintf(stderr, "libgpib: disabling DMA not supported\n");
+					setIberr(ECAP);
+					return exit_library(ud, 1);
 				}
 				break;
 			case IbcEventQueue:
-				if( value )
-				{
+				if (value) {
 					interfaceBoard(conf)->use_event_queue = 1;
-				}else
+				} else {
 					interfaceBoard(conf)->use_event_queue = 0;
-				return exit_library( ud, 0 );
+				}
+				return exit_library(ud, 0);
 				break;
 			case IbcSPollBit:
-/*				fprintf( stderr, "libgpib: SPOLL bit support not implemented\n");
-				setIberr( ECAP );*/
+/*				fprintf(stderr, "libgpib: SPOLL bit support not implemented\n");
+				setIberr(ECAP);*/
 				/* we currently have some support for SPOLL in the nec7210 driver,
 				which is always enabled.  It can only detect the occurance of
 				a serial poll if the board was requesting service when the
@@ -304,73 +293,67 @@ int ibconfig( int ud, int option, int value )
 				break;
 			case IbcSendLLO:
 				// XXX
-				if( value )
-				{
-					fprintf( stderr, "libgpib: sending local lockout on device open not implemented\n");
-					setIberr( ECAP );
-					return exit_library( ud, 1 );
-				}else
-					return exit_library( ud, 0 );
+				if (value) {
+					fprintf(stderr, "libgpib: sending local lockout on device open not implemented\n");
+					setIberr(ECAP);
+					return exit_library(ud, 1);
+				} else {
+					return exit_library(ud, 0);
+				}
 				break;
 			case IbcPPollTime:
-				retval = set_ppoll_timeout( conf, value );
-				if( retval < 0 )
-				{
-					setIberr( EARG );
-					return exit_library( ud, 1 );
-				}else
-				{
-					return exit_library( ud, 0 );
+				retval = set_ppoll_timeout(conf, value);
+				if (retval < 0) {
+					setIberr(EARG);
+					return exit_library(ud, 1);
+				} else {
+					return exit_library(ud, 0);
 				}
 				break;
 			case IbcHSCableLength:
-				if (set_cable_length (conf, value) < 0)
-				{
-					return exit_library( ud, 1 );
-				} else
-				{
-					return exit_library( ud, 0 );
+				if (set_cable_length (conf, value) < 0) {
+					return exit_library(ud, 1);
+				} else {
+					return exit_library(ud, 0);
 				}
 				break;
 			case IbcIst:
-				retval = internal_ibist( conf, value );
-				if( retval < 0 ) return exit_library( ud, 1 );
-				else return exit_library( ud, 0 );
+				retval = internal_ibist(conf, value);
+				if (retval < 0)
+					return exit_library(ud, 1);
+				else
+					return exit_library(ud, 0);
 				break;
 			case IbcRsv:
-				retval = internal_ibrsv2( conf, value, value & request_service_bit );
-				if( retval < 0 )
-					return exit_library( ud, 1 );
+				retval = internal_ibrsv2(conf, value, value & request_service_bit);
+				if (retval < 0)
+					return exit_library(ud, 1);
 				else
-					return exit_library( ud, 0 );
+					return exit_library(ud, 0);
 				break;
 			default:
 				break;
 		}
-	}else
-	{
-		switch( option )
-		{
+	} else {
+		switch (option)	{
 			case IbcREADDR:
 				/* We always re-address.  To support only
 				 * readdressing when necessary would require
 				 * making the driver keep track of current addressing
 				 * state.  Maybe someday, but low priority. */
-				if( value )
+				if (value)
 					conf->settings.readdr = 1;
 				else
 					conf->settings.readdr = 0;
-				return exit_library( ud, 0 );
+				return exit_library(ud, 0);
 				break;
 			case IbcSPollTime:
-				retval = set_spoll_timeout( conf, value );
-				if( retval < 0 )
-				{
-					setIberr( EARG );
-					return exit_library( ud, 1 );
-				}else
-				{
-					return exit_library( ud, 0 );
+				retval = set_spoll_timeout(conf, value);
+				if (retval < 0)	{
+					setIberr(EARG);
+					return exit_library(ud, 1);
+				} else {
+					return exit_library(ud, 0);
 				}
 				break;
 			case IbcUnAddr:
@@ -378,20 +361,20 @@ int ibconfig( int ud, int option, int value )
 					conf->settings.send_unt_unl = 1;
 				else
 					conf->settings.send_unt_unl = 0;
-				return exit_library( ud, 0 );
+				return exit_library(ud, 0);
 				break;
 			case IbcBNA:
-				retval = my_ibbna( conf, value );
-				if( retval < 0 )
-					return exit_library( ud, 1 );
+				retval = my_ibbna(conf, value);
+				if (retval < 0)
+					return exit_library(ud, 1);
 				else
-					return exit_library( ud, 0 );
+					return exit_library(ud, 0);
 				break;
 			default:
 				break;
 		}
 	}
 
-	setIberr( EARG );
-	return exit_library( ud, 1 );
+	setIberr(EARG);
+	return exit_library(ud, 1);
 }

@@ -1,0 +1,332 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>Introduction</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.3.7
+ Documentation"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="	Linux-GPIB 4.3.7
+ Documentation"
+HREF="t1.html"><LINK
+REL="NEXT"
+TITLE="	Configuration"
+HREF="configuration.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.3.7
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="t1.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="configuration.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="AEN25"
+>Introduction</A
+></H1
+><P
+>The linux-gpib package is a set of software that supports programmatic
+access to IEEE-488 General Purpose Interface Bus compliant devices and
+instruments via a number of supported boards. Boards are adapters or
+interface cards that permit a computer to be connected to a GPIB bus.
+Typical instruments are test and measurement instruments such as
+signal generators, volt meters, oscilloscopes and spectrum
+analysers. There are also GPIB capable devices such as printers,
+plotters and digitizing tablets.</P
+><P
+>The linux-gpib package is comprised of 2 parts: user part and kernel
+part. The user part contains</P
+><P
+><P
+></P
+><UL
+><LI
+><P
+>      The administration program <A
+HREF="configuration-gpib-config.html"
+>gpib_config</A
+>.
+    </P
+></LI
+><LI
+><P
+>      A sample configuration file <A
+HREF="configuration-gpib-conf.html"
+>gpib.conf</A
+>.
+    </P
+></LI
+><LI
+><P
+>      Automatic udev configuration scripts for usb adapter boards.
+    </P
+></LI
+><LI
+><P
+>      User library and header files.
+    </P
+></LI
+><LI
+><P
+>      Bindings for various languages such as guile, perl, python and tcl.
+    </P
+></LI
+><LI
+><P
+>      Example programmes and documentation.
+    </P
+></LI
+></UL
+></P
+><P
+>The kernel part contains the drivers for the different supported
+boards. See <A
+HREF="supported-hardware.html"
+>Supported
+    Hardware</A
+>.
+The kernel part is provided for installations that do not have
+built-in kernel support for the drivers.</P
+><P
+>An IEEE-488 compliant board can drive a GPIB bus with up to 15 devices
+attached. Each device on the bus, as well as the board connected to
+it, must be assigned a unique primary address ranging from 0 to
+30. GPIB addresses of devices or instruments are assigned by setting
+DIP switches or via the front panel. The GPIB address of boards are
+assigned via software configuration (see
+<A
+HREF="configuration-gpib-conf.html"
+>Configuration</A
+>). Some
+boards also support secondary addressing. This feature is very rarely
+needed.</P
+><P
+>The software supports the use of multiple boards in one system. Some
+boards can also function as devices. Each board is assigned an
+identifier called a <I
+CLASS="EMPHASIS"
+>minor</I
+> by which it is
+referenced in the sotfware functions. Devices are
+referenced programmatically by a device descriptor which is obtained
+with the
+<A
+HREF="reference-function-ibdev.html"
+>ibdev()</A
+> function by
+specifying the minor of the board of the bus to which they are
+connected. Board descriptors and device descriptors can also be
+obtained with the
+<A
+HREF="reference-function-ibfind.html"
+>ibfind()</A
+> function by
+specifying their name as defined in the configuration file. The
+<I
+CLASS="EMPHASIS"
+>minor</I
+> can also be used directly as a board
+descriptor. Board descriptors are only needed in advanced applications
+requiring fine control over the bus such as emulating a device or
+managing the bus state. When using a device descriptor for I/O the
+library automatically handles the low level functions such as
+configuring the device to talk or listen on the bus.</P
+><P
+>  Here is simple programme to read the identification string of a
+  device. The descriptor is obtained with ibfind() by the name
+  <I
+CLASS="EMPHASIS"
+>voltmeter</I
+> defined in the configuration file. Error
+  handling has been omitted for clarity.
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>&#13;
+
+#include &#60;stdlib.h&#62;
+#include &#60;stdio.h&#62;
+#include &#60;string.h&#62;
+#include &#60;stdint.h&#62;
+#include &#60;gpib/gpib_user.h&#62;
+#include &#60;gpib/ib.h&#62;
+
+int main() {
+  int ud;                /* descriptor for the device      */
+  char *id = "*IDN?\n";  /* string to request id of device */
+  uint8_t buf[256];      /* buffer for response            */
+
+  ud = ibfind("voltmeter");      /* obtain descriptor by name   */
+  ibwrt(ud, id, strlen(id));     /* send request-id string      */
+  ibrd(ud, buf, 256);            /* read response               */
+  buf[ibcnt] = 0;                /* null terminate the response */
+  printf("Device id: %s\n", buf);
+  return 0;
+}</PRE
+></TD
+></TR
+></TABLE
+></P
+><P
+>Here is the same programme using ibdev() to access a device with a
+primary GPIB address of 7 attached to the bus connected to a board
+configured with minor 0. This provides more control over the
+parameters or defaults in the configuration file if present.
+<TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="PROGRAMLISTING"
+>#include &#60;stdlib.h&#62;
+#include &#60;stdio.h&#62;
+#include &#60;string.h&#62;
+#include &#60;stdint.h&#62;
+#include &#60;gpib/gpib_user.h&#62;
+#include &#60;gpib/ib.h&#62;
+
+int main() {
+  int minor = 0;         /* minor of board                 */
+  int pad = 7;           /* primary GPIB address of device */
+  int sad = 0;           /* no secondary address           */
+  int timeout = T300ms;  /* set timeout to 300 millseconds */
+  int eoi = 1;           /* send EOI with last byte        */
+  int eos = 0;           /* no end of string character     */
+  int ud;                /* descriptor for the device      */
+  char *id = "*IDN?\n";  /* string to request id of device */
+  uint8_t buf[256];      /* buffer for response            */
+
+  ud = ibdev(minor, pad, sad,    /* obtain device descriptor    */
+	     timeout, eoi, eos); 
+  ibwrt(ud, id, strlen(id));     /* send request-id string      */
+  ibrd(ud, buf, 256);            /* read response               */
+  buf[ibcnt] = 0;                /* null terminate the response */
+  printf("Device id: %s\n", buf);
+  return 0;
+}</PRE
+></TD
+></TR
+></TABLE
+>    </P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="configuration.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Linux-GPIB 4.3.7
+ Documentation</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Configuration</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

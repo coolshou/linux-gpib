@@ -1,0 +1,62 @@
+'\" t
+.\"     Title: ibrsv
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBRSV" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibrsv \- request service (board)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibrsv('u
+.BI "int ibrsv(int\ " "ud" ", int\ " "status_byte" ");"
+.SH "DESCRIPTION"
+.PP
+The serial poll response byte of the board specified by the board descriptor
+\fIud\fR
+is set to
+\fIstatus_byte\fR\&. If MSS (bit 6 in
+\fIstatus_byte\fR) is set, then the IEEE 488\&.2 local message "reqt" will be set true, causing the board to request service by asserting the SRQ line\&. If the MSS bit is clear, then the "reqf" message will be set true, causing the board to stop requesting service\&.
+.PP
+Boards will also automatically stop requesting service when they are serial polled by the controller\&.
+.PP
+This function follows the implementation technique described in IEEE 488\&.2 section 11\&.3\&.3\&.4\&.3\&. It is prone to generating spurious requests for service, which are permitted by 488\&.2 but less than ideal\&. In order to avoid spurious requests, use
+ibrsv2()
+instead\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

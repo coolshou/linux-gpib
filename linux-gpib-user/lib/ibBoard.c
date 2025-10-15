@@ -48,44 +48,38 @@ void init_ibboard(ibBoard_t *board)
 	board->autospoll = 0;
 	strcpy(board->sysfs_device_path, "");
 	strcpy(board->serial_number, "");
+	board->set_ren_on_sc = 1;
 }
 
 int configure_autospoll(ibConf_t *conf, int enable)
 {
-	autospoll_ioctl_t spoll_enable = enable != 0;
+	short spoll_enable = enable != 0;
 	int retval = 0;
 	ibBoard_t *board = interfaceBoard(conf);
 
-	if((spoll_enable && board->autospoll == 0) ||
-		(spoll_enable == 0 && board->autospoll))
-	{
+	if ((spoll_enable && !board->autospoll) || (!spoll_enable && board->autospoll)) {
 		retval = ioctl(interfaceBoard(conf)->fileno, IBAUTOSPOLL, &spoll_enable);
-		if(retval)
-		{
+		if (retval)
 			fprintf(stderr, "libgpib: autospoll ioctl returned error %i\n", retval);
-		}else
-		{
+		else
 			board->autospoll = enable != 0;
-		}
 	}
 	return retval;
 }
 
-int ibBoardOpen( ibBoard_t *board, int error_msg_disable )
+int ibBoardOpen(ibBoard_t *board, int error_msg_disable)
 {
 	int fd;
 	int flags = 0;
 
-	if( board->fileno >= 0 ) return 0;
+	if (board->fileno >= 0) return 0;
 
-	if( ( fd = open( board->device, O_RDWR | flags ) ) < 0 )
-	{
-		setIberr( EDVR );
-		setIbcnt( errno );
-		if (!error_msg_disable)
-		{
-			fprintf( stderr, "libgpib: ibBoardOpen failed to open device file %s\n", board->device);
-			perror( "libgpib" );
+	if ((fd = open(board->device, O_RDWR | flags)) < 0) {
+		setIberr(EDVR);
+		setIbcnt(errno);
+		if (!error_msg_disable)	{
+			fprintf(stderr, "libgpib: ibBoardOpen failed to open device file %s\n", board->device);
+			perror("libgpib");
 		}
 		return -1;
 	}
@@ -95,100 +89,93 @@ int ibBoardOpen( ibBoard_t *board, int error_msg_disable )
 	return 0;
 }
 
-int ibBoardClose( ibBoard_t *board )
+int ibBoardClose(ibBoard_t *board)
 {
 
-	if( board->open_count == 0 )
-	{
-		fprintf( stderr, "libgpib: bug! board->open_count is zero on close\n");
+	if (board->open_count == 0) {
+		fprintf(stderr, "libgpib: bug! board->open_count is zero on close\n");
 		return -1;
 	}
 
 	board->open_count--;
-	if( board->open_count > 0 )
+	if (board->open_count > 0)
 		return 0;
 
-	if( board->fileno >= 0 )
-	{
-		close( board->fileno );
+	if (board->fileno >= 0)	{
+		close(board->fileno);
 		board->fileno = -1;
 	}
 
 	return 0;
 }
 
-int InternalResetSys( ibConf_t *conf, const Addr4882_t addressList[] )
+int InternalResetSys(ibConf_t *conf, const Addr4882_t addressList[])
 {
 	ibBoard_t *board;
 	int retval;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	if( addressListIsValid( addressList ) == 0 )
-	{
-		setIberr( EARG );
+	if (addressListIsValid(addressList) == 0) {
+		setIberr(EARG);
 		return -1;
 	}
 
-	if( conf->is_interface == 0 )
-	{
-		setIberr( EDVR );
+	if (conf->is_interface == 0) {
+		setIberr(EDVR);
 		return -1;
 	}
 
-	if( is_system_controller( board ) == 0 )
-	{
-		setIberr( ESAC );
+	retval = is_system_controller(board);
+	if (retval <= 0) {
+		if (retval == 0)
+			setIberr(ESAC);
 		return -1;
 	}
 
-	if( is_cic( board ) == 0 )
-	{
-		setIberr( ECIC );
+	retval = is_cic(board);
+	if (retval <= 0) {
+		if (retval == 0)
+			setIberr(ECIC);
 		return -1;
 	}
 
-	retval = remote_enable( board, 1 );
-	if( retval < 0 ) return retval;
+	retval = remote_enable(board, 1);
+	if (retval < 0)
+		return retval;
 
-	retval = internal_ibsic( conf );
-	if( retval < 0 ) return retval;
+	retval = internal_ibsic(conf);
+	if (retval < 0)
+		return retval;
 
-	retval = InternalDevClearList( conf, NULL );
-	if( retval < 0 ) return retval;
+	retval = InternalDevClearList(conf, NULL);
+	if (retval < 0)
+		return retval;
 
-	retval = InternalSendList( conf, addressList, "*RST", 4, NLend );
-	if( retval < 0 ) return retval;
+	retval = InternalSendList(conf, addressList, "*RST", 4, NLend);
+	if (retval < 0)
+		return retval;
 
 	return 0;
 }
 
-void ResetSys( int boardID, const Addr4882_t addressList[] )
+void ResetSys(int boardID, const Addr4882_t addressList[])
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (conf == NULL) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalResetSys( conf, addressList );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = InternalResetSys(conf, addressList);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	exit_library( boardID, 0 );
+	exit_library(boardID, 0);
 
 }
-
-
-
-
-
-
-

@@ -17,16 +17,13 @@
 
 #include "ib_internal.h"
 
-int ibdma( int ud, int v )
+int ibdma(int ud, int v)
 {
 	ibConf_t *conf;
-	ibBoard_t *board;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
+	conf = enter_library(ud);
+	if (!conf)
 		return exit_library( ud, 1 );
-
-	board = interfaceBoard( conf );
 
 	fprintf( stderr, "libgpib: ibdma() unimplemented!\n" );
 

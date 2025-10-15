@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibdev"
 HREF="reference-function-ibdev.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibdev.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibeot.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBEOS"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1505"
+NAME="AEN1849"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1505"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1508"
+NAME="AEN1852"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1509"
+NAME="AEN1853"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibeos</CODE
->(int ud, int eosmode);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibeos</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>eosmode</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,16 +136,18 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1518"
+NAME="AEN1862"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	ibeos() is used to set the end-of-string character and mode.  The least
-	significant 8 bits of <CODE
+	significant 8 bits of <TT
 CLASS="PARAMETER"
->eosmode</CODE
+><I
+>eosmode</I
+></TT
 > specify the
 	eos character.  You may also bitwise-or one or more of the following
 	bits to set the eos mode:
@@ -132,7 +156,7 @@ CLASS="PARAMETER"
 >	<DIV
 CLASS="TABLE"
 ><A
-NAME="AEN1523"
+NAME="AEN1867"
 ></A
 ><P
 ><B
@@ -140,10 +164,12 @@ NAME="AEN1523"
 ></P
 ><TABLE
 BORDER="1"
-RULES="all"
 WIDTH="100%"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
 CLASS="CALSTABLE"
-><COL><COL><COL><THEAD
+><THEAD
 ><TR
 ><TH
 >constant</TH
@@ -188,7 +214,7 @@ CLASS="CALSTABLE"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1544"
+NAME="AEN1888"
 ></A
 ><H2
 >	Return value
@@ -218,14 +244,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibdev.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -236,7 +262,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibeot.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -250,7 +276,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

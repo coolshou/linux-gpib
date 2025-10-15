@@ -1,0 +1,78 @@
+'\" t
+.\"     Title: ibwait
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBWAIT" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibwait \- wait for event (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibwait('u
+.BI "int ibwait(int\ " "ud" ", int\ " "status_mask" ");"
+.SH "DESCRIPTION"
+.PP
+ibwait() will sleep until one of the conditions specified in
+\fIstatus_mask\fR
+is true\&. The meaning of the bits in
+\fIstatus_mask\fR
+are the same as the bits of the
+ibsta
+status variable\&.
+.PP
+If
+\fIstatus_mask\fR
+is zero, then ibwait() will return immediately\&. This is useful if you simply wish to get an updated ibsta\&.
+.PP
+When calling ibwait() on a device, only the following condition bits in the
+\fIstatus_mask\fR
+are valid: TIMO, END, CMPL, and RQS\&. For the RQS bit to be set in the returned ibsta automatic serial polling must be enabled for the board controlling the device, see
+ibconfig()\&. The RQS condition is cleared by serial polling the device, see
+ibrsp()\&.
+.PP
+If you wish to resynchronize and obtain the results from an asynchronous I/O operation, you must wait on CMPL by setting its bit in the
+\fIstatus_mask\fR
+parameter\&. Then if ibwait returns with CMPL set, it will have updated iberr, ibcnt, and the ERR bit of ibsta with the most recent asynchronous I/O results\&.
+.PP
+If TIMO is set in the
+\fIstatus_mask\fR
+parameter, then ibwait will timeout after the time period set by
+ibtmo
+and set TIMO in ibsta\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

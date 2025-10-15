@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibonl"
 HREF="reference-function-ibonl.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibonl.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibpct.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBPAD"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1913"
+NAME="AEN2260"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1913"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1916"
+NAME="AEN2263"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1917"
+NAME="AEN2264"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibpad</CODE
->(int ud, int pad);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibpad</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>pad</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,29 +136,37 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1926"
+NAME="AEN2273"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	ibpad() sets the GPIB primary address to <CODE
+>	ibpad() sets the GPIB primary address to <TT
 CLASS="PARAMETER"
->pad</CODE
+><I
+>pad</I
+></TT
 >
-	for the device or board specified by the descriptor <CODE
+	for the device or board specified by the descriptor <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >.
-	If <CODE
+	If <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > is a device descriptor, then the setting is
 	local to the descriptor (it does not affect the behaviour of calls using
 	other descriptors, even if they refer to the same physical device).  If
-	<CODE
+	<TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > is a board descriptor, then the board's
 	primary address is changed immediately, which is a global change affecting
 	anything (even other processes) using the board.  Valid GPIB primary
@@ -146,7 +176,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1933"
+NAME="AEN2280"
 ></A
 ><H2
 >	Return value
@@ -176,14 +206,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibonl.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -194,7 +224,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibpct.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -208,7 +238,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

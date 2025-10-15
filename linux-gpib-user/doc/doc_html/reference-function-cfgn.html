@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="	Utility Functions"
-HREF="reference.html#AEN3474"><LINK
+HREF="x3822.html"><LINK
 REL="PREVIOUS"
 TITLE="AsyncIbsta"
 HREF="reference-function-async-ibsta.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-async-ibsta.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-get-pad.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-CFGN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3560"
+NAME="AEN3908"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3560"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3563"
+NAME="AEN3911"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,34 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3564"
+NAME="AEN3912"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->uint8_t CFGn</CODE
->(unsigned int num_meters);</CODE
+>uint8_t <TT
+CLASS="FUNCTION"
+>CFGn</TT
+></CODE
+>(unsigned int <TT
+CLASS="PARAMETER"
+><I
+>num_meters</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +131,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3571"
+NAME="AEN3919"
 ></A
 ><H2
 >	Description
@@ -122,15 +139,19 @@ NAME="AEN3571"
 ><P
 >	CFGn() returns a 'configure n meters'
 	<A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command byte</A
 > corresponding
-	to the <CODE
+	to the <TT
 CLASS="PARAMETER"
->num_meters</CODE
-> argument.  <CODE
+><I
+>num_meters</I
+></TT
+> argument.  <TT
 CLASS="PARAMETER"
->num_meters</CODE
+><I
+>num_meters</I
+></TT
 >
 	(valid values are 1 through 15)
 	specifies how many meters of cable are in your system.  This is necessary in
@@ -141,7 +162,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3577"
+NAME="AEN3925"
 ></A
 ><H2
 >	Return value
@@ -168,14 +189,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-async-ibsta.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -186,7 +207,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-get-pad.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -200,7 +221,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN3474"
+HREF="x3822.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

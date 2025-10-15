@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibbna"
 HREF="reference-function-ibbna.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibbna.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibclr.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBCAC"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1142"
+NAME="AEN1486"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1142"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1145"
+NAME="AEN1489"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1146"
+NAME="AEN1490"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibcac</CODE
->(int ud, int synchronous);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibcac</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>synchronous</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,27 +136,33 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1155"
+NAME="AEN1499"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	ibcac() causes the board specified by the board descriptor <CODE
+>	ibcac() causes the board specified by the board descriptor <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >
 	to become active controller by asserting the ATN line.
 	The board must be controller-in-change in order to assert ATN.
-	If <CODE
+	If <TT
 CLASS="PARAMETER"
->synchronous</CODE
+><I
+>synchronous</I
+></TT
 > is nonzero, then
 	the board will wait for a data
 	byte on the bus to complete its transfer before asserting ATN.
-	If the synchronous attempt times out, or <CODE
+	If the synchronous attempt times out, or <TT
 CLASS="PARAMETER"
->synchronous</CODE
+><I
+>synchronous</I
+></TT
 >
 	is zero, then ATN will be asserted immediately.
 	</P
@@ -146,7 +174,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1162"
+NAME="AEN1506"
 ></A
 ><H2
 >	Return value
@@ -176,14 +204,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibbna.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -194,7 +222,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibclr.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -208,7 +236,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

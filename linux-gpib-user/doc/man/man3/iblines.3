@@ -1,0 +1,210 @@
+'\" t
+.\"     Title: iblines
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBLINES" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+iblines \- monitor bus lines (board)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ iblines('u
+.BI "int iblines(int\ " "ud" ", short\ *" "line_status" ");"
+.SH "DESCRIPTION"
+.PP
+iblines() is used to obtain the status of the control and handshaking
+bus lines
+of the bus\&. The board used to monitor the bus is specified by the
+\fIud\fR
+argument, and the status of the various bus lines are written to the location specified by
+\fIline_status\fR\&.
+.PP
+Some older chips are not capable of reporting the status of the bus lines, so each line has two corresponding bits in
+\fIline_status\fR\&. One bit indicates if the board can monitor the line, and the other bit indicates the line\*(Aqs state\&. The meaning of the
+\fIline_status\fR
+bits are as follows:
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&9.\ \&line status bits
+.TS
+allbox tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value
+T}:T{
+description
+T}
+.T&
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l
+l l l.
+T{
+ValidDAV
+T}:T{
+0x1
+T}:T{
+The BusDAV bit is valid\&.
+T}
+T{
+ValidNDAC
+T}:T{
+0x2
+T}:T{
+The BusNDAC bit is valid\&.
+T}
+T{
+ValidNRFD
+T}:T{
+0x4
+T}:T{
+The BusNRFD bit is valid\&.
+T}
+T{
+ValidIFC
+T}:T{
+0x8
+T}:T{
+The BusIFC bit is valid\&.
+T}
+T{
+ValidREN
+T}:T{
+0x10
+T}:T{
+The BusREN bit is valid\&.
+T}
+T{
+ValidSRQ
+T}:T{
+0x20
+T}:T{
+The BusSRQ bit is valid\&.
+T}
+T{
+ValidATN
+T}:T{
+0x40
+T}:T{
+The BusATN bit is valid\&.
+T}
+T{
+ValidEOI
+T}:T{
+0x80
+T}:T{
+The BusEOI bit is valid\&.
+T}
+T{
+BusDAV
+T}:T{
+0x100
+T}:T{
+Set/cleared if the DAV line is asserted/unasserted\&.
+T}
+T{
+BusNDAC
+T}:T{
+0x200
+T}:T{
+Set/cleared if the NDAC line is asserted/unasserted\&.
+T}
+T{
+BusNRFD
+T}:T{
+0x400
+T}:T{
+Set/cleared if the NRFD line is asserted/unasserted\&.
+T}
+T{
+BusIFC
+T}:T{
+0x800
+T}:T{
+Set/cleared if the IFC line is asserted/unasserted\&.
+T}
+T{
+BusREN
+T}:T{
+0x1000
+T}:T{
+Set/cleared if the REN line is asserted/unasserted\&.
+T}
+T{
+BusSRQ
+T}:T{
+0x2000
+T}:T{
+Set/cleared if the SRQ line is asserted/unasserted\&.
+T}
+T{
+BusATN
+T}:T{
+0x4000
+T}:T{
+Set/cleared if the ATN line is asserted/unasserted\&.
+T}
+T{
+BusEOI
+T}:T{
+0x8000
+T}:T{
+Set/cleared if the EOI line is asserted/unasserted\&.
+T}
+.TE
+.sp 1
+.PP
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

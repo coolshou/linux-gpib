@@ -17,27 +17,24 @@
 
 #include "ib_internal.h"
 
-int internal_iblines( ibConf_t *conf, short *line_status )
+int internal_iblines(ibConf_t *conf, short *line_status)
 {
 	int retval;
 	ibBoard_t *board;
 
-	if( conf->is_interface == 0 )
-	{
-		setIberr( EARG );
+	if (conf->is_interface == 0) {
+		setIberr(EARG);
 		return -1;
 	}
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	retval = ioctl( board->fileno, IBLINES, line_status );
-	if( retval < 0 )
-	{
-		switch( errno )
-		{
+	retval = ioctl(board->fileno, IBLINES, line_status);
+	if (retval < 0)	{
+		switch (errno)	{
 			default:
-				setIbcnt( errno );
-				setIberr( EDVR );
+				setIbcnt(errno);
+				setIberr(EDVR);
 				break;
 		}
 		return -1;
@@ -45,57 +42,51 @@ int internal_iblines( ibConf_t *conf, short *line_status )
 	return 0;
 }
 
-int iblines( int ud, short *line_status )
+int iblines(int ud, short *line_status)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = general_enter_library( ud, 1, 1 );
-	if( conf == NULL )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	conf = general_enter_library(ud, 1, 1);
+	if (conf == NULL)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	retval = internal_iblines( conf, line_status );
-	if( retval < 0 )
-	{
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
-	}
+	retval = internal_iblines(conf, line_status);
+	if (retval < 0)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	return general_exit_library( ud, 0, 0, 0, 0, 0, 1 );
+	return general_exit_library(ud, 0, 0, 0, 0, 0, 1);
 }
 
-void TestSRQ( int boardID, short *result )
+void TestSRQ(int boardID, short *result)
 {
 	short line_status;
 
 	ibConf_t *conf;
 	int retval;
 
-	conf = general_enter_library( boardID, 1, 0 );
-	if( conf == NULL )
-	{
-		general_exit_library( boardID, 1, 0, 0, 0, 0, 1 );
+	conf = general_enter_library(boardID, 1, 0);
+	if (conf == NULL) {
+		general_exit_library(boardID, 1, 0, 0, 0, 0, 1);
 		return;
 	}
 
-	retval = internal_iblines( conf, &line_status );
-	if( retval < 0 )
-	{
-		general_exit_library( boardID, 1, 0, 0, 0, 0, 1 );
+	retval = internal_iblines(conf, &line_status);
+	if (retval < 0) {
+		general_exit_library(boardID, 1, 0, 0, 0, 0, 1);
 		return;
 	}
 
-	if( ( line_status & ValidSRQ ) == 0 )
-	{
-		setIberr( ECAP );
-		general_exit_library( boardID, 1, 0, 0, 0, 0, 1 );
+	if ((line_status & ValidSRQ) == 0) {
+		setIberr(ECAP);
+		general_exit_library(boardID, 1, 0, 0, 0, 0, 1);
 		return;
 	}
 
-	if( line_status & BusSRQ )
-	{
+	if (line_status & BusSRQ)
 		*result = 1;
-	}else
+	else
 		*result = 0;
 
-	general_exit_library( boardID, 0, 0, 0, 0, 0, 1 );
+	general_exit_library(boardID, 0, 0, 0, 0, 0, 1);
 }

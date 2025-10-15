@@ -1,0 +1,74 @@
+'\" t
+.\"     Title: MakeAddr
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Utility Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "MAKEADDR" "3" "10/04/2025" "linux-gpib 4.3.7" "Utility Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+MakeAddr \- pack primary and secondary address into an Addr4882_t value
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'static\ __inline__\ Addr4882_t\ MakeAddr('u
+.BI "static __inline__ Addr4882_t MakeAddr(unsigned\ int\ " "pad" ", unsigned\ int\ " "sad" ");"
+.SH "DESCRIPTION"
+.PP
+MakeAddr() generates an Addr4882_t value that corresponds to the specified primary address
+\fIpad\fR
+and secondary address
+\fIsad\fR\&. It does so by putting
+\fIpad\fR
+into the least significant byte and left shifting
+\fIsad\fR
+up to the next byte\&.
+.SH "EXAMPLES"
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+Addr4882_t addressList[ 5 ];
+
+addressList[ 0 ] = 5 /* primary address 5, no secondary address */
+addressList[ 1 ] = MakeAddr(3, 0); /* primary address 3, no secondary address */
+addressList[ 2 ] = MakeAddr(7, 0x70); /* primary address 3, secondary address 16 */
+addressList[ 3 ] = MakeAddr(20, MSA(9)); /* primary address 20, secondary address 9 */
+addressList[ 4 ] = NOADDR;
+.fi
+.if n \{\
+.RE
+.\}
+.SH "RETURN VALUE"
+.PP
+An Addr4882_t value corresponding to the specified primary and secondary GPIB address\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

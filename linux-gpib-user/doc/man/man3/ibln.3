@@ -1,0 +1,77 @@
+'\" t
+.\"     Title: ibln
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBLN" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibln \- check if listener is present (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibln('u
+.BI "int ibln(int\ " "ud" ", int\ " "pad" ", int\ " "sad" ", short\ *" "found_listener" ");"
+.SH "DESCRIPTION"
+.PP
+ibln() checks for the presence of a device, by attempting to address it as a listener\&.
+\fIud\fR
+specifies the GPIB interface board which should check for listeners\&. If
+\fIud\fR
+is a device descriptor, then the device\*(Aqs access board is used\&.
+.PP
+The GPIB address to check is specified by the
+\fIpad\fR
+and
+\fIsad\fR
+arguments\&.
+\fIpad\fR
+specifies the primary address, 0 through 30 are valid values\&.
+\fIsad\fR
+gives the secondary address, and may be a value from 0x60 through 0x7f (96 through 127), or one of the constants NO_SAD or ALL_SAD\&. NO_SAD indicates that no secondary addressing is to be used, and ALL_SAD indicates that all secondary addresses should be checked\&.
+.PP
+If the board finds a listener at the specified GPIB address(es), then the variable specified by the pointer
+\fIfound_listener\fR
+is set to a nonzero value\&. If no listener is found, the variable is set to zero\&.
+.PP
+The board must be controller\-in\-charge to perform this function\&. Also, it must have the capability to monitor the NDAC
+bus line
+(see
+iblines())\&.
+.PP
+This function has the additional effect of addressing the board as talker for the duration of the Find Listeners protocol, which is beyond what IEEE 488\&.2 specifies\&. This is done because some boards cannot reliably read the state of the NDAC bus line unless they are the talker\&. Being the talker causes the board\*(Aqs gpib transceiver to configure NDAC as an input, so its state can be reliably read from the bus through the transceiver\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

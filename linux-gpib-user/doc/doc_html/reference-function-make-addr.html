@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE="	Utility Functions"
-HREF="reference.html#AEN3474"><LINK
+HREF="x3822.html"><LINK
 REL="PREVIOUS"
 TITLE="GetSAD"
 HREF="reference-function-get-sad.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-get-sad.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-mla.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-MAKE-ADDR"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3630"
+NAME="AEN3978"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3630"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3633"
+NAME="AEN3981"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3634"
+NAME="AEN3982"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->static __inline__ Addr4882_t MakeAddr</CODE
->(unsigned int pad, unsigned int sad);</CODE
+>static __inline__ Addr4882_t <TT
+CLASS="FUNCTION"
+>MakeAddr</TT
+></CODE
+>(unsigned int <TT
+CLASS="PARAMETER"
+><I
+>pad</I
+></TT
+>, unsigned int <TT
+CLASS="PARAMETER"
+><I
+>sad</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,39 +136,53 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3643"
+NAME="AEN3991"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	MakeAddr() generates an Addr4882_t value that corresponds to the
-	specified primary address <CODE
+	specified primary address <TT
 CLASS="PARAMETER"
->pad</CODE
+><I
+>pad</I
+></TT
 > and secondary
-	address <CODE
+	address <TT
 CLASS="PARAMETER"
->sad</CODE
+><I
+>sad</I
+></TT
 >.  It does so by putting
-	<CODE
+	<TT
 CLASS="PARAMETER"
->pad</CODE
+><I
+>pad</I
+></TT
 > into the least significant byte and
-	left shifting <CODE
+	left shifting <TT
 CLASS="PARAMETER"
->sad</CODE
+><I
+>sad</I
+></TT
 > up to the next byte.
 	</P
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3650"
+NAME="AEN3998"
 ></A
 ><H2
 >	Examples
 	</H2
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="PROGRAMLISTING"
 >Addr4882_t addressList[ 5 ];
@@ -156,11 +192,14 @@ addressList[ 1 ] = MakeAddr(3, 0); /* primary address 3, no secondary address */
 addressList[ 2 ] = MakeAddr(7, 0x70); /* primary address 3, secondary address 16 */
 addressList[ 3 ] = MakeAddr(20, MSA(9)); /* primary address 20, secondary address 9 */
 addressList[ 4 ] = NOADDR;</PRE
+></TD
+></TR
+></TABLE
 ></DIV
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3653"
+NAME="AEN4001"
 ></A
 ><H2
 >	Return value
@@ -188,14 +227,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-get-sad.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -206,7 +245,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-mla.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -220,7 +259,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN3474"
+HREF="x3822.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

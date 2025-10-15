@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="iblines"
 HREF="reference-function-iblines.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-iblines.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibloc.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBLN"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1817"
+NAME="AEN2161"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1817"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1820"
+NAME="AEN2164"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,49 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1821"
+NAME="AEN2165"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibln</CODE
->(int ud, int pad, int sad, short *found_listener);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibln</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>pad</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>sad</I
+></TT
+>, short *<TT
+CLASS="PARAMETER"
+><I
+>found_listener</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,50 +146,64 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1834"
+NAME="AEN2178"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	ibln() checks for the presence of a device, by attempting to address
-	it as a listener.  <CODE
+	it as a listener.  <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > specifies the GPIB
-	interface board which should check for listeners.  If <CODE
+	interface board which should check for listeners.  If <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >
 	is a device descriptor, then the device's access board is used.
 	</P
 ><P
 >	The GPIB address to check is specified by the
-	<CODE
+	<TT
 CLASS="PARAMETER"
->pad</CODE
-> and <CODE
+><I
+>pad</I
+></TT
+> and <TT
 CLASS="PARAMETER"
->sad</CODE
+><I
+>sad</I
+></TT
 > arguments.
-	<CODE
+	<TT
 CLASS="PARAMETER"
->pad</CODE
+><I
+>pad</I
+></TT
 > specifies the primary address, 0 through 30
-	are valid values.  <CODE
+	are valid values.  <TT
 CLASS="PARAMETER"
->sad</CODE
+><I
+>sad</I
+></TT
 > gives the secondary
-	address, and may be a value from 0x60 through 0x7e (96 through 126), or
+	address, and may be a value from 0x60 through 0x7f (96 through 127), or
 	one of the constants NO_SAD or ALL_SAD.  NO_SAD indicates that no
 	secondary addressing is to be used, and ALL_SAD indicates that
 	all secondary addresses should be checked.
 	</P
 ><P
 >	If the board finds a listener at the specified GPIB address(es), then the
-	variable specified by the pointer <CODE
+	variable specified by the pointer <TT
 CLASS="PARAMETER"
->found_listener</CODE
+><I
+>found_listener</I
+></TT
 >
 	is set to a nonzero value.  If no listener is found, the variable is set
 	to zero.
@@ -166,7 +212,7 @@ CLASS="PARAMETER"
 >	The board must be controller-in-charge to perform this function.  Also,
 	it must have the capability to monitor the NDAC
 	<A
-HREF="gpib-protocol.html#GPIB-PROTOCOL-BUS-LINES"
+HREF="x4176.html#GPIB-PROTOCOL-BUS-LINES"
 >bus line</A
 >
 	(see <A
@@ -187,7 +233,7 @@ HREF="reference-function-iblines.html"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1850"
+NAME="AEN2194"
 ></A
 ><H2
 >	Return value
@@ -217,14 +263,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-iblines.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -235,7 +281,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibloc.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -249,7 +295,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

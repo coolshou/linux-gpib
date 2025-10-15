@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
 #include <tcl.h>
 #include <gpib/ib.h>
+
+#undef _ANSI_ARGS_
+#define _ANSI_ARGS_(x) x
 
 void ib_CreateVerboseError(Tcl_Interp *interp,char *entry );
 

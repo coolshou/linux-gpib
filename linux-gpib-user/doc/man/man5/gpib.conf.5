@@ -1,0 +1,381 @@
+'\" t
+.\"     Title: gpib.conf
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Configuration
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "GPIB\&.CONF" "5" "10/04/2025" "linux-gpib 4.3.7" "Configuration"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+gpib.conf \- GPIB library configuration file
+.SH "DESCRIPTION"
+.PP
+The library, and the administration tool
+gpib_config
+read their configuration information from the file gpib\&.conf\&. By default, the file is located in the sysconfdir directory configured when linux\-gpib was compiled\&. The sysconfdir is typically set to /etc or /usr/local/etc\&. A template gpib\&.conf file can be found in the util/templates/ subdirectory of the linux\-gpib package\&.
+.PP
+The default config file may be overridden by setting the IB_CONFIG environment variable to a custom file path\&.
+.PP
+The configuration file must contain one \*(Aqinterface\*(Aq entry for each of the board minors that are going to be used unless all the \*(Aqrequired\*(Aq options are specified in the command\-line invocation of the administration tool gpib_config to configure that minor\&. The file must contain an \*(Aqinterface\*(Aq entry with the \*(Aqname\*(Aq option set if you wish to open the board desciptor with
+ibfind()
+instead of directly using the minor as the board descriptor\&. If there is no entry for the minor in the configuration file, the required command\-line options are \*(Aqboard_type\*(Aq and \*(Aqpad\*(Aq\&. Additionally the \*(Aq\-\-system\-controller\*(Aq option must be scpecified if the board is to be system\-controller, which is the normal case\&. For example:
+.sp
+.if n \{\
+.RS 4
+.\}
+.nf
+  gpib_config \-\-minor 8 \-\-board\-type ni_usb_b \-\-pad 0 \-\-system\-controller
+.fi
+.if n \{\
+.RE
+.\}
+.sp
+The configuration file can contain zero or more \*(Aqdevice\*(Aq entries\&. \*(Aqdevice\*(Aq entries are only required if you wish to open device descriptors with
+ibfind()
+instead of using
+ibdev()\&. Each \*(Aqdevice\*(Aq entry must have at least the \*(Aqminor\*(Aq, \*(Aqpad\*(Aq and \*(Aqname\*(Aq options specified\&. The \*(Aqminor\*(Aq of a \*(Aqdevice\*(Aq entry must have a corresponding \*(Aqinterface\*(Aq entry\&.
+.PP
+Several example entries, and a table summarizing the possible options follow\&.
+.PP
+.if n \{\
+.RS 4
+.\}
+.nf
+  /*  This comment style is permitted */
+
+  // This is an alternate comment style
+  
+interface {
+	minor = 0
+	board_type = "ni_pci"
+	pad = 0
+	master = yes
+}
+
+interface {
+	minor = 1
+	board_type = "ines_pci"
+	name = "joe"
+	pad = 5
+	sad = 0
+	timeout = T10s
+	pci_bus = 0
+	pci_slot = 0xd
+	master = no
+}
+
+interface {
+	minor = 2
+	board_type = "pcII"
+	pad = 3
+	sad = 0x62
+	eos = 0x0d
+	set\-reos = yes
+	set\-bin = no
+	set\-xeos = no
+	set\-eot = yes
+	base = 0x300
+	irq  = 5
+	dma  = 0
+	master = no
+}
+
+device {
+	minor = 0
+	name = "counter"  // name that can be used with ibfind
+	pad = 24
+}
+
+device {
+	minor = 0
+	name = "voltmeter"
+	pad = 7
+	sad = 110
+	eos = 0xa
+	set\-reos = yes
+	set\-bin = no
+	set\-xeos = yes
+	set\-eot = no
+	timeout = T1s
+}
+.fi
+.if n \{\
+.RE
+.\}
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&1.\ \&configuration options
+.TS
+allbox expand tab(:);
+lB lB lB lB.
+T{
+option name
+T}:T{
+description
+T}:T{
+used by interface or device entries
+T}:T{
+required or optional
+T}
+.T&
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l.
+T{
+base
+T}:T{
+Specifies the base ioport or io memory address for a
+	board that lacks plug\-and\-play capability\&.
+T}:T{
+interface
+T}:T{
+optional
+T}
+T{
+board_type
+T}:T{
+Specifies the type of interface board\&.  See the last
+        two columns of Table
+        2\&. for a list of possible board types, and the kernel
+        driver module that supports them\&. There is no default\&.
+T}:T{
+interface
+T}:T{
+required
+T}
+T{
+dma
+T}:T{
+Specifies the dma channel for a board that lacks plug\-and\-play
+	capability\&.
+T}:T{
+interface
+T}:T{
+optional
+T}
+T{
+eos
+T}:T{
+Sets the end\-of\-string byte for board or device
+	descriptors obtained with ibfind()\&. By default eos = 0\&.
+	See also the set\-reos, set\-bin, and set\-xeos options\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+T{
+irq
+T}:T{
+Specifies the interrupt level for a board that lacks
+	plug\-and\-play capability\&.
+T}:T{
+interface
+T}:T{
+optional
+T}
+T{
+master
+T}:T{
+Set to \*(Aqyes\*(Aq if you want the interface board to be the
+	system controller of the bus\&.  There can only be one system
+	controller on a bus\&. By default master = no\&.
+T}:T{
+interface
+T}:T{
+required
+T}
+T{
+minor
+T}:T{
+\*(Aqminor\*(Aq specifies the minor number of the device file
+	this interface board will use\&.  A \*(Aqminor\*(Aq of 0 corresponds to
+	/dev/gpib0, 1 is /dev/gpib1, etc\&.  The minor number is also
+	equal to the \*(Aqboard index\*(Aq which can be used as a board
+	descriptor, and is passed as the first argument
+	of  ibdev()
+T}:T{
+interface
+T}:T{
+required
+T}
+T{
+name
+T}:T{
+The \*(Aqname\*(Aq specifies the name which can be used with
+	 ibfind() to get a descriptor for the board or device
+	 associated with this entry\&.
+T}:T{
+interface or device
+T}:T{
+interface optional
+	  device required
+T}
+T{
+pad
+T}:T{
+Specifies the primary GPIB address (valid addresses are
+	0 to 30)\&.  For interfaces, this is the primary address that
+	the board will be assigned when it is first brought online\&.
+	For devices, this is address that will be used by device
+	descriptors obtained with ibfind()\&. No default\&.
+T}:T{
+interface or device
+T}:T{
+required
+T}
+T{
+pci_bus
+T}:T{
+Useful for distinguishing between multiple PCI cards\&.  If
+	you have more than one PCI card that with the same \*(Aqboard_type\*(Aq, you can
+	use the \*(Aqpci_bus\*(Aq and \*(Aqpci_slot\*(Aq options to specify the particular
+	card you are interested in\&.
+T}:T{
+interface
+T}:T{
+optional
+T}
+T{
+pci_slot
+T}:T{
+Can be used in conjunction with \*(Aqpci_bus\*(Aq to specify
+	a particular pci card\&.
+T}:T{
+interface
+T}:T{
+optional
+T}
+T{
+sad
+T}:T{
+Specifies the secondary GPIB address\&.  Valid values are
+	0, or 0x60 to 0x7f hexadecimal (96 to 127 decimal)\&.  A value
+	of 0 means secondary addressing is disabled (the default)\&.
+	Secondary addresses from 0 to 31 are specified by the
+	library\*(Aqs convention of adding an offset of 0x60\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+T{
+set\-bin
+T}:T{
+Enables 8\-bit comparisons when matching the
+	end\-of\-string byte, instead of only comparing the
+	7 least significant bits\&.  Only affects descriptors
+	returned by ibfind(), and has same effect as setting
+	the BIN bit in a
+	ibeos()
+	call\&. Default is set\-bin = 0\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+T{
+set\-eot
+T}:T{
+Enables assertion of the EOI line at the end of writes,
+	for descriptors returned by ibfind()\&.  See
+	ibeot()\&.
+	Default set\-eoi = yes\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+T{
+set\-reos
+T}:T{
+Enables the termination of reads on reception of the
+	end\-of\-string byte for descriptors returned by ibfind()\&.
+	Same as setting the REOS bit in a
+	ibeos()
+	call\&. Default is set\-reos = no\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+T{
+set\-xeos
+T}:T{
+Enables the assertion of EOI on transmission of the
+	end\-of\-string byte for descriptors returned by ibfind()\&.
+	Same as setting the XEOS bit in a
+	ibeos()
+	call\&. Default is set\-xeos = no\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+T{
+sysfs_device_path
+T}:T{
+A string which may be used to select a particular piece of hardware by its sysfs device path\&.
+T}:T{
+interface
+T}:T{
+optional
+T}
+T{
+timeout
+T}:T{
+Sets the io timeout for a board or device descriptor
+	opened through ibfind()\&.  The possible settings are the same
+	as the constants used
+	by ibtmo()\&.
+	Default is timeout = T3s , which is 3 seconds\&.
+T}:T{
+interface or device
+T}:T{
+optional
+T}
+.TE
+.sp 1
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

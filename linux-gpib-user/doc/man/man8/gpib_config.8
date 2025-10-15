@@ -1,0 +1,149 @@
+'\" t
+.\"     Title: gpib_config
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Configuration
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "GPIB_CONFIG" "8" "10/04/2025" "linux-gpib 4.3.7" "Configuration"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+gpib_config \- GPIB administration program
+.SH "SYNOPSIS"
+.HP \w'\fBgpib_config\fR\ 'u
+\fBgpib_config\fR [\-\-minor\ \fInumber\fR]
+.HP \w'\fBgpib_config\fR\ 'u
+\fBgpib_config\fR [\-\-board\-type\ \fIboard_type\fR] [\-\-device\-file\ \fIfile_path\fR] [\-\-dma\ \fInumber\fR] [\-\-file\ \fIfile_path\fR] [\-\-help] [\-\-iobase\ \fInumber\fR] [\-\-ifc] [\-\-no\-ifc] [\-\-init\-data\ \fIfile_path\fR] [\-\-irq\ \fInumber\fR] [\-\-minor\ \fInumber\fR] [\-\-offline] [\-\-pad\ \fInumber\fR] [\-\-pci\-bus\ \fInumber\fR] [\-\-pci\-slot\ \fInumber\fR] [\-\-sad\ \fInumber\fR] [\-\-serial\-number\ \fIserial_number\fR] [\-\-sre] [\-\-no\-sre] [\-\-sysfs\-device\-path\ \fIsysfs_device_path\fR] [\-\-system\-controller] [\-\-no\-system\-controller] [\-\-version]
+.SH "DESCRIPTION"
+.PP
+gpib_config must be run after the kernel driver module for a GPIB interface board is loaded\&. It performs configuration of driver settings that cannot be performed by libgpib at runtime\&. This includes configuration which requires root privilege (for example, setting the base address or irq of a board), and configuration which should only be performed once and not automatically redone every time a program using libgpib is run (for example, setting the board\*(Aqs GPIB address)\&.
+.PP
+The board to be configured by gpib_config is selected by the
+\fB\-\-minor\fR
+option\&. By default, the board settings are read from the
+gpib\&.conf
+configuration file\&. However, individual settings can be overiden by use of command\-line options (see below)\&.
+.SH "OPTIONS"
+.PP
+\fB\-t, \-\-board\-type \fR\fB\fIboard_type\fR\fR
+.PP
+Set board type to
+\fIboard_type\fR\&.
+.PP
+\fB\-c, \-\-device\-file \fR\fB\fIfile_path\fR\fR
+.PP
+Specify character device file path for the board\&. This can be used as an alternative to the \-\-minor option\&.
+.PP
+\fB\-d, \-\-dma \fR\fB\fInumber\fR\fR
+.PP
+Specify isa dma channel
+\fInumber\fR
+for boards without plug\-and\-play cabability\&.
+.PP
+\fB\-f, \-\-file \fR\fB\fIfile_path\fR\fR
+.PP
+Specify file path for configuration file\&. The values in the configuration file will be used as defaults for unspecified options for the minor being configured\&. If this option is not specified, then the value of the IB_CONFIG environment variable will be used if it is set\&. Otherwise, the default configuration file is "sysconfdir/gpib\&.conf" where sysconfdir is specified when the library is configured before compilation (it is usually /etc or /usr/local/etc)\&. Note: The configuration file read by the library is not affected by this option\&. It will either use the value of the IB_CONFIG environment variable, if it is set, or the default configuration file\&. The configuration file read by the library is used to resolve the \*(Aqname\*(Aq in ibfind() calls\&.
+.PP
+\fB\-h, \-\-help\fR
+.PP
+Print help on options and exit\&.
+.PP
+\fB\-I, \-\-init\-data \fR\fB\fIfile_path\fR\fR
+.PP
+Upload binary initialization data (firmware) from
+\fIfile_path\fR
+to board\&.
+.PP
+\fB\-\-[no\-]ifc\fR
+.PP
+Perform (or not) interface clear after bringing board online\&. Default is
+\fB\-\-ifc\fR\&.
+.PP
+\fB\-b, \-\-iobase \fR\fB\fInumber\fR\fR
+.PP
+Set io base address to
+\fInumber\fR
+for boards without plug\-and\-play cabability\&.
+.PP
+\fB\-i, \-\-irq \fR\fB\fInumber\fR\fR
+.PP
+Specify irq line
+\fInumber\fR
+for boards without plug\-and\-play cabability\&.
+.PP
+\fB\-m, \-\-minor \fR\fB\fInumber\fR\fR
+.PP
+Configure gpib device file with minor number
+\fInumber\fR
+(default is 0)\&.
+.PP
+\fB\-o, \-\-offline\fR
+.PP
+Unconfigure an already configured board, don\*(Aqt bring board online\&.
+.PP
+\fB\-p, \-\-pad \fR\fB\fInumber\fR\fR
+.PP
+Specify primary gpib address\&.
+\fInumber\fR
+should be in the range 0 through 30\&.
+.PP
+\fB\-u, \-\-pci\-bus \fR\fB\fInumber\fR\fR
+.PP
+Specify pci bus
+\fInumber\fR
+to select a specific pci board\&. If used, you must also specify the pci slot with
+\fB\-\-pci\-slot\fR\&.
+.PP
+\fB\-l, \-\-pci\-slot \fR\fB\fInumber\fR\fR
+.PP
+Specify pci slot
+\fInumber\fR
+to select a specific pci board\&. If used, you must also specify the pci bus with
+\fB\-\-pci\-bus\fR\&.
+.PP
+\fB\-s, \-\-sad \fR\fB\fInumber\fR\fR
+.PP
+Specify secondary gpib address\&.
+\fInumber\fR
+should be 0 (disabled) or in the range 96 through 127 (0x60 through 0x7f hexadecimal)\&.
+.PP
+\fB\-\-[no\-]sre\fR
+.PP
+Assert (or not) remote enable line after bringing board online\&. Default is
+\fB\-\-sre\fR\&.
+.PP
+\fB\-a, \-\-sysfs\-device\-path \fR\fB\fIdev_path\fR\fR
+.PP
+Select a specific board to attach by its sysfs device path\&. The sysfs device path is the absolute path to the device\*(Aqs directory under /sys/devices, with the leading "/sys" stripped off\&. The device path is available in udev scripts as the DEVPATH variable\&.
+.PP
+\fB\-\-[no\-]system\-controller\fR
+.PP
+Configure board as system controller (or not)\&.
+.PP
+\fB\-v, \-\-version \fR
+.PP
+Prints the current linux\-gpib version and exits\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

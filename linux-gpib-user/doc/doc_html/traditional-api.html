@@ -1,0 +1,355 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML
+><HEAD
+><TITLE
+>	Traditional API Functions </TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
+REL="HOME"
+TITLE="	Linux-GPIB 4.3.7
+ Documentation"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="ibsta"
+HREF="reference-globals-ibsta.html"><LINK
+REL="NEXT"
+TITLE="ibask"
+HREF="reference-function-ibask.html"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>Linux-GPIB 4.3.7
+ Documentation</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="reference-globals-ibsta.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="reference-function-ibask.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="TRADITIONAL-API"
+>Traditional API Functions</A
+></H1
+><DIV
+CLASS="TOC"
+><DL
+><DT
+><B
+>Table of Contents</B
+></DT
+><DT
+><A
+HREF="reference-function-ibask.html"
+>ibask</A
+>&nbsp;--&nbsp;query configuration (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibbna.html"
+>ibbna</A
+>&nbsp;--&nbsp;change access board (device)</DT
+><DT
+><A
+HREF="reference-function-ibcac.html"
+>ibcac</A
+>&nbsp;--&nbsp;assert ATN (board)</DT
+><DT
+><A
+HREF="reference-function-ibclr.html"
+>ibclr</A
+>&nbsp;--&nbsp;clear device (device)</DT
+><DT
+><A
+HREF="reference-function-ibcmd.html"
+>ibcmd</A
+>&nbsp;--&nbsp;write command bytes (board)</DT
+><DT
+><A
+HREF="reference-function-ibcmda.html"
+>ibcmda</A
+>&nbsp;--&nbsp;write command bytes asynchronously (board)</DT
+><DT
+><A
+HREF="reference-function-ibconfig.html"
+>ibconfig</A
+>&nbsp;--&nbsp;change configuration (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibdev.html"
+>ibdev</A
+>&nbsp;--&nbsp;open a device (device)</DT
+><DT
+><A
+HREF="reference-function-ibeos.html"
+>ibeos</A
+>&nbsp;--&nbsp;set end-of-string mode (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibeot.html"
+>ibeot</A
+>&nbsp;--&nbsp;assert EOI with last data byte (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibevent.html"
+>ibevent</A
+>&nbsp;--&nbsp;get events from event queue (board)</DT
+><DT
+><A
+HREF="reference-function-ibfind.html"
+>ibfind</A
+>&nbsp;--&nbsp;open a board or device (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibgts.html"
+>ibgts</A
+>&nbsp;--&nbsp;release ATN (board)</DT
+><DT
+><A
+HREF="reference-function-ibist.html"
+>ibist</A
+>&nbsp;--&nbsp;set individual status bit (board)</DT
+><DT
+><A
+HREF="reference-function-iblines.html"
+>iblines</A
+>&nbsp;--&nbsp;monitor bus lines (board)</DT
+><DT
+><A
+HREF="reference-function-ibln.html"
+>ibln</A
+>&nbsp;--&nbsp;check if listener is present (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibloc.html"
+>ibloc</A
+>&nbsp;--&nbsp;go to local mode (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibonl.html"
+>ibonl</A
+>&nbsp;--&nbsp;close or reinitialize descriptor (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibpad.html"
+>ibpad</A
+>&nbsp;--&nbsp;set primary GPIB address (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibpct.html"
+>ibpct</A
+>&nbsp;--&nbsp;pass control (board)</DT
+><DT
+><A
+HREF="reference-function-ibppc.html"
+>ibppc</A
+>&nbsp;--&nbsp;parallel poll configure (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibrd.html"
+>ibrd</A
+>&nbsp;--&nbsp;read data bytes (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibrda.html"
+>ibrda</A
+>&nbsp;--&nbsp;read data bytes asynchronously (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibrdf.html"
+>ibrdf</A
+>&nbsp;--&nbsp;read data bytes to file (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibrpp.html"
+>ibrpp</A
+>&nbsp;--&nbsp;perform a parallel poll (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibrsc.html"
+>ibrsc</A
+>&nbsp;--&nbsp;request system control (board)</DT
+><DT
+><A
+HREF="reference-function-ibrsp.html"
+>ibrsp</A
+>&nbsp;--&nbsp; read status byte /  serial poll (device)</DT
+><DT
+><A
+HREF="reference-function-ibrsv.html"
+>ibrsv</A
+>&nbsp;--&nbsp;request service (board)</DT
+><DT
+><A
+HREF="reference-function-ibrsv2.html"
+>ibrsv2</A
+>&nbsp;--&nbsp;request service (board)</DT
+><DT
+><A
+HREF="reference-function-ibsad.html"
+>ibsad</A
+>&nbsp;--&nbsp;set secondary GPIB address (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibsic.html"
+>ibsic</A
+>&nbsp;--&nbsp;perform interface clear (board)</DT
+><DT
+><A
+HREF="reference-function-ibspb.html"
+>ibspb</A
+>&nbsp;--&nbsp; obtain length of serial poll bytes queue (device)</DT
+><DT
+><A
+HREF="reference-function-ibsre.html"
+>ibsre</A
+>&nbsp;--&nbsp;set remote enable (board)</DT
+><DT
+><A
+HREF="reference-function-ibstop.html"
+>ibstop</A
+>&nbsp;--&nbsp;abort asynchronous i/o operation (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibtmo.html"
+>ibtmo</A
+>&nbsp;--&nbsp;adjust io timeout (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibtrg.html"
+>ibtrg</A
+>&nbsp;--&nbsp;trigger device (device)</DT
+><DT
+><A
+HREF="reference-function-ibvers.html"
+>ibvers</A
+>&nbsp;--&nbsp;Obtain the current linux gpib version.</DT
+><DT
+><A
+HREF="reference-function-ibwait.html"
+>ibwait</A
+>&nbsp;--&nbsp;wait for event (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibwrt.html"
+>ibwrt</A
+>&nbsp;--&nbsp;write data bytes (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibwrta.html"
+>ibwrta</A
+>&nbsp;--&nbsp;write data bytes asynchronously (board or device)</DT
+><DT
+><A
+HREF="reference-function-ibwrtf.html"
+>ibwrtf</A
+>&nbsp;--&nbsp;write data bytes from file (board or device)</DT
+></DL
+></DIV
+><P
+>  Reference section for traditional API functions.</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="reference-globals-ibsta.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="reference-function-ibask.html"
+ACCESSKEY="N"
+>Next &#62;&#62;&#62;</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>ibsta</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>ibask</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,3 +1,4 @@
+.\"
 '\" Copyright 1990 Regents of the University of California
 '\" Permission to use, copy, modify, and distribute this
 '\" documentation for any purpose and without fee is hereby
@@ -7,7 +8,6 @@
 '\" provided "as is" without express or implied warranty.
 '\" 
 '\" $Header$ SPRITE (Berkeley)
-'/" 
 .\" The definitions below are for supplemental macros used in Sprite
 .\" manual entries.
 .\"
@@ -47,7 +47,7 @@
 .\" .DE
 .\"	End of indented unfilled display.
 .\"
-'	# Heading for Sprite man pages
+.\"	# Heading for Sprite man pages
 .de HS
 .if '\\$2'cmds'       .TH \\$1 1 \\$3 \\$4
 .if '\\$2'lib'        .TH \\$1 3 \\$3 \\$4
@@ -57,7 +57,7 @@
 .nr ^l \\n(.l
 .ad b
 ..
-'	# Start an argument description
+.\"	# Start an argument description
 .de AP
 .ie !"\\$4"" .TP \\$4
 .el \{\
@@ -79,7 +79,7 @@
 .\}
 .\}
 ..
-'	# define tabbing values for .AP
+.\"	# define tabbing values for .AP
 .de AS
 .nr )A 10n
 .if !"\\$1"" .nr )A \\w'\\$1'u+3n
@@ -88,9 +88,9 @@
 .if !"\\$2"" .nr )B \\w'\\$2'u+\\n()Au+3n
 .nr )C \\n()Bu+\\w'(in/out)'u+2n
 ..
-'	# BS - start boxed text
-'	# ^y = starting y location
-'	# ^b = 1
+.\"	# BS - start boxed text
+.\"	# ^y = starting y location
+.\"	# ^b = 1
 .de BS
 .br
 .mk ^y
@@ -100,7 +100,7 @@
 .if n \l'\\n(.lu\(ul'
 .if n .fi
 ..
-'	# BE - end boxed text (draw box now)
+.\"	# BE - end boxed text (draw box now)
 .de BE
 .nf
 .ti 0
@@ -120,15 +120,15 @@
 .br
 .nr ^b 0
 ..
-'	# VS - start vertical sidebar
-'	# ^Y = starting y location
-'	# ^v = 1 (for troff;  for nroff this doesn't matter)
+.\"	# VS - start vertical sidebar
+.\"	# ^Y = starting y location
+.\"	# ^v = 1 (for troff;  for nroff this doesn't matter)
 .de VS
 .mk ^Y
 .ie n 'mc \s12\(br\s0
 .el .nr ^v 1u
 ..
-'	# VE - end of vertical sidebar
+.\"	# VE - end of vertical sidebar
 .de VE
 .ie n 'mc
 .el \{\
@@ -143,9 +143,9 @@
 .\}
 .nr ^v 0
 ..
-'	# Special macro to handle page bottom:  finish off current
-'	# box/sidebar if in box/sidebar mode, then invoked standard
-'	# page bottom macro.
+.\"	# Special macro to handle page bottom:  finish off current
+.\"	# box/sidebar if in box/sidebar mode, then invoked standard
+.\"	# page bottom macro.
 .de ^B
 .ev 2
 'ti 0
@@ -172,13 +172,13 @@
 .mk ^Y
 .\}
 ..
-'	# DS - begin display
+.\"	# DS - begin display
 .de DS
 .RS
 .nf
 .sp
 ..
-'	# DE - end display
+.\"	# DE - end display
 .de DE
 .fi
 .RE

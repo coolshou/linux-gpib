@@ -1,0 +1,411 @@
+'\" t
+.\"     Title: ibask
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBASK" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibask \- query configuration (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibask('u
+.BI "int ibask(int\ " "ud" ", int\ " "option" ", int\ *" "result" ");"
+.SH "DESCRIPTION"
+.PP
+Queries various configuration settings associated with the board or device descriptor
+\fIud\fR\&. The
+\fIoption\fR
+argument specifies the particular setting you wish to query\&. The result of the query is written to the location specified by
+\fIresult\fR\&. To change the descriptor\*(Aqs configuration, see
+ibconfig()\&.
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&5.\ \&ibask options
+.TS
+allbox expand tab(:);
+lB lB lB lB.
+T{
+option
+T}:T{
+value (hexadecimal)
+T}:T{
+result of query
+T}:T{
+used for board/device
+T}
+.T&
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l.
+T{
+IbaPAD
+T}:T{
+0x1
+T}:T{
+GPIB primary address
+T}:T{
+board or device
+T}
+T{
+IbaSAD
+T}:T{
+0x2
+T}:T{
+GPIB secondary address (0 for none, 0x60 to 0x7f for secondary
+	addresses 0 to 31)
+T}:T{
+board or device
+T}
+T{
+IbaTMO
+T}:T{
+0x3
+T}:T{
+Timeout setting for io operations (a number from 0 to 17)\&.  See
+	ibmto()\&.
+T}:T{
+board or device
+T}
+T{
+IbaEOT
+T}:T{
+0x4
+T}:T{
+Nonzero if EOI is asserted with last byte on writes\&.
+	See ibeot()\&.
+T}:T{
+\ \&
+T}
+T{
+IbaPPC
+T}:T{
+0x5
+T}:T{
+Parallel poll configuration\&.  See
+	ibppc()\&.
+T}:T{
+board
+T}
+T{
+IbaREADDR
+T}:T{
+0x6
+T}:T{
+Useless, included for compatibility only\&.
+T}:T{
+device
+T}
+T{
+IbaAUTOPOLL
+T}:T{
+0x7
+T}:T{
+Nonzero if automatic serial polling is enabled\&.
+T}:T{
+board
+T}
+T{
+IbaCICPROT
+T}:T{
+0x8
+T}:T{
+Useless, included for compatibility only\&.
+T}:T{
+board
+T}
+T{
+IbaSC
+T}:T{
+0xa
+T}:T{
+Nonzero if board is system controller\&.
+	See ibrsc()\&.
+T}:T{
+board
+T}
+T{
+IbaSRE
+T}:T{
+0xb
+T}:T{
+Nonzero if board automatically asserts the REN line when
+	it becomes the system controller\&.  See
+	ibrsc()\&.
+T}:T{
+board
+T}
+T{
+IbaEOSrd
+T}:T{
+0xc
+T}:T{
+Nonzero if termination of reads on reception of the end\-of\-string
+	character is enabled\&.  See ibeos(),
+	in particular the REOS bit\&.
+T}:T{
+board or device
+T}
+T{
+IbaEOSwrt
+T}:T{
+0xd
+T}:T{
+Nonzero if EOI is asserted whenever end\-of\-string character is
+	sent\&.  See ibeos(),
+	in particular the XEOS bit\&.
+T}:T{
+board or device
+T}
+T{
+IbaEOScmp
+T}:T{
+0xe
+T}:T{
+Nonzero if all 8 bits are used to match end\-of\-string
+	character\&.  Zero if only least significant 7 bits are used\&.
+	See ibeos(),
+	in particular the BIN bit\&.
+T}:T{
+board or device
+T}
+T{
+IbaEOSchar
+T}:T{
+0xf
+T}:T{
+The end\-of\-string byte\&.
+T}:T{
+board or device
+T}
+T{
+IbaPP2
+T}:T{
+0x10
+T}:T{
+Nonzero if in local parallel poll configure mode\&.  Zero
+	if in remote parallel poll configure mode\&.
+T}:T{
+board
+T}
+T{
+IbaTIMING
+T}:T{
+0x11
+T}:T{
+Number indicating T1 delay\&.  1 for 2 microseconds, 2 for 500
+	nanoseconds, 3 for 350 nanoseconds\&.  The values are declared in
+	the header files as the constants T1_DELAY_2000ns, T1_DELAY_500ns,
+	and T1_DELAY_350ns\&.
+T}:T{
+board
+T}
+T{
+IbaReadAdjust
+T}:T{
+0x13
+T}:T{
+Nonzero if byte pairs are automatically swapped during
+	reads\&.
+T}:T{
+board or device
+T}
+T{
+IbaWriteAdjust
+T}:T{
+0x14
+T}:T{
+Nonzero if byte pairs are automatically swapped during
+	writes\&.
+T}:T{
+board or device
+T}
+T{
+IbaEventQueue
+T}:T{
+0x15
+T}:T{
+Nonzero if event queue is enabled\&.
+T}:T{
+board
+T}
+T{
+IbaSPollBit
+T}:T{
+0x16
+T}:T{
+Nonzero if the use of the SPOLL bit in ibsta is enabled\&.
+T}:T{
+board
+T}
+T{
+IbaSendLLO
+T}:T{
+0x17
+T}:T{
+Nonzero if devices connected to this board are automatically
+	put into local lockout
+	mode when brought online with ibfind() or ibdev()\&.
+T}:T{
+board
+T}
+T{
+IbaSPollTime
+T}:T{
+0x18
+T}:T{
+Timeout for serial polls\&.  The value of the result
+	is between 0 and 17, and has the same meaning as in
+	ibtmo()\&.
+T}:T{
+device
+T}
+T{
+IbaPPollTime
+T}:T{
+0x19
+T}:T{
+Timeout for parallel polls\&.  The value of the result
+	is between 0 and 17, and has the same meaning as in
+	ibtmo()\&.
+T}:T{
+board
+T}
+T{
+IbaEndBitIsNormal
+T}:T{
+0x1a
+T}:T{
+Nonzero if END bit of ibsta is set on reception of end\-of\-string
+	character or EOI\&.  Zero if END bit is only set on EOI\&.
+T}:T{
+board or device
+T}
+T{
+IbaUnAddr
+T}:T{
+0x1b
+T}:T{
+Nonzero if UNT (untalk) and UNL (unlisten) commands are automatically
+	sent after a completed ibrd* or ibwrt* operation using this descriptor\&.
+T}:T{
+device
+T}
+T{
+IbaHSCableLength
+T}:T{
+0x1f
+T}:T{
+Useless, included only for compatibility\&.
+T}:T{
+board
+T}
+T{
+IbaIst
+T}:T{
+0x20
+T}:T{
+Individual status bit, a\&.k\&.a\&. \*(Aqist\*(Aq\&.
+T}:T{
+board
+T}
+T{
+IbaRsv
+T}:T{
+0x21
+T}:T{
+The current status byte this board will use to respond to
+	serial polls\&.
+T}:T{
+board
+T}
+T{
+IbaBNA
+T}:T{
+0x200
+T}:T{
+For a device: the board index (minor number) of interface board through
+	which the device is being accessed\&.  For a board: the board index of the
+	board itself\&.
+T}:T{
+board or device
+T}
+T{
+Iba7BitEOS
+T}:T{
+0x1000
+T}:T{
+Nonzero if board supports 7 bit EOS comparisons\&.
+	See ibeos(),
+	in particular the BIN bit\&.  This is a Linux\-GPIB extension\&.
+T}:T{
+board
+T}
+.TE
+.sp 1
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

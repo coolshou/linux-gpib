@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="SendList"
 HREF="reference-function-sendlist.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-sendlist.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-sendsetup.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-SENDLLO"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN3292"
+NAME="AEN3640"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN3292"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN3295"
+NAME="AEN3643"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,34 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN3296"
+NAME="AEN3644"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void SendLLO</CODE
->(int board_desc);</CODE
+>void <TT
+CLASS="FUNCTION"
+>SendLLO</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +131,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3303"
+NAME="AEN3651"
 ></A
 ><H2
 >	Description
@@ -123,7 +140,7 @@ NAME="AEN3303"
 >	SendLLO() asserts the 'remote enable' bus line, then sends the
 	LLO
 	<A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command byte</A
 >.
 	Any devices currently addressed as listener will be put into
@@ -140,7 +157,7 @@ HREF="reference-function-setrwls.html"
 >SetRWLS()</A
 >
 	performs a similar function, except it lets you
-	specifiy which devices you wish to address as listener before
+	specify which devices you wish to address as listener before
 	sending the LLO command.
 	</P
 ></DIV
@@ -162,14 +179,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-sendlist.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -180,7 +197,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-sendsetup.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -194,7 +211,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

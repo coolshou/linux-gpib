@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibgts"
 HREF="reference-function-ibgts.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibgts.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-iblines.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBIST"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1684"
+NAME="AEN2028"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1684"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1687"
+NAME="AEN2031"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1688"
+NAME="AEN2032"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibist</CODE
->(int ud, int ist);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibist</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>ist</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,23 +136,29 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1697"
+NAME="AEN2041"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
->	If <CODE
+>	If <TT
 CLASS="PARAMETER"
->ist</CODE
+><I
+>ist</I
+></TT
 > is nonzero, then the individual status bit
-	of the board specified by the board descriptor <CODE
+	of the board specified by the board descriptor <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >
-	is set.  If <CODE
+	is set.  If <TT
 CLASS="PARAMETER"
->ist</CODE
+><I
+>ist</I
+></TT
 > is zero then the individual status
 	bit is cleared.  The individual status bit is sent by the board in response
 	to parallel polls.
@@ -146,7 +174,7 @@ HREF="reference-globals-iberr.html"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1705"
+NAME="AEN2049"
 ></A
 ><H2
 >	Return value
@@ -176,14 +204,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibgts.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -194,7 +222,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-iblines.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -208,7 +236,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

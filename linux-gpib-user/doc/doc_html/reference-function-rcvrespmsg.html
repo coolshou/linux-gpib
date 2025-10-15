@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
 TITLE='	"Multidevice" API Functions'
-HREF="reference.html#AEN2698"><LINK
+HREF="x3047.html"><LINK
 REL="PREVIOUS"
 TITLE="PPollUnconfig"
 HREF="reference-function-ppollunconfig.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ppollunconfig.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-readstatusbyte.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-RCVRESPMSG"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2993"
+NAME="AEN3341"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2993"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2996"
+NAME="AEN3344"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,49 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2997"
+NAME="AEN3345"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->void RcvRespMsg</CODE
->(int board_desc, void *buffer, long count, int termination);</CODE
+>void <TT
+CLASS="FUNCTION"
+>RcvRespMsg</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>board_desc</I
+></TT
+>, void *<TT
+CLASS="PARAMETER"
+><I
+>buffer</I
+></TT
+>, long <TT
+CLASS="PARAMETER"
+><I
+>count</I
+></TT
+>, int <TT
+CLASS="PARAMETER"
+><I
+>termination</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +146,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN3010"
+NAME="AEN3358"
 ></A
 ><H2
 >	Description
@@ -131,22 +163,30 @@ HREF="reference-function-receivesetup.html"
 	function.
 	</P
 ><P
->	Up to <CODE
+>	Up to <TT
 CLASS="PARAMETER"
->count</CODE
+><I
+>count</I
+></TT
 > bytes are read into the array
-	specified by <CODE
+	specified by <TT
 CLASS="PARAMETER"
->buffer</CODE
->.  The <CODE
+><I
+>buffer</I
+></TT
+>.  The <TT
 CLASS="PARAMETER"
->termination</CODE
+><I
+>termination</I
+></TT
 >
 	argument specifies the 8-bit end-of-string character (which must
 	be a value from 0 to 255) whose
-	reception will terminate a read.  <CODE
+	reception will terminate a read.  <TT
 CLASS="PARAMETER"
->termination</CODE
+><I
+>termination</I
+></TT
 >
 	can also be set to the 'STOPend' constant, in which case no
 	end-of-string character will be used.  Assertion of the EOI line
@@ -180,14 +220,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ppollunconfig.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -198,7 +238,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-readstatusbyte.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -212,7 +252,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN2698"
+HREF="x3047.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

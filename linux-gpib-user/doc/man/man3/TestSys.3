@@ -1,0 +1,56 @@
+'\" t
+.\"     Title: TestSys
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "TESTSYS" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+TestSys \- perform self\-test queries on devices
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ TestSys('u
+.BI "void TestSys(int\ " "board_desc" ", const\ Addr4882_t\ " "addressList[]" ", short\ " "results[]" ");"
+.SH "DESCRIPTION"
+.PP
+TestSys() sends the \*(Aq*TST?\*(Aq message to all the devices in the
+\fIaddressList\fR
+array, then reads their responses into the
+\fIresults\fR
+array\&. This will cause devices that conform to the IEEE 488\&.2 standard to perform a self\-test and respond with a zero on success\&. A non\-zero response indicates an error during the self\-test\&.
+.PP
+The number of devices which responded with nonzero values from their self\-tests is returned in
+ibcnt, ibcntl\&. If a device fails to respond to the *TST? query, an error will be flagged in
+ibsta
+(this is different than NI\*(Aqs documented behaviour which is broken)\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

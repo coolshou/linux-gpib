@@ -1,0 +1,116 @@
+'\" t
+.\"     Title: ibrsp
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBRSP" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibrsp \- read status byte / serial poll (device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibrsp('u
+.BI "int ibrsp(int\ " "ud" ", char\ *" "result" ");"
+.SH "DESCRIPTION"
+.PP
+ibrsp() obtains the status byte from the device specified by
+\fIud\fR\&. The status byte is stored in the location specified by
+\fIresult\fR\&.
+.PP
+If automatic serial polling is enabled on the board controlling the device, the status byte is automatically read and queued whenever the device requests service\&. If the status byte queue is not empty
+\fBibrsp()\fR
+obtains the status byte information from the queue\&. If the queue is empty the status byte is obtained by serial polling the device\&. Automatic serial polling is controlled with
+ibconfig()\&. The contents of the status byte returned in
+\fIresult\fR
+are device specific\&. Refer to the device manufacturer\*(Aqs documentation for details\&. For devices conforming to the IEEE488\&.1 or 2 specification the bits defined in the table below are available if enabled in the device\*(Aqs Status Byte Enable register\&.
+.sp
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&10.\ \&Standard IEEE\&.488 GPIB status byte bits
+.TS
+allbox tab(:);
+lB lB lB.
+T{
+constant
+T}:T{
+value
+T}:T{
+description
+T}
+.T&
+l l l
+l l l
+l l l.
+T{
+IbStbRQS
+T}:T{
+0x40
+T}:T{
+The request service bit is set when device asserts
+	      RQS\&. It is cleared by serial polling the
+	      device\&. Supported by devices conforming to IEEE 488\&.1 or
+	      IEEE 488\&.2\&.
+T}
+T{
+IbStbESB
+T}:T{
+0x20
+T}:T{
+The event\-status bit is set when there are one or more
+	      bits set in the device\*(Aqs Standard Event Status Register\&.  It
+	      is cleared by reading the Standard Event Status Register\&.
+	      For devices conforming to IEEE 488\&.2 only\&.
+T}
+T{
+IbStbMAV
+T}:T{
+0x10
+T}:T{
+The message available bit indicates whether or not the
+	      device\*(Aqs data output queue is empty\&. Whenever the device has
+	      data available, this bit will be set\&. It is cleared when the
+	      output queue is empty\&. The queue is emptied by reading data
+	      from the device with
+	      ibrd() for
+	      example\&. For devices conforming to IEEE 488\&.2 only\&.
+T}
+.TE
+.sp 1
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

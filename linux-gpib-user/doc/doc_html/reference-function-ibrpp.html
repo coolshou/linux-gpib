@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibrdf"
 HREF="reference-function-ibrdf.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibrdf.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibrsc.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBRPP"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN2095"
+NAME="AEN2442"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN2095"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN2098"
+NAME="AEN2445"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,39 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN2099"
+NAME="AEN2446"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibrpp</CODE
->(int ud, char *ppoll_result);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibrpp</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, char *<TT
+CLASS="PARAMETER"
+><I
+>ppoll_result</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,7 +136,7 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2108"
+NAME="AEN2455"
 ></A
 ><H2
 >	Description
@@ -122,9 +144,11 @@ NAME="AEN2108"
 ><P
 >	ibrpp() causes the interface board to perform a parallel poll, and stores
 	the resulting parallel poll byte in the
-	location specified by <CODE
+	location specified by <TT
 CLASS="PARAMETER"
->ppoll_result</CODE
+><I
+>ppoll_result</I
+></TT
 >.  Bits 0 to 7
 	of the parallel poll byte correspond to the dio lines 1 to 8, with
 	a 1 indicating the corresponding dio line is asserted.  The devices
@@ -134,13 +158,17 @@ HREF="reference-function-ibppc.html"
 >ibppc()</A
 >.  The board
 	which performs the parallel poll must be controller-in-charge, and
-	is specified by the descriptor <CODE
+	is specified by the descriptor <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 >.
-	If <CODE
+	If <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > is a device descriptor instead of
 	a board descriptor, the device's access board performs the
 	parallel poll.
@@ -149,7 +177,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN2115"
+NAME="AEN2462"
 ></A
 ><H2
 >	Return value
@@ -179,14 +207,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibrdf.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -197,7 +225,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibrsc.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -211,7 +239,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

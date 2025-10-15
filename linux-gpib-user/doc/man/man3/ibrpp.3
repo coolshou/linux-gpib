@@ -1,0 +1,57 @@
+'\" t
+.\"     Title: ibrpp
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Traditional API Functions 
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBRPP" "3" "10/04/2025" "linux-gpib 4.3.7" "Traditional API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibrpp \- perform a parallel poll (board or device)
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'int\ ibrpp('u
+.BI "int ibrpp(int\ " "ud" ", char\ *" "ppoll_result" ");"
+.SH "DESCRIPTION"
+.PP
+ibrpp() causes the interface board to perform a parallel poll, and stores the resulting parallel poll byte in the location specified by
+\fIppoll_result\fR\&. Bits 0 to 7 of the parallel poll byte correspond to the dio lines 1 to 8, with a 1 indicating the corresponding dio line is asserted\&. The devices on the bus you wish to poll should be configured beforehand with
+ibppc()\&. The board which performs the parallel poll must be controller\-in\-charge, and is specified by the descriptor
+\fIud\fR\&. If
+\fIud\fR
+is a device descriptor instead of a board descriptor, the device\*(Aqs access board performs the parallel poll\&.
+.SH "RETURN VALUE"
+.PP
+The value of
+ibsta
+is returned\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

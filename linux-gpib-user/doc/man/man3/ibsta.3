@@ -1,0 +1,273 @@
+'\" t
+.\"     Title: ibsta
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	Linux-GPIB Reference
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "IBSTA" "3" "10/04/2025" "linux-gpib 4.3.7" "Linux-GPIB Reference"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+ibsta \- holds status
+.SH "SYNOPSIS"
+.sp
+.nf
+#include <gpib/ib\&.h>
+
+volatile int ibsta;
+.fi
+.SH "DESCRIPTION"
+.PP
+ibsta is set whenever a function from the \*(Aqtraditional\*(Aq or \*(Aqmultidevice\*(Aq API is called\&. Each of the bits in ibsta has a different meaning, summarized in the following table:
+.PP
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.B Table\ \&4.\ \&ibsta Bits
+.TS
+allbox expand tab(:);
+lB lB lB lB.
+T{
+bit
+T}:T{
+value (hexadecimal)
+T}:T{
+meaning
+T}:T{
+used for board/device
+T}
+.T&
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l
+l l l l.
+T{
+DCAS
+T}:T{
+0x1
+T}:T{
+DCAS is set when a board receives the device clear command
+	(that is, the
+	SDC or DCL command byte)\&.
+	It is cleared on the next \*(Aqtraditional\*(Aq or
+	\*(Aqmultidevice\*(Aq function call following ibwait() (with DCAS set in the
+	wait mask), or following a read
+	or write (ibrd(), ibwrt(), Receive(), etc\&.)\&.
+	The DCAS and DTAS bits will only be set if the event queue is disabled\&.
+	The event queue may be disabled with
+	ibconfig()\&.
+T}:T{
+board
+T}
+T{
+DTAS
+T}:T{
+0x2
+T}:T{
+DTAS is set when a board has received a device trigger command
+	(that is,
+	the GET command byte)\&.
+	It is cleared on the next \*(Aqtraditional\*(Aq or
+	\*(Aqmultidevice\*(Aq function call following ibwait() (with DTAS in the wait
+	mask)\&.
+	The DCAS and DTAS bits will only be set if the event queue is disabled\&.
+	The event queue may be disabled with
+	ibconfig()\&.
+T}:T{
+board
+T}
+T{
+LACS
+T}:T{
+0x4
+T}:T{
+Board is currently addressed as a listener (IEEE listener state machine is in LACS or LADS)\&.
+T}:T{
+board
+T}
+T{
+TACS
+T}:T{
+0x8
+T}:T{
+Board is currently addressed as talker (IEEE talker state machine is in TACS or TADS)\&.
+T}:T{
+board
+T}
+T{
+ATN
+T}:T{
+0x10
+T}:T{
+The ATN line is asserted\&.
+T}:T{
+board
+T}
+T{
+CIC
+T}:T{
+0x20
+T}:T{
+Board is controller\-in\-charge, so it is able to set the ATN line\&.
+T}:T{
+board
+T}
+T{
+REM
+T}:T{
+0x40
+T}:T{
+Board is in \*(Aqremote\*(Aq state\&.
+T}:T{
+board
+T}
+T{
+LOK
+T}:T{
+0x80
+T}:T{
+Board is in \*(Aqlockout\*(Aq state\&.
+T}:T{
+board
+T}
+T{
+CMPL
+T}:T{
+0x100
+T}:T{
+I/O operation is complete\&.  Useful for determining when
+	an asynchronous I/O operation (ibrda(), ibwrta(), etc) has
+	completed\&.
+T}:T{
+board or device
+T}
+T{
+EVENT
+T}:T{
+0x200
+T}:T{
+One or more clear, trigger, or interface clear events have been received,
+	and are available in the event queue
+	(see ibevent())\&.
+	The EVENT bit will only be set if the event queue is enabled\&.  The
+	event queue may be enabled with
+	ibconfig()\&.
+T}:T{
+board
+T}
+T{
+SPOLL
+T}:T{
+0x400
+T}:T{
+If this bit is enabled (see ibconfig()), it is set when the board is
+	serial polled\&.  The SPOLL bit is cleared when the board requests service
+	(see ibrsv()) or you call ibwait() on the board with SPOLL in the wait mask\&.
+T}:T{
+board
+T}
+T{
+RQS
+T}:T{
+0x800
+T}:T{
+RQS indicates that the device has requested service, and one
+	or more status bytes are available for reading with ibrsp()\&.  RQS will
+	only be set if you have automatic serial polling enabled (see
+	ibconfig())\&.
+T}:T{
+device
+T}
+T{
+SRQI
+T}:T{
+0x1000
+T}:T{
+SRQI indicates that a device connected to the board is asserting
+	the SRQ line\&.  It
+	is only set if the board is the controller\-in\-charge\&.  If
+	automatic serial polling is enabled (see
+	ibconfig()),
+	SRQI will generally be cleared,
+	since when a device requests service it will be automatically
+	polled and then unassert SRQ\&.
+T}:T{
+board
+T}
+T{
+END
+T}:T{
+0x2000
+T}:T{
+END is set if the last io operation ended with the EOI
+	line asserted, and may be set on reception of the end\-of\-string character\&.
+	The
+	IbcEndBitIsNormal option of ibconfig() can be used to configure
+	whether or not END should be set on reception of the eos character\&.
+T}:T{
+board or device
+T}
+T{
+TIMO
+T}:T{
+0x4000
+T}:T{
+TIMO indicates that the last io operation or ibwait() timed out\&.
+T}:T{
+board or device
+T}
+T{
+ERR
+T}:T{
+0x8000
+T}:T{
+ERR is set if the last \*(Aqtraditional\*(Aq or \*(Aqmultidevice\*(Aq function
+	call failed\&.  The global variable iberr
+	 will be set indicate the
+	cause of the error\&.
+T}:T{
+board or device
+T}
+.TE
+.sp 1
+.PP
+If you wish to avoid using a global variable, you may instead use
+ThreadIbsta()
+which returns a thread\-specific value\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

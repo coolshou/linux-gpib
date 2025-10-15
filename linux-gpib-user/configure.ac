@@ -1,7 +1,7 @@
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([linux-gpib-user],[4.3.7-rc1])
+AC_INIT([linux-gpib-user],[4.3.7])
 # libtool version: current:revision:age
 #
 # If the library source code has changed at all since the last update, then
@@ -34,21 +34,24 @@ AC_CANONICAL_HOST
 
 AC_ENABLE_SHARED([yes])
 AC_ENABLE_STATIC([no])
-AC_ARG_ENABLE([all-bindings],[  --disable-all-bindings	Disable all language binding to libgpib],
+AC_ARG_ENABLE([all-bindings],[  --disable-all-bindings   Disable all language binding to libgpib],
 	[BINDING_DEFAULT=$enableval],[BINDING_DEFAULT="yes"])
-AC_ARG_ENABLE([guile-binding],[  --disable-guile-binding	Disable Guile binding to libgpib],
+AC_ARG_ENABLE([guile-binding],[  --disable-guile-binding  Disable Guile binding to libgpib],
 	[BIND_GUILE=$enableval],[BIND_GUILE=$BINDING_DEFAULT])
-AC_ARG_ENABLE([perl-binding],[  --disable-perl-binding	Disable Perl binding to libgpib],
+AC_ARG_ENABLE([perl-binding],[  --disable-perl-binding   Disable Perl binding to libgpib],
 	[BIND_PERL=$enableval],[BIND_PERL=$BINDING_DEFAULT])
-AC_ARG_ENABLE([php-binding],[  --disable-php-binding		Disable PHP binding to libgpib],
+AC_ARG_ENABLE([php-binding],[  --disable-php-binding    Disable PHP binding to libgpib],
 	[BIND_PHP=$enableval],[BIND_PHP=$BINDING_DEFAULT])
-AC_ARG_ENABLE([python-binding],[  --disable-python-binding	Disable Python binding to libgpib],
+AC_ARG_ENABLE([python-binding],[  --disable-python-binding Disable Python binding to libgpib],
 	[BIND_PYTHON=$enableval],[BIND_PYTHON=$BINDING_DEFAULT])
-AC_ARG_ENABLE([tcl-binding],[  --disable-tcl-binding		Disable TCL binding to libgpib],
+AC_ARG_ENABLE([tcl-binding],[  --disable-tcl-binding    Disable TCL binding to libgpib],
 	[BIND_TCL=$enableval],[BIND_TCL=$BINDING_DEFAULT])
-AC_ARG_ENABLE([documentation],[  --disable-documentation	Disable building documentation from SGML sources],
+AC_ARG_ENABLE([documentation],[  --disable-documentation  Disable building pdf documentation from SGML sources],
 	[BUILD_DOCS=$enableval],[BUILD_DOCS="yes"])
-
+AC_ARG_ENABLE([html-docs],[  --disable-html-docs      Disable building html documentation from SGML sources],
+	[BUILD_HTML=$enableval],[BUILD_HTML="yes"])
+AC_ARG_ENABLE([manpages],[  --disable-manpages       Disable building man pages from SGML sources],
+	[BUILD_MANPAGES=$enableval],[BUILD_MANPAGES="yes"])
 dnl udev lib dir
 AC_ARG_WITH([udev-libdir],
 	[AS_HELP_STRING([--with-udev-libdir=DIR], [location to install udev scripts [PREFIX/lib/udev]])],
@@ -64,13 +67,34 @@ AC_PROG_LEX([noyywrap])
 if test "$LEX" = ":" ; then
    LEX="$SHELL "$srcdir"/../missing flex"
 fi
-AM_MISSING_PROG(YACC,yacc)
+AM_MISSING_PROG(YACC,bison)
+
 LT_INIT
-AC_PATH_PROG([JW_PATH], [jw], [no])
-if test "$JW_PATH" = "no" ; then
-	AC_MSG_NOTICE([docbook-tools (jw) not found, disabling documentation])
+#docs and manpages
+AC_PATH_PROGS([SGML2PDF_PATH], [dblatex jw], [no])
+if test "$SGML2PDF_PATH" = "no" ; then
+	AC_MSG_NOTICE([docbook-tools neither dblatex nor jw found, disabling pdf documentation])
 	BUILD_DOCS="no"
 fi
+AC_PATH_PROG([JW_PATH], [jw], [no])
+if test "$JW_PATH" = "no" ; then
+	AC_MSG_NOTICE([docbook-tools jw not found, disabling html documentation])
+	BUILD_HTML="no"
+fi
+# look for manpage xsl file in various locations
+AC_CHECK_FILE(/usr/share/sgml/docbook/xsl-ns-stylesheets/manpages/docbook.xsl, AC_SUBST([DOCBOOK_XSL],
+	      ["/usr/share/sgml/docbook/xsl-ns-stylesheets/manpages/docbook.xsl"]))
+AC_CHECK_FILE(/usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl, AC_SUBST([DOCBOOK_XSL],
+              ["/usr/share/sgml/docbook/xsl-stylesheets/manpages/docbook.xsl"]))
+AC_CHECK_FILE(/usr/share/xml/docbook/xsl-stylesheets-1.79.2/manpages/docbook.xsl, AC_SUBST([DOCBOOK_XSL],
+              ["/usr/share/xml/docbook/xsl-stylesheets-1.79.2/manpages/docbook.xsl"]))
+AC_PATH_PROGS([SGML2XML_PATH], [sgml2xml osgml2xml], [no])
+AC_PATH_PROG([XSLTPROC_PATH], [xsltproc], [no])
+if test "$SGML2XML_PATH" = "no" || test "$XSLTPROC_PATH" = "no" || test -z $DOCBOOK_XSL ; then
+	AC_MSG_NOTICE([sgml-man tools  not found, disabling building man pages])
+	BUILD_MANPAGES="no"
+fi
+
 
 if test "$BIND_PYTHON" = "yes"; then
 	AM_PATH_PYTHON([3.0],,[:])
@@ -173,7 +197,11 @@ AC_DEFINE([IBMAJOR],[160],[Major number of device files])
 echo
 echo Configuration:
 AM_CONDITIONAL([BUILD_DOCS], [test "$BUILD_DOCS" = "yes"])
-echo "SGML Documentation: $BUILD_DOCS"
+echo "pdf documentation: $BUILD_DOCS"
+AM_CONDITIONAL([BUILD_HTML], [test "$BUILD_HTML" = "yes"])
+echo "html documentation: $BUILD_HTML"
+AM_CONDITIONAL([BUILD_MANPAGES], [test "$BUILD_MANPAGES" = "yes"])
+echo "man pages: $BUILD_MANPAGES"
 AM_CONDITIONAL([BIND_GUILE], [test "$BIND_GUILE" = "yes"])
 echo "Guile binding: $BIND_GUILE"
 AM_CONDITIONAL([BIND_PERL], [test "$BIND_PERL" = "yes"])

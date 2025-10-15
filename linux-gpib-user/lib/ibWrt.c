@@ -25,18 +25,19 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int find_eos( const uint8_t *buffer, size_t length, int eos, int eos_flags )
+int find_eos(const uint8_t *buffer, size_t length, int eos, int eos_flags)
 {
 	unsigned int i;
 	unsigned int compare_mask;
 
-	if( eos_flags & BIN ) compare_mask = 0xff;
-	else compare_mask = 0x7f;
+	if (eos_flags & BIN)
+		compare_mask = 0xff;
+	else
+		compare_mask = 0x7f;
 
-	for( i = 0; i < length; i++ )
-	{
-		if( ( buffer[i] & compare_mask ) == ( eos & compare_mask ) )
-		return i;
+	for(i = 0; i < length; i++) {
+		if ((buffer[i] & compare_mask) == (eos & compare_mask))
+			return i;
 	}
 
 	return -1;
@@ -45,12 +46,12 @@ int find_eos( const uint8_t *buffer, size_t length, int eos, int eos_flags )
 int send_data(ibConf_t *conf, unsigned int usec_timeout, const void *buffer, size_t count, int send_eoi, size_t *bytes_written)
 {
 	ibBoard_t *board;
-	read_write_ioctl_t write_cmd;
+	struct gpib_read_write_ioctl write_cmd;
 	int retval;
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	set_timeout( board, usec_timeout );
+	set_timeout(board, usec_timeout);
 
 	assert(sizeof(buffer) <= sizeof(write_cmd.buffer_ptr));
 	write_cmd.buffer_ptr = (uintptr_t)buffer;
@@ -59,32 +60,31 @@ int send_data(ibConf_t *conf, unsigned int usec_timeout, const void *buffer, siz
 	write_cmd.end = send_eoi;
 	write_cmd.handle = conf->handle;
 
-	retval = ioctl( board->fileno, IBWRT, &write_cmd);
-	if(retval < 0)
-	{
-		switch( errno )
-		{
+	retval = ioctl(board->fileno, IBWRT, &write_cmd);
+	if (retval < 0)	{
+		switch (errno) {
 			case ETIMEDOUT:
 				conf->timed_out = 1;
-				setIberr( EABO );
+				setIberr(EABO);
 				break;
 			case EINTR:
-				setIberr( EABO );
+				setIberr(EABO);
 				break;
 			case ECOMM:
-				setIberr( ENOL );
+				setIberr(ENOL);
 				break;
 			case EFAULT:
 				//fall-through
 			default:
-				setIberr( EDVR );
-				setIbcnt( errno );
+				setIberr(EDVR);
+				setIbcnt(errno);
 				break;
 		}
 	}
 	*bytes_written = write_cmd.completed_transfer_count;
 	conf->end = send_eoi && (*bytes_written == count);
-	if(retval < 0) return retval;
+	if (retval < 0)
+		return retval;
 	return 0;
 }
 
@@ -102,26 +102,23 @@ int send_data_smart_eoi(ibConf_t *conf,  unsigned int usec_timeout,
 
 	block_size = count;
 
-	if( eoi_on_eos )
-	{
-		retval = find_eos( buffer, count, conf->settings.eos, conf->settings.eos_flags );
-		if( retval < 0 ) eos_found = 0;
-		else
-		{
+	if (eoi_on_eos)	{
+		retval = find_eos(buffer, count, conf->settings.eos, conf->settings.eos_flags);
+		if (retval < 0) {
+			eos_found = 0;
+		} else {
 			block_size = retval;
 			eos_found = 1;
 		}
 	}
 
-	send_eoi = force_eoi || ( eoi_on_eos && eos_found );
-	if(send_data(conf, usec_timeout, buffer, block_size, send_eoi, bytes_written) < 0)
-	{
+	send_eoi = force_eoi || (eoi_on_eos && eos_found);
+	if (send_data(conf, usec_timeout, buffer, block_size, send_eoi, bytes_written) < 0)
 		return -1;
-	}
 	return 0;
 }
 
-int my_ibwrt( ibConf_t *conf, unsigned int usec_timeout,
+int my_ibwrt(ibConf_t *conf, unsigned int usec_timeout,
 	const uint8_t *buffer, size_t count, size_t *bytes_written)
 {
 	ibBoard_t *board;
@@ -129,79 +126,72 @@ int my_ibwrt( ibConf_t *conf, unsigned int usec_timeout,
 	int retval;
 
 	*bytes_written = 0;
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	set_timeout( board, usec_timeout );
+	set_timeout(board, usec_timeout);
 
-	if( conf->is_interface == 0 )
-	{
+	if (!conf->is_interface) {
 		// set up addressing
-		if( send_setup( conf, usec_timeout ) < 0 )
-		{
+		if (send_setup(conf, usec_timeout) < 0)
 			return -1;
-		}
 	}
 
-	while( count )
-	{
-		retval = send_data_smart_eoi( conf, usec_timeout, buffer, count, conf->settings.send_eoi, &block_size);
+	while (count) {
+		retval = send_data_smart_eoi(conf, usec_timeout, buffer, count, conf->settings.send_eoi, &block_size);
 		*bytes_written += block_size;
-		if(retval < 0)
-		{
+		if (retval < 0)
 			break;
-		}
+
 		count -= block_size;
 		buffer += block_size;
 	}
 
-	if ( !conf->is_interface && conf->settings.send_unt_unl ) {
+	if (!conf->is_interface && conf->settings.send_unt_unl) {
 		retval = unlisten_untalk(conf);
 	}
 
 	return retval;
 }
 
-int ibwrt( int ud, const void *rd, long cnt )
+int ibwrt(int ud, const void *rd, long cnt)
 {
 	ibConf_t *conf;
 	size_t count;
 	int retval;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
-		return exit_library( ud, 1 );
+	conf = enter_library(ud);
+	if (!conf)
+		return exit_library(ud, 1);
 
 	conf->end = 0;
 
 	retval = my_ibwrt(conf, conf->settings.usec_timeout, rd, cnt, &count);
-	if(retval < 0)
-	{
-		if(ThreadIberr() != EDVR) setIbcnt(count);
-		return exit_library( ud, 1 );
+	if (retval < 0)	{
+		if (ThreadIberr() != EDVR) setIbcnt(count);
+		return exit_library(ud, 1);
 	}
 	setIbcnt(count);
 
-	return general_exit_library( ud, 0, 0, 0, DCAS, 0, 0 );
+	return general_exit_library(ud, 0, 0, 0, DCAS, 0, 0);
 }
 
-int ibwrta( int ud, const void *buffer, long cnt )
+int ibwrta(int ud, const void *buffer, long cnt)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = general_enter_library( ud, 1, 0 );
-	if( conf == NULL )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	conf = general_enter_library(ud, 1, 0);
+	if (!conf)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	retval = gpib_aio_launch( ud, conf, GPIB_AIO_WRITE,
-		(void*)buffer, cnt );
-	if( retval < 0 )
-		return general_exit_library( ud, 1, 0, 0, 0, 0, 1 );
+	retval = gpib_aio_launch(ud, conf, GPIB_AIO_WRITE, (void*)buffer, cnt);
+	if (retval < 0)
+		return general_exit_library(ud, 1, 0, 0, 0, 0, 1);
 
-	return general_exit_library( ud, 0, 0, 0, 0, 0, 1 );
+	return general_exit_library(ud, 0, 0, 0, 0, 0, 1);
 }
 
-int my_ibwrtf( ibConf_t *conf, const char *file_path, size_t *bytes_written)
+int my_ibwrtf(ibConf_t *conf, const char *file_path, size_t *bytes_written)
 {
 	ibBoard_t *board;
 	long count;
@@ -212,135 +202,119 @@ int my_ibwrtf( ibConf_t *conf, const char *file_path, size_t *bytes_written)
 	uint8_t buffer[ 0x4000 ];
 
 	*bytes_written = 0;
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	data_file = fopen( file_path, "r" );
-	if( data_file == NULL )
-	{
-		setIberr( EFSO );
-		setIbcnt( errno );
+	data_file = fopen(file_path, "r");
+	if (!data_file)	{
+		setIberr(EFSO);
+		setIbcnt(errno);
 		return -1;
 	}
 
-	retval = fstat( fileno( data_file ), &file_stats );
-	if( retval < 0 )
-	{
-		setIberr( EFSO );
-		setIbcnt( errno );
+	retval = fstat(fileno(data_file), &file_stats);
+	if (retval < 0)	{
+		setIberr(EFSO);
+		setIbcnt(errno);
 		return -1;
 	}
 
 	count = file_stats.st_size;
 
-	if( conf->is_interface == 0 )
-	{
+	if (!conf->is_interface) {
 		// set up addressing
-		if( send_setup( conf, conf->settings.usec_timeout) < 0 )
-		{
+		if (send_setup(conf, conf->settings.usec_timeout) < 0)
 			return -1;
-		}
 	}
 
-	set_timeout( board, conf->settings.usec_timeout );
+	set_timeout(board, conf->settings.usec_timeout);
 
-	while( count )
-	{
+	while (count) {
 		size_t fread_count;
 		int send_eoi;
 		size_t buffer_offset = 0;
 
-		fread_count = fread( buffer, 1, sizeof( buffer ), data_file );
-		if( fread_count == 0 )
-		{
-			setIberr( EFSO );
-			setIbcnt( errno );
+		fread_count = fread(buffer, 1, sizeof(buffer), data_file);
+		if (!fread_count) {
+			setIberr(EFSO);
+			setIbcnt(errno);
 			retval = -1;
 			break;
 		}
-		while(buffer_offset < fread_count)
-		{
+		while (buffer_offset < fread_count) {
 			send_eoi = conf->settings.send_eoi && (count == fread_count - buffer_offset);
 			retval = send_data_smart_eoi(conf, conf->settings.usec_timeout, buffer + buffer_offset,
 				fread_count - buffer_offset, send_eoi, &block_size);
 			count -= block_size;
 			buffer_offset += block_size;
 			*bytes_written += block_size;
-			if(retval < 0)
-			{
+			if (retval < 0)	{
 				count = 0;
 				break;
 			}
 		}
 	}
 
-	if ( !conf->is_interface && conf->settings.send_unt_unl ) {
+	if (!conf->is_interface && conf->settings.send_unt_unl)
 		retval = unlisten_untalk(conf);
-	}
 
 	return retval;
 }
 
-int ibwrtf( int ud, const char *file_path )
+int ibwrtf(int ud, const char *file_path)
 {
 	ibConf_t *conf;
 	size_t count;
 	int retval;
 
-	conf = enter_library( ud );
-	if( conf == NULL )
-		return exit_library( ud, 1 );
+	conf = enter_library(ud);
+	if (!conf)
+		return exit_library(ud, 1);
 
 	conf->end = 0;
 
 	retval = my_ibwrtf(conf, file_path, &count);
-	if(retval < 0)
-	{
-		if(ThreadIberr() != EDVR) setIbcnt(count);
-		return exit_library( ud, 1 );
+	if (retval < 0)	{
+		if (ThreadIberr() != EDVR) setIbcnt(count);
+		return exit_library(ud, 1);
 	}
-	setIbcnt( count );
+	setIbcnt(count);
 
-	return general_exit_library( ud, 0, 0, 0, DCAS, 0, 0 );
+	return general_exit_library(ud, 0, 0, 0, DCAS, 0, 0);
 }
 
-int InternalSendDataBytes( ibConf_t *conf, const void *buffer,
+int InternalSendDataBytes(ibConf_t *conf, const void *buffer,
 	size_t count, int eotmode)
 {
 	int retval;
 	size_t num_bytes;
 	size_t bytes_written = 0;
 
-	if( conf->is_interface == 0 )
-	{
+	if (!conf->is_interface) {
 		setIberr(EARG);
 		return -1;
 	}
 
-	switch( eotmode )
-	{
+	switch (eotmode) {
 		case DABend:
 		case NLend:
 		case NULLend:
 			break;
 		default:
-			setIberr( EARG );
+			setIberr(EARG);
 			return -1;
 			break;
 	}
 
-	retval = send_data( conf, conf->settings.usec_timeout, buffer, count, eotmode == DABend, &num_bytes);
+	retval = send_data(conf, conf->settings.usec_timeout, buffer, count, eotmode == DABend, &num_bytes);
 	bytes_written += num_bytes;
-	if( retval < 0 )
-	{
+	if (retval < 0)	{
 		setIbcnt(bytes_written);
 		return retval;
 	}
-	if( eotmode == NLend )
-	{
-		retval = send_data( conf, conf->settings.usec_timeout, "\n", 1, 1, &num_bytes);
+	if (eotmode == NLend) {
+		retval = send_data(conf, conf->settings.usec_timeout, "\n", 1, 1, &num_bytes);
 		bytes_written += num_bytes;
-		if( retval < 0 )
-		{
+		if (retval < 0)	{
 			setIbcnt(bytes_written);
 			return retval;
 		}
@@ -349,97 +323,94 @@ int InternalSendDataBytes( ibConf_t *conf, const void *buffer,
 	return 0;
 }
 
-void SendDataBytes( int boardID, const void *buffer,
-	long count, int eotmode )
+void SendDataBytes(int boardID, const void *buffer,
+	long count, int eotmode)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalSendDataBytes( conf, buffer, count, eotmode );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = InternalSendDataBytes(conf, buffer, count, eotmode);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	general_exit_library( boardID, 0, 0, 0, DCAS, 0, 0 );
+	general_exit_library(boardID, 0, 0, 0, DCAS, 0, 0);
 }
 
-int InternalSendList( ibConf_t *conf, const Addr4882_t addressList[],
-	const void *buffer, long count, int eotmode )
+int InternalSendList(ibConf_t *conf, const Addr4882_t addressList[],
+	const void *buffer, long count, int eotmode)
 {
 	ibBoard_t *board;
 	int retval;
 
-	if( addressListIsValid( addressList ) == 0 ||
-		numAddresses( addressList ) == 0 )
-	{
+	if (!addressListIsValid(addressList) ||
+		!numAddresses(addressList)) {
 		setIberr(EARG);
 		return -1;
 	}
 
-	if( conf->is_interface == 0 )
-	{
+	if (!conf->is_interface) {
 		setIberr(EARG);
 		return -1;
 	}
 
-	board = interfaceBoard( conf );
+	board = interfaceBoard(conf);
 
-	if( is_cic( board ) == 0 )
-	{
-		setIberr( ECIC );
+	retval = is_cic(board);
+	if (retval <= 0) {
+		if (retval == 0)
+			setIberr(ECIC);
 		return -1;
 	}
 
-	retval = InternalSendSetup( conf, addressList );
-	if( retval < 0 ) return retval;
+	retval = InternalSendSetup(conf, addressList);
+	if (retval < 0)
+		return retval;
 
-	retval = InternalSendDataBytes( conf, buffer, count, eotmode );
-	if( retval < 0 ) return retval;
+	retval = InternalSendDataBytes(conf, buffer, count, eotmode);
+	if (retval < 0)
+		return retval;
 
 	return 0;
 }
 
-void SendList( int boardID, const Addr4882_t addressList[],
-	const void *buffer, long count, int eotmode )
+void SendList(int boardID, const Addr4882_t addressList[],
+	const void *buffer, long count, int eotmode)
 {
 	ibConf_t *conf;
 	int retval;
 
-	conf = enter_library( boardID );
-	if( conf == NULL )
-	{
-		exit_library( boardID, 1 );
+	conf = enter_library(boardID);
+	if (!conf) {
+		exit_library(boardID, 1);
 		return;
 	}
 
-	retval = InternalSendList( conf, addressList, buffer, count, eotmode );
-	if( retval < 0 )
-	{
-		exit_library( boardID, 1 );
+	retval = InternalSendList(conf, addressList, buffer, count, eotmode);
+	if (retval < 0)	{
+		exit_library(boardID, 1);
 		return;
 	}
 
-	general_exit_library( boardID, 0, 0, 0, DCAS, 0, 0 );
+	general_exit_library(boardID, 0, 0, 0, DCAS, 0, 0);
 }
 
-void Send( int boardID, Addr4882_t address, const void *buffer, long count,
-	int eotmode )
+void Send(int boardID, Addr4882_t address, const void *buffer, long count,
+	int eotmode)
 {
 	Addr4882_t addressList[ 2 ];
 
 	addressList[ 0 ] = address;
 	addressList[ 1 ] = NOADDR;
 
-	SendList( boardID, addressList, buffer, count, eotmode );
+	SendList(boardID, addressList, buffer, count, eotmode);
 }
 
 

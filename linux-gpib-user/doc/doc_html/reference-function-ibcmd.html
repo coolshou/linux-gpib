@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN""http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
@@ -7,12 +7,12 @@
 NAME="GENERATOR"
 CONTENT="Modular DocBook HTML Stylesheet Version 1.79"><LINK
 REL="HOME"
-TITLE="	Linux-GPIB 4.3.4
+TITLE="	Linux-GPIB 4.3.7
  Documentation"
-HREF="index.html"><LINK
+HREF="t1.html"><LINK
 REL="UP"
-TITLE="	'Traditional' API Functions"
-HREF="reference.html#AEN904"><LINK
+TITLE="	Traditional API Functions "
+HREF="traditional-api.html"><LINK
 REL="PREVIOUS"
 TITLE="ibclr"
 HREF="reference-function-ibclr.html"><LINK
@@ -38,7 +38,7 @@ CELLSPACING="0"
 ><TH
 COLSPAN="3"
 ALIGN="center"
->Linux-GPIB 4.3.4
+>Linux-GPIB 4.3.7
  Documentation</TH
 ></TR
 ><TR
@@ -49,7 +49,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibclr.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="80%"
@@ -63,7 +63,7 @@ VALIGN="bottom"
 ><A
 HREF="reference-function-ibcmda.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ></TABLE
@@ -78,7 +78,7 @@ NAME="REFERENCE-FUNCTION-IBCMD"
 ><DIV
 CLASS="REFNAMEDIV"
 ><A
-NAME="AEN1193"
+NAME="AEN1537"
 ></A
 ><H2
 >Name</H2
@@ -86,7 +86,7 @@ NAME="AEN1193"
 ><DIV
 CLASS="REFSYNOPSISDIV"
 ><A
-NAME="AEN1196"
+NAME="AEN1540"
 ></A
 ><H2
 >Synopsis</H2
@@ -95,17 +95,44 @@ CLASS="FUNCSYNOPSIS"
 ><P
 ></P
 ><A
-NAME="AEN1197"
+NAME="AEN1541"
 ></A
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
 ><PRE
 CLASS="FUNCSYNOPSISINFO"
 >#include &#60;gpib/ib.h&#62;</PRE
+></TD
+></TR
+></TABLE
 ><P
 ><CODE
 ><CODE
 CLASS="FUNCDEF"
->int ibcmd</CODE
->(int ud, const void *commands, long num_bytes);</CODE
+>int <TT
+CLASS="FUNCTION"
+>ibcmd</TT
+></CODE
+>(int <TT
+CLASS="PARAMETER"
+><I
+>ud</I
+></TT
+>, const void *<TT
+CLASS="PARAMETER"
+><I
+>commands</I
+></TT
+>, long <TT
+CLASS="PARAMETER"
+><I
+>num_bytes</I
+></TT
+>);</CODE
 ></P
 ><P
 ></P
@@ -114,28 +141,34 @@ CLASS="FUNCDEF"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1208"
+NAME="AEN1552"
 ></A
 ><H2
 >	Description
 	</H2
 ><P
 >	ibcmd() writes the <A
-HREF="gpib-protocol.html#REFERENCE-COMMAND-BYTES"
+HREF="x4176.html#REFERENCE-COMMAND-BYTES"
 >command bytes</A
 >
 	contained
-	in the array <CODE
+	in the array <TT
 CLASS="PARAMETER"
->commands</CODE
+><I
+>commands</I
+></TT
 >
 	to the bus.  The number of bytes written from the array is specified by
-	<CODE
+	<TT
 CLASS="PARAMETER"
->num_bytes</CODE
->.  The <CODE
+><I
+>num_bytes</I
+></TT
+>.  The <TT
 CLASS="PARAMETER"
->ud</CODE
+><I
+>ud</I
+></TT
 > argument is a
 	board descriptor, and the
 	board must be controller-in-charge.  Most of the
@@ -154,7 +187,7 @@ CLASS="PARAMETER"
 ><DIV
 CLASS="REFSECT1"
 ><A
-NAME="AEN1216"
+NAME="AEN1560"
 ></A
 ><H2
 >	Return value
@@ -184,14 +217,14 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibclr.html"
 ACCESSKEY="P"
->Prev</A
+>&#60;&#60;&#60; Previous</A
 ></TD
 ><TD
 WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="index.html"
+HREF="t1.html"
 ACCESSKEY="H"
 >Home</A
 ></TD
@@ -202,7 +235,7 @@ VALIGN="top"
 ><A
 HREF="reference-function-ibcmda.html"
 ACCESSKEY="N"
->Next</A
+>Next &#62;&#62;&#62;</A
 ></TD
 ></TR
 ><TR
@@ -216,7 +249,7 @@ WIDTH="34%"
 ALIGN="center"
 VALIGN="top"
 ><A
-HREF="reference.html#AEN904"
+HREF="traditional-api.html"
 ACCESSKEY="U"
 >Up</A
 ></TD

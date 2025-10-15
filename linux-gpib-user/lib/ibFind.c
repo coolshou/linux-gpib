@@ -19,7 +19,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-int ibfind( const char *dev )
+int ibfind(const char *dev)
 {
 	int index;
 	int retval;
@@ -27,18 +27,23 @@ int ibfind( const char *dev )
 	ibConf_t *conf;
 	int status;
 
-	retval = ibParseConfigFile();
-	if(retval < 0)
-	{
-		setIberr( EDVR );
-		setIbsta( ERR );
+	retval = ibParseConfigFile(-1);
+	if (retval < 0)	{
+		if (errno) {
+			setIbcnt(errno);
+			setIberr(EDVR);
+		} else {
+			setIberr(ECNF);
+		}
+		setIbsta(ERR);
+		sync_globals();
 		return -1;
 	}
 
-	if( ( index = ibFindDevIndex( dev ) ) < 0 )
-	{ /* find desired entry */
-		setIberr( EDVR );
-		setIbsta( ERR );
+	if ((index = ibFindDevIndex(dev)) < 0)	{ /* find desired entry */
+		setIberr(EARG);
+		setIbsta(ERR);
+		sync_globals();
 		return -1;
 	}
 
@@ -47,25 +52,23 @@ int ibfind( const char *dev )
 	if (getenv("IB_NO_ERROR"))
 		conf->error_msg_disable = 1;
 
-	ud = my_ibdev( *conf );
-	if(ud < 0)
-	{
+	ud = my_ibdev(*conf);
+	if (ud < 0) {
 		if (!conf->error_msg_disable)
 			fprintf(stderr, "libgpib: ibfind failed to get descriptor\n");
 		return -1;
 	}
-	conf = general_enter_library( ud, 1, 0 );
+	conf = general_enter_library(ud, 1, 0);
 
-	if(conf->flags & CN_SDCL)
-	{
+	if (conf->flags & CN_SDCL) {
 		status = ibclr(ud);
-		if( status & ERR ) return -1;
+		if (status & ERR)
+			return -1;
 	}
 
-	if(strcmp(conf->init_string, ""))
-	{
+	if (strcmp(conf->init_string, "")) {
 		status = ibwrt(ud, conf->init_string, strlen(conf->init_string));
-		if( status & ERR )
+		if (status & ERR)
 			return -1;
 	}
 

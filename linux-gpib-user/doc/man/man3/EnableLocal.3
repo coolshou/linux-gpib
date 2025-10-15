@@ -1,0 +1,53 @@
+'\" t
+.\"     Title: EnableLocal
+.\"    Author: Frank Mori Hess
+.\" Generator: DocBook XSL Stylesheets vsnapshot <http://docbook.sf.net/>
+.\"      Date: 10/04/2025
+.\"    Manual: 	"Multidevice" API Functions
+.\"    Source: linux-gpib 4.3.7
+.\"  Language: English
+.\"
+.TH "ENABLELOCAL" "3" "10/04/2025" "linux-gpib 4.3.7" ""Multidevice" API Functions"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+EnableLocal \- put devices into local mode\&.
+.SH "SYNOPSIS"
+.sp
+.ft B
+.nf
+#include <gpib/ib\&.h>
+.fi
+.ft
+.HP \w'void\ EnableLocal('u
+.BI "void EnableLocal(int\ " "board_desc" ", const\ Addr4882_t\ " "addressList[]" ");"
+.SH "DESCRIPTION"
+.PP
+EnableLocal() addresses all of the devices in the
+\fIaddressList\fR
+array as listeners then sends the GTL (go to local) command byte, causing them to enter local mode\&. This requires that the board is the controller\-in\-charge\&. Note that while the REN (remote enable) bus line is asserted, the devices will return to remote mode the next time they are addressed\&.
+.PP
+If
+\fIaddressList\fR
+is empty or NULL, then the REN line is unasserted and all devices enter local mode\&. The board must be system controller to change the state of the REN line\&.
+.SH "COPYRIGHT"
+.br
+Copyright \(co 2003-2006, 2008 Frank Mori Hess
+.br

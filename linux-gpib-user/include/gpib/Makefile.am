@@ -8,7 +8,7 @@
 #   (at your option) any later version.
 
 headersdir = $(includedir)/gpib
-headers_HEADERS = gpib_user.h ib.h gpib_version.h
+headers_HEADERS = gpib_user.h gpib.h ib.h gpib_version.h
 noinst_HEADERS = gpib_ioctl.h
 
 EXTRA_DIST = version_subst
